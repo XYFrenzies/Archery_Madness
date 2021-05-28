@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public abstract class Arrow : MonoBehaviour, IResettable
 {
     public enum ArrowType
     {
@@ -14,6 +14,21 @@ public class Arrow : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // When arrow collides with an object.
+    }
+
+    public void OnReset()
+    {
+        // When arrow is reset.
+    }
+
+    public virtual void OnActivate()
+    {
+
+    }
+
+    public virtual void OnDeactivate()
+    {
+
     }
 
     public ArrowType Type

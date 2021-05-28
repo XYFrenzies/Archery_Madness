@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Arrow_BroadHead : Arrow
+public class Arrow_Broadhead : Arrow
 {
     private void Awake()
     {

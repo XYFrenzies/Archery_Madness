@@ -16,10 +16,7 @@ public class Singleton< T > : MonoBehaviour where T : Singleton< T >
                 
                 if (foundObjects == null || foundObjects.Length == 0)
                 {
-                    GameObject newGameObject = new GameObject();
-                    m_Instance = newGameObject.AddComponent<T>();
-                    DontDestroyOnLoad(newGameObject);
-                    return m_Instance;
+                    return null;
                 }
                 else
                 {

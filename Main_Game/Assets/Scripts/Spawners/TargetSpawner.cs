@@ -41,21 +41,6 @@ public class TargetSpawner : MonoBehaviour
 
     public bool SpawnNewTarget(Target.TargetType a_TargetType)
     {
-        switch (a_TargetType)
-        {
-            case Target.TargetType.WOOD:
-                {
-                    return m_TargetPoolWood.TrySpawn(out Target_WoodBird _);
-                }
-            case Target.TargetType.FIRE:
-                {
-                    return m_TargetPoolFire.TrySpawn(out Target_FireBird _);
-                }
-            case Target.TargetType.GLASS:
-                {
-                    return m_TargetPoolGlass.TrySpawn(out Target_GlassBird _);
-                }
-        }
         return false;
     }
 
