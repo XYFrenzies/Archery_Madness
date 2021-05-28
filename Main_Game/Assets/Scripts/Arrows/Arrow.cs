@@ -11,7 +11,7 @@ public abstract class Arrow : MonoBehaviour, IResettable
         WATER
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision a_Collision)
     {
         // When arrow collides with an object.
     }

@@ -2,28 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowSpawner : MonoBehaviour, IInteractable
+public class ArrowSpawner : MonoBehaviour
 {
     public Arrow.ArrowType ArrowType;
     [Range(1, 100)] public int ArrowCapacity;
 
     private void Awake()
     {
+        //Need to integrate the poolsize of each arrow type.
         switch (ArrowType)
         {
             case Arrow.ArrowType.BROAD:
                 {
-                    m_ArrowPool = new ObjectPool<Arrow>(ArrowCapacity, GenerateNewArrow<Arrow_Broadhead>, arrow => arrow.OnActivate(), arrow => arrow.OnDeactivate());
+                    m_ArrowPool = new ObjectPool<Arrow>(GenerateNewArrow<Arrow_Broadhead>, arrow => arrow.OnActivate(), arrow => arrow.OnDeactivate());
                     break;
                 }
             case Arrow.ArrowType.HAMMER:
                 {
-                    m_ArrowPool = new ObjectPool<Arrow>(ArrowCapacity, GenerateNewArrow<Arrow_Hammerhead>, arrow => arrow.OnActivate(), arrow => arrow.OnDeactivate());
+                    m_ArrowPool = new ObjectPool<Arrow>(GenerateNewArrow<Arrow_Hammerhead>, arrow => arrow.OnActivate(), arrow => arrow.OnDeactivate());
                     break;
                 }
             case Arrow.ArrowType.WATER:
                 {
-                    m_ArrowPool = new ObjectPool<Arrow>(ArrowCapacity, GenerateNewArrow<Arrow_WaterBalloon>, arrow => arrow.OnActivate(), arrow => arrow.OnDeactivate());
+                    m_ArrowPool = new ObjectPool<Arrow>(GenerateNewArrow<Arrow_WaterBalloon>, arrow => arrow.OnActivate(), arrow => arrow.OnDeactivate());
                     break;
                 }
         }
@@ -111,16 +112,6 @@ public class ArrowSpawner : MonoBehaviour, IInteractable
     public T GenerateNewArrow<T>() where T : Arrow
     {
         return default;
-    }
-
-    public void Interact(IInteractable a_Other)
-    {
-
-    }
-
-    public void UnInteract(IInteractable a_Other)
-    {
-
     }
 
     private ObjectPool<Arrow> m_ArrowPool;

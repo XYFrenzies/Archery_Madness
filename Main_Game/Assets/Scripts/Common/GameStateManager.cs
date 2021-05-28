@@ -11,9 +11,4 @@ public class GameStateManager : Singleton< GameStateManager >
     public ArrowSpawner ArrowSpawner_Broadhead;
     public ArrowSpawner ArrowSpawner_Hammerhead;
     public ArrowSpawner ArrowSpawner_WaterBalloon;
-
-    public void OnFire()
-    {
-
-    }
 }

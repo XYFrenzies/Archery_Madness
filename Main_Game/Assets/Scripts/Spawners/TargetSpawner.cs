@@ -3,16 +3,17 @@
 public class TargetSpawner : MonoBehaviour
 {
     [Range(1, 100)] public int PoolSize;
-    public ConfigurableJoint SlideRailJoint;
+    public ConfigurableJoint SlideRailJoint; // will need 3, not 1.
     public GameObject TargetPrefab1;
     public GameObject TargetPrefab2;
     public GameObject TargetPrefab3;
 
     void Start()
     {
-        m_TargetPoolWood = new ObjectPool<Target_WoodBird>(PoolSize, GenerateNewTarget<Target_WoodBird>, target => target.OnActivate(), target => target.OnDeactivate());
-        m_TargetPoolFire = new ObjectPool<Target_FireBird>(PoolSize, GenerateNewTarget<Target_FireBird>, target => target.OnActivate(), target => target.OnDeactivate());
-        m_TargetPoolGlass = new ObjectPool<Target_GlassBird>(PoolSize, GenerateNewTarget<Target_GlassBird>, target => target.OnActivate(), target => target.OnDeactivate());
+        //Need to intergrate the poolsize of each target.
+        m_TargetPoolWood = new ObjectPool<Target_WoodBird>(GenerateNewTarget<Target_WoodBird>, target => target.OnActivate(), target => target.OnDeactivate());
+        m_TargetPoolFire = new ObjectPool<Target_FireBird>(GenerateNewTarget<Target_FireBird>, target => target.OnActivate(), target => target.OnDeactivate());
+        m_TargetPoolGlass = new ObjectPool<Target_GlassBird>(GenerateNewTarget<Target_GlassBird>, target => target.OnActivate(), target => target.OnDeactivate());
     }
 
     public ObjectPool<Target_WoodBird> PoolWoodBird
