@@ -9,7 +9,6 @@ public class Target_Rotation : MonoBehaviour
     private ConfigurableJoint joint;
     [Tooltip("If you want to not use a timer to set it back up, set this to 0.")]
     [SerializeField] private float timerToBringBackUpPanel = 1.0f;
-    private int angleToStopAt = 70;
     private float deltaTime = 0;
     private Vector3 savedJointOriginalRot;
     private Rigidbody rb;
@@ -31,10 +30,10 @@ public class Target_Rotation : MonoBehaviour
             joint.angularXMotion = ConfigurableJointMotion.Limited;
             hasStarted = false;
         }
-        if (transform.eulerAngles.x > 200 && transform.eulerAngles.x < angleToStopAt)
+        if (transform.eulerAngles.x > 200 && transform.eulerAngles.x < 290)
         {
             rb.angularVelocity = Vector3.zero;
-            transform.eulerAngles = new Vector3(angleToStopAt, transform.eulerAngles.y, transform.eulerAngles.z);
+            transform.eulerAngles = new Vector3(290, transform.eulerAngles.y, transform.eulerAngles.z);
         }
         if (!hasBeenHit && transform.eulerAngles.x != 0)
         {
