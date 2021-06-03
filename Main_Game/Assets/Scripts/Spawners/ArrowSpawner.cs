@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class ArrowSpawner : MonoBehaviour
 {
     public Arrow.ArrowType ArrowType;
     [Range(1, 100)] public int ArrowCapacity;
+    public GameObject ArrowPrefab;
+    public Transform ArrowSpawnPoint;
 
     private void Awake()
     {
@@ -44,7 +47,7 @@ public class ArrowSpawner : MonoBehaviour
                     if (!m_LeftHand)
                     {
                         m_LeftHand = true;
-                        OnPreInteract(GameStateManager.Instance.LeftHand);
+                        OnPreInteract(GameStateManager.Instance.LeftController);
                     }
 
                     break;
@@ -54,7 +57,7 @@ public class ArrowSpawner : MonoBehaviour
                     if (!m_RightHand)
                     {
                         m_RightHand = true;
-                        OnPreInteract(GameStateManager.Instance.RightHand);
+                        OnPreInteract(GameStateManager.Instance.RightController);
                     }
 
                     break;
@@ -76,7 +79,7 @@ public class ArrowSpawner : MonoBehaviour
                     if (m_LeftHand)
                     {
                         m_LeftHand = false;
-                        OnPostInteract(GameStateManager.Instance.LeftHand);
+                        OnPostInteract(GameStateManager.Instance.LeftController);
                     }
 
                     break;
@@ -86,7 +89,7 @@ public class ArrowSpawner : MonoBehaviour
                     if (m_RightHand)
                     {
                         m_RightHand = false;
-                        OnPostInteract(GameStateManager.Instance.RightHand);
+                        OnPostInteract(GameStateManager.Instance.RightController);
                     }
 
                     break;
@@ -101,7 +104,9 @@ public class ArrowSpawner : MonoBehaviour
 
     public void OnInteract(HandController a_Controller)
     {
-        // Called when spawner is interacted with.
+        XRGrabInteractable interactable = Instantiate( ArrowPrefab ).GetComponent<XRGrabInteractable>();
+        interactable.gameObject.transform.position = gameObject.transform.position;
+        a_Controller.Interactor.StartManualInteraction(interactable);
     }
 
     public void OnPostInteract(HandController a_Controller)

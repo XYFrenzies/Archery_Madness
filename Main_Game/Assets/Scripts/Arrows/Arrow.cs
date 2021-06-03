@@ -1,14 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public abstract class Arrow : MonoBehaviour, IResettable
+public class Arrow : MonoBehaviour, IResettable
 {
     public enum ArrowType
     {
         BROAD,
         HAMMER,
         WATER
+    }
+
+    protected void Awake()
+    {
+
     }
 
     private void OnCollisionEnter(Collision a_Collision)
@@ -40,4 +46,5 @@ public abstract class Arrow : MonoBehaviour, IResettable
     }
 
     protected ArrowType m_ArrowType;
+    protected XRGrabInteractable m_GrabInteractable;
 }
