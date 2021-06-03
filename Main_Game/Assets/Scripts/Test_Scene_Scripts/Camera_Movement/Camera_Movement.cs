@@ -8,7 +8,7 @@ public class Camera_Movement : MonoBehaviour
     [SerializeField]private float moveSpeed = 100.0f;
     private float rawAxisHorz = 0;
     private float rawAxisVert = 0;
-    [SerializeField] private GameObject camObj;
+    [SerializeField] private GameObject camObj = null;
 
     [SerializeField] private float speedHorizontalMouse = 2.0f;
     [SerializeField] private float speedVerticalMouse = 2.0f;

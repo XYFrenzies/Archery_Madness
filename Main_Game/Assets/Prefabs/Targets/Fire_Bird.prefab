@@ -12,8 +12,7 @@ GameObject:
   - component: {fileID: 4848016362496168528}
   - component: {fileID: 4848016362496168529}
   - component: {fileID: 4848016362496168526}
-  - component: {fileID: 4848016362496168527}
-  - component: {fileID: 4848016362496168524}
+  - component: {fileID: 1300391803}
   m_Layer: 0
   m_Name: Target (1)
   m_TagString: Untagged
@@ -97,41 +96,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &4848016362496168527
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4848016362496168522}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!95 &4848016362496168524
-Animator:
-  serializedVersion: 3
+--- !u!114 &1300391803
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4848016362496168522}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4c4c99d604d574f49ab5e42ceb60cc09, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce277b55276451246b48dbbd1a29c945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timerToStand: 5
 --- !u!1 &4848016362827195006
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,8 +118,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4848016362827194945}
+  - component: {fileID: 2002348449}
+  - component: {fileID: 2002348448}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Water_Balloon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,3 +142,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!111 &2002348449
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4848016362827195006}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: b2bbe10545033b24a9f56fbfcce6edad, type: 2}
+  - {fileID: 7400000, guid: 74586932e0e546448a130cd5fd7334c4, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
+--- !u!114 &2002348448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4848016362827195006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 517862abde4f7724a986a69e5eeedabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canMove: 1
+  a_trails:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  speed: 1
+  CurrentDirection: 1
+  wayToMove: 1
+  currentTarget: 1
