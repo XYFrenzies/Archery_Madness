@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Target_Rotation : MonoBehaviour
+public class Target_Test_Rotation : MonoBehaviour
 {
     [Tooltip("Changing the speed of the motion of the target, go to the configurable joint, angular x limit spring and change the damper to increase to make it a smaller change in velocity and less if u want a faster velocity.")]
     private ConfigurableJoint joint;
