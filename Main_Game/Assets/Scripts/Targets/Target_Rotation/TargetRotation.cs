@@ -18,11 +18,14 @@ public class TargetRotation : MonoBehaviour
     }
     private void Update()
     {
+        //Quick escape from class if collision has not been made.
         if (!hasBeenHit)
             return;
+        //If the designer is using a timer.
         if (timerToStand > 0)
         {
             deltaTime += Time.deltaTime;
+            //Determines the amount of time that is input from the designer by the amount of deltatime.
             if (timerToStand <= deltaTime)
             {
                 animationFall.Play("Target_Stand_Back_Up");
@@ -32,6 +35,7 @@ public class TargetRotation : MonoBehaviour
             }
         }
     }
+    //If the target is collided by another object.
     private void OnCollisionEnter(Collision _)
     {
         if (isStanding)
