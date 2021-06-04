@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 7349253030853280164}
   - component: {fileID: 6616920207211418851}
   - component: {fileID: 5968154811078769393}
+  - component: {fileID: -6980743908294769831}
   m_Layer: 5
-  m_Name: Text
+  m_Name: CurrentScores
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,3 +80,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: New Text
+--- !u!114 &-6980743908294769831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5044663914038801579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a4008521130e9b4288714f9f8c497c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_textScore: {fileID: 0}
+  textBeforeScore: 
+  textAfterScore: 

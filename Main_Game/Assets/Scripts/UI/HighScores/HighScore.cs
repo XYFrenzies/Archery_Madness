@@ -7,12 +7,13 @@ public class HighScore : Singleton<HighScore>
 {
     [Tooltip("Max amount  to have in the highscores.")]
     [SerializeField] private int maxAmountInScores = 5;
-    [SerializeField] private Text m_text = null;
+
     [Tooltip("Text displayed before the array of highscores")]
     [SerializeField] private string beforeDisplayHighScores = "";
     [Tooltip("Text displayed after the array of highscores")]
     [SerializeField] private string afterDisplayHighScores = "";
     private HighScore_Info[] m_highScores;
+    private Text m_text;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +24,7 @@ public class HighScore : Singleton<HighScore>
             m_highScores[i].positionOnLadder = i + 1;
             m_highScores[i].score = -1;
         }
+        m_text = GetComponent<Text>();
     }
     private void Update()
     {
