@@ -36,6 +36,8 @@ public abstract class Target : MonoBehaviour, IResettable
 
     public virtual void OnArrowContact(Arrow a_ContactingArrow)
     {
+        //Use this line below to increment the arrow value by a certain amount.
+        //CurrentScore.Instance.IncrementScore();
         // Called if an arrow contacts this target.
     }
 
