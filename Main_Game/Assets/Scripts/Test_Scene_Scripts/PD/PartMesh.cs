@@ -20,7 +20,14 @@ public class PartMesh
     {
 
     }
-
+    public PartMesh(Vector2[] a_uv, Vector3[] a_normals, Vector3[] a_vertices, int[][] a_triangles, Bounds a_bounds)
+    {
+        UV = a_uv;
+        Normals = a_normals;
+        Triangles = a_triangles;
+        Vertices = a_vertices;
+        Bounds = a_bounds;
+    }
     public void AddTriangle(int submesh, Vector3 vert1, Vector3 vert2, Vector3 vert3, Vector3 normal1, Vector3 normal2, Vector3 normal3, Vector2 uv1, Vector2 uv2, Vector2 uv3)
     {
         if (_Triangles.Count - 1 < submesh)
@@ -53,39 +60,48 @@ public class PartMesh
         Normals = _Normals.ToArray();
         UV = _UVs.ToArray();
         Triangles = new int[_Triangles.Count][];
-        for (var i = 0; i < _Triangles.Count; i++)
+        for (int i = 0; i < _Triangles.Count; i++)
             Triangles[i] = _Triangles[i].ToArray();
     }
 
-    public void MakeGameobject(ProceduralDestroy original)
+    public void MakeGameobject(ProceduralDestroy original, bool isSkinned)
     {
         GameObject = new GameObject(original.name);
         GameObject.transform.position = original.transform.position;
         GameObject.transform.rotation = original.transform.rotation;
         GameObject.transform.localScale = original.transform.localScale;
 
-        var mesh = new Mesh();
-        mesh.name = original.GetComponent<MeshFilter>().mesh.name;
+        Mesh mesh = new Mesh();
 
+        if (!isSkinned)
+        {
+            mesh.name = original.GetComponent<MeshFilter>().mesh.name;
+            MeshRenderer renderer = GameObject.AddComponent<MeshRenderer>();
+            renderer.materials = original.GetComponent<MeshRenderer>().materials;
+            MeshFilter filter = GameObject.AddComponent<MeshFilter>();
+            filter.mesh = mesh;
+        }
+        else
+        { 
+            mesh.name = original.GetComponent<SkinnedMeshRenderer>().sharedMesh.name;
+            SkinnedMeshRenderer filter = GameObject.AddComponent<SkinnedMeshRenderer>();
+            filter.sharedMesh = mesh;
+            filter.materials = original.GetComponent<SkinnedMeshRenderer>().materials;
+        }
         mesh.vertices = Vertices;
         mesh.normals = Normals;
         mesh.uv = UV;
-        for (var i = 0; i < Triangles.Length; i++)
+        for (int i = 0; i < Triangles.Length; i++)
             mesh.SetTriangles(Triangles[i], i, true);
         Bounds = mesh.bounds;
 
-        var renderer = GameObject.AddComponent<MeshRenderer>();
-        renderer.materials = original.GetComponent<MeshRenderer>().materials;
 
-        var filter = GameObject.AddComponent<MeshFilter>();
-        filter.mesh = mesh;
-
-        var collider = GameObject.AddComponent<MeshCollider>();
+        MeshCollider collider = GameObject.AddComponent<MeshCollider>();
         collider.convex = true;
 
-        var rigidbody = GameObject.AddComponent<Rigidbody>();
-        var meshDestroy = GameObject.AddComponent<ProceduralDestroy>();
-        meshDestroy.CutCascades = original.CutCascades;
+        Rigidbody rigidbody = GameObject.AddComponent<Rigidbody>();
+        ProceduralDestroy meshDestroy = GameObject.AddComponent<ProceduralDestroy>();
+        meshDestroy.SplitMultiplier = original.SplitMultiplier;
         meshDestroy.ExplodeForce = original.ExplodeForce;
 
     }
