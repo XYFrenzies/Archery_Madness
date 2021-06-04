@@ -21,7 +21,8 @@ public class ProceduralDestroy : MonoBehaviour
     }
     private void MeshDestroy()
     {
-
+        if (!GetComponent<MeshFilter>())
+            return;
         var originalMesh = GetComponent<MeshFilter>().mesh;
         originalMesh.RecalculateBounds();
         var parts = new List<PartMesh>();
