@@ -4,15 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 public class CurrentScore : Singleton<CurrentScore>
 {
-    [SerializeField] private Text m_textScore = null;
+
     [Tooltip("Text displayed before score")]
     [SerializeField] private string textBeforeScore = "";//Text before the score
     [Tooltip("Text displayed after score")]
     [SerializeField] private string textAfterScore = "";//Text after the score
     private int currentScore; //Current score of the game.
+    private Text m_textScore;
     private void Start()
     {
         currentScore = 0;
+        m_textScore = GetComponent<Text>();
     }
     // Update is called once per frame
     void Update()
