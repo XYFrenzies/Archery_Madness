@@ -1,57 +1,66 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class HandController : MonoBehaviour
 {
-    public KeyCode OnInteractKey;
-
     public enum Side
     {
         LEFT,
         RIGHT
     }
 
-    private void OnCollisionEnter(Collision a_Collision)
-    {
-        if (!a_Collision.gameObject.TryGetComponent(out ArrowSpawner spawner))
-        {
-            return;
-        }
+    public Side HandSide;
+    public XRDirectInteractor Interactor;
 
-        spawner.OnPreInteract(this);
+    private void Start()
+    {
+        switch (HandSide)
+        {
+            case Side.LEFT:
+                {
+                    InputManager.Instance.LeftController.TryGetBinding(
+                        XRButton.Grip,
+                        PressType.Begin,
+                        out m_GripPressed);
+                    break;
+                }
+            case Side.RIGHT:
+                {
+                    InputManager.Instance.RightController.TryGetBinding(
+                        XRButton.Grip,
+                        PressType.Begin,
+                        out m_GripPressed);
+                    break;
+                }
+        }
     }
 
-    private void OnCollisionExit(Collision a_Collision)
+    private void OnTriggerEnter(Collider a_Collider)
     {
-        if (!a_Collision.gameObject.TryGetComponent(out ArrowSpawner spawner))
+        if (a_Collider.gameObject.TryGetComponent(out ArrowSpawner spawner))
         {
-            return;
+            spawner.OnPreInteract(this);
         }
-
-        spawner.OnPostInteract(this);
     }
 
-    private void OnCollisionStay(Collision a_Collision)
+    private void OnTriggerExit(Collider a_Collider)
     {
-        if (!a_Collision.gameObject.TryGetComponent(out ArrowSpawner spawner))
+        if (a_Collider.gameObject.TryGetComponent(out ArrowSpawner spawner))
         {
-            return;
+            spawner.OnPostInteract(this);
         }
+    }
 
-        if (Input.GetKeyDown(OnInteractKey))
+    private void OnTriggerStay(Collider a_Collider)
+    {
+        if (a_Collider.gameObject.TryGetComponent(out ArrowSpawner spawner) && m_GripPressed.Active)
         {
             spawner.OnInteract(this);
         }
     }
 
-    public Side HandSide
-    {
-        get
-        {
-            return m_HandSide;
-        }
-    }
-
-    private Side m_HandSide;
+    private XRBinding m_GripPressed;
 }

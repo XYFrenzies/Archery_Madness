@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Arrow_Broadhead : Arrow
 {
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
         m_ArrowType = ArrowType.BROAD;
     }
 }
