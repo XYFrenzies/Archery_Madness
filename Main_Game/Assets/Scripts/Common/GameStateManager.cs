@@ -10,4 +10,6 @@ public class GameStateManager : Singleton< GameStateManager >
     public ArrowSpawner ArrowSpawner_Broadhead;
     public ArrowSpawner ArrowSpawner_Hammerhead;
     public ArrowSpawner ArrowSpawner_WaterBalloon;
+    public HighScore HighScore;
+    public CurrentScore CurrentScore;
 }
