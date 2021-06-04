@@ -14,6 +14,24 @@ public class HandController : MonoBehaviour
 
     public Side HandSide;
     public XRDirectInteractor Interactor;
+    public GameObject SpawnableObject;
+
+
+    public bool HoldingArrow
+    {
+        get
+        {
+            return m_HoldingArrow;
+        }
+    }
+
+    public Arrow HeldArrow
+    {
+        get
+        {
+            return m_HeldArrow;
+        }
+    }
 
     private void Start()
     {
@@ -35,6 +53,16 @@ public class HandController : MonoBehaviour
                         out m_GripPressed);
                     break;
                 }
+        }
+    }
+
+    private void Update()
+    {
+        if ( m_GripPressed.Active )
+        {
+            GameObject newObject = Instantiate(SpawnableObject);
+            newObject.transform.position = transform.position;
+            Interactor.interactionManager.ForceSelect(Interactor, newObject.GetComponent<XRGrabInteractable>());
         }
     }
 
@@ -62,5 +90,29 @@ public class HandController : MonoBehaviour
         }
     }
 
+    public void OnSetHeldArrow( Arrow a_Arrow )
+    {
+        if ( a_Arrow == null )
+        {
+            return;
+        }
+
+        m_HoldingArrow = true;
+        m_HeldArrow = a_Arrow;
+    }
+
+    public void OnDropHeldArrow()
+    {
+        if ( m_HeldArrow == null )
+        {
+            return;
+        }
+
+        m_HeldArrow = null;
+        m_HoldingArrow = false;
+    }
+
+    private bool m_HoldingArrow;
+    private Arrow m_HeldArrow;
     private XRBinding m_GripPressed;
 }

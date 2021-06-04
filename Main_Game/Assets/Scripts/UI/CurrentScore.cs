@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 public class CurrentScore : Singleton<CurrentScore>
 {
-
     [Tooltip("Text displayed before score")]
     [SerializeField] private string textBeforeScore = "";//Text before the score
     [Tooltip("Text displayed after score")]

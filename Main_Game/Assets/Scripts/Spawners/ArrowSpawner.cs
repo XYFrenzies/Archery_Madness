@@ -104,9 +104,12 @@ public class ArrowSpawner : MonoBehaviour
 
     public void OnInteract(HandController a_Controller)
     {
-        XRGrabInteractable interactable = Instantiate( ArrowPrefab ).GetComponent<XRGrabInteractable>();
-        interactable.gameObject.transform.position = gameObject.transform.position;
-        a_Controller.Interactor.StartManualInteraction(interactable);
+        GameObject newArrow = Instantiate( ArrowPrefab );
+        newArrow.transform.position = transform.position;
+        Arrow arrow = newArrow.GetComponent<Arrow>();
+        a_Controller.OnSetHeldArrow(arrow);
+        //interactable.gameObject.transform.position = gameObject.transform.position;
+        //a_Controller.Interactor.StartManualInteraction(interactable);
     }
 
     public void OnPostInteract(HandController a_Controller)

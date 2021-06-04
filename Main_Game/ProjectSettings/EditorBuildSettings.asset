@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Main_Level_Scene/SampleScene.unity
     guid: d1c3109bdb54ad54c8a2b2838528e640
+  - enabled: 0
+    path: Assets/Scenes/Practice_Scenes/Len/ShootingMechanicsTest.unity
+    guid: 2eef93f47f592b64a9c7623b7bcf5765
   - enabled: 1
-    path: Assets/Scenes/Practice_Scenes/Len/Test.unity
-    guid: e60b3d9584fe38347aca30f9ab9834aa
+    path: Assets/Scenes/Practice_Scenes/James/Level Test.unity
+    guid: 33e6ab011a59dc640b36d7351dc9d405
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 323a8ff9486c9f44e8e81065e9d41866, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 778f84bae1c3f754282f3cc8f1d6e78b, type: 2}
