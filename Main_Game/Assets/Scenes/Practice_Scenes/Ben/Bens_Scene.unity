@@ -350,7 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutCascades: 6
+  SplitMultiplier: 1
   ExplodeForce: 1000
 --- !u!1001 &54996354
 PrefabInstance:
@@ -409,6 +409,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b762b646537e6441af4552a33071b9f, type: 3}
+--- !u!1 &54996355 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6166641095072120540, guid: 6b762b646537e6441af4552a33071b9f, type: 3}
+  m_PrefabInstance: {fileID: 54996354}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &54996356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54996355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SplitMultiplier: 1
+  ExplodeForce: 1000
 --- !u!1 &170171480
 GameObject:
   m_ObjectHideFlags: 0
@@ -1820,7 +1839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutCascades: 6
+  SplitMultiplier: 1
   ExplodeForce: 1000
 --- !u!65 &819229735
 BoxCollider:
@@ -2034,7 +2053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutCascades: 6
+  SplitMultiplier: 1
   ExplodeForce: 1000
 --- !u!1001 &932577713
 PrefabInstance:
@@ -2110,7 +2129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutCascades: 6
+  SplitMultiplier: 1
   ExplodeForce: 1000
 --- !u!1 &1009924877
 GameObject:
@@ -4000,7 +4019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutCascades: 6
+  SplitMultiplier: 1
   ExplodeForce: 1000
 --- !u!1 &2138677391
 GameObject:
