@@ -19,6 +19,12 @@ public class InputManager : Singleton<InputManager>
                     InputDeviceCharacteristics.Controller | 
                     InputDeviceCharacteristics.Left,
                     devices);
+
+                if ( devices.Count == 0 )
+                {
+                    return null;
+                }
+
                 m_LeftController.SetInputDevice(devices[0]);
             }
             return m_LeftController;
@@ -37,6 +43,12 @@ public class InputManager : Singleton<InputManager>
                     InputDeviceCharacteristics.Controller | 
                     InputDeviceCharacteristics.Right,
                     devices);
+
+                if ( devices.Count == 0 )
+                {
+                    return null;
+                }
+
                 m_RightController.SetInputDevice(devices[0]);
             }
             return m_RightController;

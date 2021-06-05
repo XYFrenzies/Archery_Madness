@@ -39,6 +39,11 @@ public class HandController : MonoBehaviour
         {
             case Side.LEFT:
                 {
+                    if ( InputManager.Instance.LeftController == null )
+                    {
+                        return;
+                    }
+
                     InputManager.Instance.LeftController.TryGetBinding(
                         XRButton.Grip,
                         PressType.Begin,
@@ -47,6 +52,11 @@ public class HandController : MonoBehaviour
                 }
             case Side.RIGHT:
                 {
+                    if ( InputManager.Instance.RightController == null )
+                    {
+                        return;
+                    }
+
                     InputManager.Instance.RightController.TryGetBinding(
                         XRButton.Grip,
                         PressType.Begin,
@@ -58,12 +68,12 @@ public class HandController : MonoBehaviour
 
     private void Update()
     {
-        if ( m_GripPressed.Active )
-        {
-            GameObject newObject = Instantiate(SpawnableObject);
-            newObject.transform.position = transform.position;
-            Interactor.interactionManager.ForceSelect(Interactor, newObject.GetComponent<XRGrabInteractable>());
-        }
+        //if ( m_GripPressed.Active )
+        //{
+        //    GameObject newObject = Instantiate(SpawnableObject);
+        //    newObject.transform.position = transform.position;
+        //    Interactor.interactionManager.ForceSelect(Interactor, newObject.GetComponent<XRGrabInteractable>());
+        //}
     }
 
     private void OnTriggerEnter(Collider a_Collider)
