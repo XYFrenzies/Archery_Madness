@@ -1,57 +1,35 @@
 ﻿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class Quiver_New : XRSocketInteractor
+public class Quiver_New : XRBaseInteractable
 {
     public GameObject ArrowPrefab = null;
-    private Vector3 AttachOffset = Vector3.zero;
 
-    protected override void Awake()
+    protected override void OnEnable()
     {
-        base.Awake();
-
-        CreateAndSelectArrow();
-        SetAttachOffset();
+        base.OnEnable();
+        selectEntered.AddListener( CreateAndSelectArrow );
     }
 
-    protected override void OnSelectExiting( XRBaseInteractable a_Interactable )
+    protected override void OnDisable()
     {
-        base.OnSelectExiting(a_Interactable);
-        CreateAndSelectArrow();
+        base.OnDisable();
+        selectEntered.RemoveListener( CreateAndSelectArrow );
     }
 
-    protected override void OnSelectExited(XRBaseInteractable a_Interactable)
+    private void CreateAndSelectArrow( SelectEnterEventArgs a_Args )
     {
-        
+        Arrow_New arrow = CreateArrow( a_Args.interactor.transform );
+        interactionManager.ForceSelect( a_Args.interactor, arrow );
     }
 
-    private void CreateAndSelectArrow()
+    private Arrow_New CreateArrow( Transform a_Orientation )
     {
-        Arrow_New arrow = CreateArrow();
-        SelectArrow( arrow );
-    }
-
-    private Arrow_New CreateArrow()
-    {
-        GameObject arrowObject = Instantiate( 
-            ArrowPrefab, 
-            transform.position - AttachOffset, 
-            transform.rotation );
+        GameObject arrowObject = Instantiate(
+            ArrowPrefab,
+            a_Orientation.position,
+            a_Orientation.rotation );
 
         return arrowObject.GetComponent< Arrow_New >();
-    }
-
-    private void SelectArrow( Arrow_New a_Arrow )
-    {
-        OnSelectEntered(a_Arrow);
-        a_Arrow.OnSelectEntered(this);
-    }
-
-    private void SetAttachOffset()
-    {
-        if ( selectTarget is XRGrabInteractable interactable )
-        {
-            AttachOffset = interactable.attachTransform.localPosition;
-        }
     }
 }

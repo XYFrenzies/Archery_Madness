@@ -3,30 +3,25 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Bow_New : XRGrabInteractable
 {
-    private Animator m_Animator = null;
-    private Puller m_Puller = null;
+    private Notch m_Notch = null;
+
     protected override void Awake()
     {
         base.Awake();
-        m_Animator = GetComponent< Animator >();
-        m_Puller = GetComponentInChildren< Puller >();
+        m_Notch = GetComponentInChildren< Notch >();
     }
 
-    public override void ProcessInteractable( XRInteractionUpdateOrder.UpdatePhase a_UpdatePhase )
+    protected override void OnEnable()
     {
-        base.ProcessInteractable( a_UpdatePhase );
-
-        if ( a_UpdatePhase == XRInteractionUpdateOrder.UpdatePhase.Dynamic )
-        {
-            if ( isSelected )
-            {
-                AnimateBow( m_Puller.PullAmount );
-            }
-        }
+        base.OnEnable();
+        selectEntered.AddListener( m_Notch.SetReady );
+        selectExited.AddListener( m_Notch.SetReady );
     }
 
-    private void AnimateBow( float a_Value )
+    protected override void OnDisable()
     {
-        m_Animator.SetFloat( "Blend", a_Value );
+        base.OnDisable();
+        selectEntered.RemoveListener( m_Notch.SetReady );
+        selectExited.RemoveListener( m_Notch.SetReady );
     }
 }
