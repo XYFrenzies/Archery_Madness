@@ -6,11 +6,11 @@ public class Target_FireBird : Target
 {
     private void Awake()
     {
-        m_TargetType = TargetType.FIRE;
+        Type = TargetType.FIRE;
     }
 
-    public override void OnArrowContact(Arrow a_ContactingArrow)
+    public override void OnArrowHit( Arrow a_Arrow )
     {
-
+        base.OnArrowHit(a_Arrow);
     }
 }

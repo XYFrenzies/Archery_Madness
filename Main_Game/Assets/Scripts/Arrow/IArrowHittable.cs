@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IArrowHittable
 {
-    void Hit( Arrow a_Arrow );
+    void OnArrowHit( Arrow a_Arrow );
 }

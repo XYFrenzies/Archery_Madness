@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class HandController : MonoBehaviour
+public class HandController : XRDirectInteractor
 {
     public enum Side
     {
@@ -13,19 +13,4 @@ public class HandController : MonoBehaviour
     }
 
     public Side HandSide;
-
-    private void OnTriggerEnter(Collider a_Collider)
-    {
-
-    }
-
-    private void OnTriggerExit(Collider a_Collider)
-    {
-
-    }
-
-    private void OnTriggerStay(Collider a_Collider)
-    {
-
-    }
 }

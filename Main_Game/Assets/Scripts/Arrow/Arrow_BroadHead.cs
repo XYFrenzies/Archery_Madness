@@ -7,6 +7,7 @@ public class Arrow_Broadhead : Arrow
     private new void Awake()
     {
         base.Awake();
-        m_ArrowType = ArrowType.BROAD;
+        Type = ArrowType.BROAD;
+        IntendedTarget = Target.TargetType.GLASS;
     }
 }

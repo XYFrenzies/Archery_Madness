@@ -7,6 +7,7 @@ public class Arrow_WaterBalloon : Arrow
     private new void Awake()
     {
         base.Awake();
-        m_ArrowType = ArrowType.WATER;
+        Type = ArrowType.WATER;
+        IntendedTarget = Target.TargetType.FIRE;
     }
 }

@@ -16,7 +16,12 @@ public class Arrow : XRGrabInteractable
 
     [ Header( "Hit" ) ]
     public Transform Tip = null;
-    public LayerMask LayerMask = ~Physics.IgnoreRaycastLayer;
+    public LayerMask LayerMask = Physics.IgnoreRaycastLayer;
+
+    
+    public ArrowType Type { get; protected set; }
+    public Target.TargetType IntendedTarget { get; protected set; }
+    public Vector3 InitialPosition { get { return m_InitialPosition; } }
 
     protected override void Awake()
     {
@@ -57,6 +62,7 @@ public class Arrow : XRGrabInteractable
         {
             SetLaunch( true );
             UpdateLastPosition();
+            SetInitialPosition( Tip.position );
             ApplyForce( a_Notch.PullMeasurer );
         }
     }
@@ -110,6 +116,11 @@ public class Arrow : XRGrabInteractable
         }
     }
 
+    private void SetInitialPosition( Vector3 a_InitalPosition )
+    {
+        m_InitialPosition = a_InitalPosition;
+    }
+
     private bool CheckForCollision()
     {
         if ( Physics.Linecast( m_LastPosition, Tip.position, out RaycastHit hit, LayerMask ) )
@@ -141,15 +152,23 @@ public class Arrow : XRGrabInteractable
 
         if ( hittable != null )
         {
-            hittable.Hit( this );
+            hittable.OnArrowHit( this );
+        }
+
+        if ( hittable is Target )
+        {
+            GameStateManager.Instance.RegisterShot( new ContactScenario( this, hittable as Target ) );
+        }
+        else
+        {
+            GameStateManager.Instance.RegisterShot( new ContactScenario( this, Tip.position ) );
         }
     }
     
-    protected ArrowType m_ArrowType;
+    private Collider m_Collider;
+    private Rigidbody m_Rigidbody;
 
-    private Collider m_Collider = null;
-    private Rigidbody m_Rigidbody = null;
-
+    private Vector3 m_InitialPosition = Vector3.zero;
     private Vector3 m_LastPosition = Vector3.zero;
     private bool m_Launched = false;
 }

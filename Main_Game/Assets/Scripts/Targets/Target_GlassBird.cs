@@ -6,11 +6,11 @@ public class Target_GlassBird : Target
 {
     private void Awake()
     {
-        m_TargetType = TargetType.GLASS;
+        Type = TargetType.GLASS;
     }
 
-    public override void OnArrowContact(Arrow a_ContactingArrow)
+    public override void OnArrowHit( Arrow a_Arrow )
     {
-        
+        base.OnArrowHit(a_Arrow);
     }
 }
