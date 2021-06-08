@@ -6,6 +6,8 @@ public abstract class Target : MonoBehaviour, IResettable, IArrowHittable
 {
     public enum TargetType
     {
+        NONE,
+        UI,
         WOOD,
         FIRE,
         GLASS
@@ -32,6 +34,4 @@ public abstract class Target : MonoBehaviour, IResettable, IArrowHittable
     {
         // Do something when arrow hits this object.
     }
-
-    private ConfigurableJoint m_SlideRailJoint;
 }

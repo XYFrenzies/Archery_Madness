@@ -73,8 +73,6 @@ public class ScoreController : Singleton< ScoreController >
         m_ScoreObject.HighScores[ foundIndex ] = 
             m_ScoreObject.HighScores[ m_ScoreObject.HighScores.Length - 1 ];
         Array.Resize( ref m_ScoreObject.HighScores, m_ScoreObject.HighScores.Length - 1 );
-
-        m_ScoreObject.Save();
     }
 
     public void RemoveAt( int a_Index )
@@ -87,8 +85,6 @@ public class ScoreController : Singleton< ScoreController >
         m_ScoreObject.HighScores[ a_Index ] = 
             m_ScoreObject.HighScores[ m_ScoreObject.HighScores.Length - 1 ];
         Array.Resize( ref m_ScoreObject.HighScores, m_ScoreObject.HighScores.Length - 1 );
-
-        m_ScoreObject.Save();
     }
 
     private void Insert( HighScore a_HighScore )
@@ -101,8 +97,6 @@ public class ScoreController : Singleton< ScoreController >
         {
             Array.Resize( ref m_ScoreObject.HighScores, m_ScoreObject.HighScores.Length - 1 );
         }
-
-        m_ScoreObject.Save();
     }
 
     private void Sort()

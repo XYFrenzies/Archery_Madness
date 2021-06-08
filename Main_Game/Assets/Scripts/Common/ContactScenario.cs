@@ -4,8 +4,8 @@ using UnityEngine;
 
 public struct ContactScenario
 {
-    public Arrow Arrow;
-    public Target Target;
+    public Arrow Arrow { get; private set; }
+    public Target Target { get; private set; }
     public bool HitTarget { get; private set; }
     public bool HitCorrectTarget { get; private set; }
     public float TravelDistance { get; private set; }
@@ -31,6 +31,7 @@ public struct ContactScenario
     public int ResultantScore()
     {
         // Define scoring parameters.
+
         return 0;
     }
 }

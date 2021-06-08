@@ -6,25 +6,46 @@ using System;
 [ Serializable ]
 public class HighScore : IComparable
 {
-    public int m_Score;
+    public int Value { get; private set; }
 
     public void Increment()
     {
-        ++m_Score;
+        ++Value;
     }
 
-    public void Decrement()
+    public void Increment( int a_Count )
     {
-        if ( m_Score == 0 )
+        if ( a_Count < 1 )
         {
             return;
         }
 
-        --m_Score;
+        Value += a_Count;
+    }
+
+    public void Decrement()
+    {
+        if ( Value == 0 )
+        {
+            return;
+        }
+
+        --Value;
+    }
+
+    public void Decrement( int a_Count )
+    {
+        if ( a_Count < 1 )
+        {
+            return;
+        }
+
+        Value -= a_Count;
+        Value = Math.Max( 0, Value );
     }
 
     public int CompareTo( object a_Object )
     {
-        return -( a_Object as HighScore ).m_Score.CompareTo( m_Score );
+        return -( a_Object as HighScore ).Value.CompareTo( Value );
     }
 }

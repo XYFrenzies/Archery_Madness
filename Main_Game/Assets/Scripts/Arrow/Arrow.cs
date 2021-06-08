@@ -6,6 +6,7 @@ public class Arrow : XRGrabInteractable
 {
     public enum ArrowType
     {
+        NONE,
         BROAD,
         HAMMER,
         WATER
@@ -18,7 +19,6 @@ public class Arrow : XRGrabInteractable
     public Transform Tip = null;
     public LayerMask LayerMask = Physics.IgnoreRaycastLayer;
 
-    
     public ArrowType Type { get; protected set; }
     public Target.TargetType IntendedTarget { get; protected set; }
     public Vector3 InitialPosition { get { return m_InitialPosition; } }
@@ -27,7 +27,7 @@ public class Arrow : XRGrabInteractable
     {
         base.Awake();
         m_Collider = GetComponent< Collider >();
-        m_Rigidbody = GetComponent< Rigidbody >();
+        m_ThisRigidbody = GetComponent< Rigidbody >();
     }
 
     protected override void OnSelectEntering( SelectEnterEventArgs a_Args )
@@ -75,14 +75,14 @@ public class Arrow : XRGrabInteractable
 
     private void UpdateLastPosition()
     {
-        m_LastPosition = Tip.position;
+        m_LastKnownPosition = Tip.position;
     }
 
     private void ApplyForce( PullMeasurer a_PullMeasurer )
     {
         float power = a_PullMeasurer.PullAmount;
         Vector3 force = transform.forward * ( power * Speed );
-        m_Rigidbody.AddForce( force );
+        m_ThisRigidbody.AddForce( force );
     }
 
     public override void ProcessInteractable( XRInteractionUpdateOrder.UpdatePhase a_UpdatePhase )
@@ -110,9 +110,9 @@ public class Arrow : XRGrabInteractable
 
     private void SetDirection()
     {
-        if ( m_Rigidbody.velocity.z > 0.5f )
+        if ( m_ThisRigidbody.velocity.z > 0.5f )
         {
-            transform.forward = m_Rigidbody.velocity;
+            transform.forward = m_ThisRigidbody.velocity;
         }
     }
 
@@ -123,7 +123,7 @@ public class Arrow : XRGrabInteractable
 
     private bool CheckForCollision()
     {
-        if ( Physics.Linecast( m_LastPosition, Tip.position, out RaycastHit hit, LayerMask ) )
+        if ( Physics.Linecast( m_LastKnownPosition, Tip.position, out RaycastHit hit, LayerMask ) )
         {
             TogglePhysics( false );
             ChildArrow( hit );
@@ -135,8 +135,8 @@ public class Arrow : XRGrabInteractable
 
     private void TogglePhysics( bool a_Value )
     {
-        m_Rigidbody.isKinematic = !a_Value;
-        m_Rigidbody.useGravity = a_Value;
+        m_ThisRigidbody.isKinematic = !a_Value;
+        m_ThisRigidbody.useGravity = a_Value;
     }
 
     private void ChildArrow( RaycastHit a_Hit )
@@ -144,7 +144,7 @@ public class Arrow : XRGrabInteractable
         Transform newParent = a_Hit.collider.transform;
         transform.SetParent( newParent );
     }
-
+    
     private void CheckForHittable( RaycastHit a_Hit )
     {
         GameObject hitObject = a_Hit.transform.gameObject;
@@ -166,9 +166,9 @@ public class Arrow : XRGrabInteractable
     }
     
     private Collider m_Collider;
-    private Rigidbody m_Rigidbody;
+    private Rigidbody m_ThisRigidbody;
 
     private Vector3 m_InitialPosition = Vector3.zero;
-    private Vector3 m_LastPosition = Vector3.zero;
+    private Vector3 m_LastKnownPosition = Vector3.zero;
     private bool m_Launched = false;
 }
