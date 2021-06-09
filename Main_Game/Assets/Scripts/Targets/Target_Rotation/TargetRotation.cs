@@ -5,14 +5,21 @@ using UnityEngine;
 public class TargetRotation : MonoBehaviour
 {
     [Tooltip("If the time is 0, then the target will stay down until the animation plays.")]
+    [SerializeField] private bool toStandImmediately = false;
+    [SerializeField] private bool startDown = false;
     [SerializeField] private float timerToStand = 5.0f;
     private Animation animationFall;
     private bool hasBeenHit;
     private bool isStanding;
+    
     private float deltaTime = 0;
     private void Start()
     {
         animationFall = GetComponentInParent<Animation>();
+        //if (startDown)
+        //{
+
+        //}
         hasBeenHit = false;
         isStanding = true;
     }
@@ -35,6 +42,7 @@ public class TargetRotation : MonoBehaviour
             }
         }
     }
+
     //If the target is collided by another object.
     private void OnCollisionEnter(Collision _)
     {
