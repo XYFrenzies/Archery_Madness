@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.2850269, g: 0.3713935, b: 0.49601045, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -188,6 +188,18 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_AttachTransform: {fileID: 0}
   m_StartingSelectedInteractable: {fileID: 0}
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
   m_OnHoverEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -206,22 +218,32 @@ MonoBehaviour:
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
   m_AudioClipForOnSelectExited: {fileID: 0}
+  m_PlayAudioClipOnSelectCanceled: 0
+  m_AudioClipForOnSelectCanceled: {fileID: 0}
   m_PlayAudioClipOnHoverEntered: 0
   m_AudioClipForOnHoverEntered: {fileID: 0}
   m_PlayAudioClipOnHoverExited: 0
   m_AudioClipForOnHoverExited: {fileID: 0}
+  m_PlayAudioClipOnHoverCanceled: 0
+  m_AudioClipForOnHoverCanceled: {fileID: 0}
   m_PlayHapticsOnSelectEntered: 0
   m_HapticSelectEnterIntensity: 0
   m_HapticSelectEnterDuration: 0
   m_PlayHapticsOnSelectExited: 0
   m_HapticSelectExitIntensity: 0
   m_HapticSelectExitDuration: 0
+  m_PlayHapticsOnSelectCanceled: 0
+  m_HapticSelectCancelIntensity: 0
+  m_HapticSelectCancelDuration: 0
   m_PlayHapticsOnHoverEntered: 0
   m_HapticHoverEnterIntensity: 0
   m_HapticHoverEnterDuration: 0
   m_PlayHapticsOnHoverExited: 0
   m_HapticHoverExitIntensity: 0
   m_HapticHoverExitDuration: 0
+  m_PlayHapticsOnHoverCanceled: 0
+  m_HapticHoverCancelIntensity: 0
+  m_HapticHoverCancelDuration: 0
 --- !u!114 &40723181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,12 +260,11 @@ MonoBehaviour:
   m_EnableInputTracking: 1
   m_EnableInputActions: 1
   m_ModelPrefab: {fileID: 4149444341506915341, guid: 14cb863b172636c499aca1e121ed2d96, type: 3}
-  m_ModelTransform: {fileID: 40723177}
+  m_ModelParent: {fileID: 40723177}
+  m_Model: {fileID: 0}
   m_AnimateModel: 0
   m_ModelSelectTransition: 
   m_ModelDeSelectTransition: 
-  m_AnchorControlDeadzone: 0.75
-  m_AnchorControlOffAxisDeadzone: 0.3
   m_PositionAction:
     m_UseReference: 1
     m_Action:
@@ -705,7 +726,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &296138508
 PrefabInstance:
@@ -787,16 +808,41 @@ MonoBehaviour:
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  m_CustomReticle: {fileID: 1464817429111846000, guid: 1858408184e196a47a472221e1d09114, type: 3}
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
   m_OnFirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnLastHoverExited:
     m_PersistentCalls:
       m_Calls: []
   m_OnHoverEntered:
     m_PersistentCalls:
       m_Calls: []
   m_OnHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnLastHoverExited:
     m_PersistentCalls:
       m_Calls: []
   m_OnSelectEntered:
@@ -814,7 +860,6 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  m_CustomReticle: {fileID: 1464817429111846000, guid: 1858408184e196a47a472221e1d09114, type: 3}
   m_TeleportationProvider: {fileID: 0}
   m_MatchOrientation: 0
   m_TeleportTrigger: 0
@@ -1193,18 +1238,13 @@ RectTransform:
   - {fileID: 1965211136926015874}
   - {fileID: 1223051399}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &578586020 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3123554068938783196, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-  m_PrefabInstance: {fileID: 1576263491}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &653260035
 GameObject:
   m_ObjectHideFlags: 0
@@ -1607,6 +1647,18 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_AttachTransform: {fileID: 0}
   m_StartingSelectedInteractable: {fileID: 0}
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
   m_OnHoverEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -1625,27 +1677,39 @@ MonoBehaviour:
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
   m_AudioClipForOnSelectExited: {fileID: 0}
+  m_PlayAudioClipOnSelectCanceled: 0
+  m_AudioClipForOnSelectCanceled: {fileID: 0}
   m_PlayAudioClipOnHoverEntered: 0
   m_AudioClipForOnHoverEntered: {fileID: 0}
   m_PlayAudioClipOnHoverExited: 0
   m_AudioClipForOnHoverExited: {fileID: 0}
+  m_PlayAudioClipOnHoverCanceled: 0
+  m_AudioClipForOnHoverCanceled: {fileID: 0}
   m_PlayHapticsOnSelectEntered: 0
   m_HapticSelectEnterIntensity: 0
   m_HapticSelectEnterDuration: 0
   m_PlayHapticsOnSelectExited: 0
   m_HapticSelectExitIntensity: 0
   m_HapticSelectExitDuration: 0
+  m_PlayHapticsOnSelectCanceled: 0
+  m_HapticSelectCancelIntensity: 0
+  m_HapticSelectCancelDuration: 0
   m_PlayHapticsOnHoverEntered: 0
   m_HapticHoverEnterIntensity: 0
   m_HapticHoverEnterDuration: 0
   m_PlayHapticsOnHoverExited: 0
   m_HapticHoverExitIntensity: 0
   m_HapticHoverExitDuration: 0
+  m_PlayHapticsOnHoverCanceled: 0
+  m_HapticHoverCancelIntensity: 0
+  m_HapticHoverCancelDuration: 0
   m_LineType: 0
+  m_BlendVisualLinePoints: 1
   m_MaxRaycastDistance: 30
   m_ReferenceFrame: {fileID: 0}
   m_Velocity: 16
   m_Acceleration: 9.8
+  m_AdditionalGroundHeight: 0.1
   m_AdditionalFlightTime: 0.5
   m_EndPointDistance: 30
   m_EndPointHeight: -10
@@ -1658,6 +1722,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RaycastTriggerInteraction: 1
+  m_HitClosestOnly: 0
   m_KeepSelectedTargetValid: 1
   m_HoverToSelect: 0
   m_HoverTimeToSelect: 0.5
@@ -1666,6 +1731,7 @@ MonoBehaviour:
   m_UseForceGrab: 1
   m_RotateSpeed: 180
   m_TranslateSpeed: 1
+  m_AnchorRotateReferenceFrame: {fileID: 0}
 --- !u!114 &774722726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1682,12 +1748,11 @@ MonoBehaviour:
   m_EnableInputTracking: 1
   m_EnableInputActions: 0
   m_ModelPrefab: {fileID: 4149444341506915341, guid: 14cb863b172636c499aca1e121ed2d96, type: 3}
-  m_ModelTransform: {fileID: 774722722}
+  m_ModelParent: {fileID: 774722722}
+  m_Model: {fileID: 0}
   m_AnimateModel: 0
   m_ModelSelectTransition: 
   m_ModelDeSelectTransition: 
-  m_AnchorControlDeadzone: 0.75
-  m_AnchorControlOffAxisDeadzone: 0.3
   m_PositionAction:
     m_UseReference: 1
     m_Action:
@@ -1805,7 +1870,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &819229733
 GameObject:
@@ -1915,7 +1980,7 @@ Transform:
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 23
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &848955592
 PrefabInstance:
@@ -2035,7 +2100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotPosition: {fileID: 1872982576}
-  objToShoot: {fileID: 578586020}
+  objToShoot: {fileID: 0}
 --- !u!1 &909394392 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9571aab4709a7174e8b2f877883467ef, type: 3}
@@ -2096,7 +2161,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6094805347922404956, guid: 41614b92a5ff1b94da73fcea5ea92db8, type: 3}
       propertyPath: m_RootOrder
-      value: 20
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 6094805347922404956, guid: 41614b92a5ff1b94da73fcea5ea92db8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2196,6 +2261,18 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_AttachTransform: {fileID: 0}
   m_StartingSelectedInteractable: {fileID: 0}
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
   m_OnHoverEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -2214,22 +2291,32 @@ MonoBehaviour:
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
   m_AudioClipForOnSelectExited: {fileID: 0}
+  m_PlayAudioClipOnSelectCanceled: 0
+  m_AudioClipForOnSelectCanceled: {fileID: 0}
   m_PlayAudioClipOnHoverEntered: 0
   m_AudioClipForOnHoverEntered: {fileID: 0}
   m_PlayAudioClipOnHoverExited: 0
   m_AudioClipForOnHoverExited: {fileID: 0}
+  m_PlayAudioClipOnHoverCanceled: 0
+  m_AudioClipForOnHoverCanceled: {fileID: 0}
   m_PlayHapticsOnSelectEntered: 0
   m_HapticSelectEnterIntensity: 0
   m_HapticSelectEnterDuration: 0
   m_PlayHapticsOnSelectExited: 0
   m_HapticSelectExitIntensity: 0
   m_HapticSelectExitDuration: 0
+  m_PlayHapticsOnSelectCanceled: 0
+  m_HapticSelectCancelIntensity: 0
+  m_HapticSelectCancelDuration: 0
   m_PlayHapticsOnHoverEntered: 0
   m_HapticHoverEnterIntensity: 0
   m_HapticHoverEnterDuration: 0
   m_PlayHapticsOnHoverExited: 0
   m_HapticHoverExitIntensity: 0
   m_HapticHoverExitDuration: 0
+  m_PlayHapticsOnHoverCanceled: 0
+  m_HapticHoverCancelIntensity: 0
+  m_HapticHoverCancelDuration: 0
 --- !u!114 &1009924882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2246,12 +2333,11 @@ MonoBehaviour:
   m_EnableInputTracking: 1
   m_EnableInputActions: 1
   m_ModelPrefab: {fileID: 2438757715876879646, guid: 8565c76e56dc0e04e9857fe5d1a1c013, type: 3}
-  m_ModelTransform: {fileID: 1009924878}
+  m_ModelParent: {fileID: 1009924878}
+  m_Model: {fileID: 0}
   m_AnimateModel: 0
   m_ModelSelectTransition: 
   m_ModelDeSelectTransition: 
-  m_AnchorControlDeadzone: 0.75
-  m_AnchorControlOffAxisDeadzone: 0.3
   m_PositionAction:
     m_UseReference: 1
     m_Action:
@@ -2403,9 +2489,10 @@ MonoBehaviour:
   m_RigBaseGameObject: {fileID: 1033993785}
   m_CameraFloorOffsetObject: {fileID: 1892337802}
   m_CameraGameObject: {fileID: 1687258581}
-  m_TrackingOriginMode: 2
-  m_TrackingSpace: 3
+  m_RequestedTrackingOriginMode: 2
   m_CameraYOffset: 1.36144
+  m_TrackingSpace: 3
+  m_TrackingOriginMode: -2147483648
 --- !u!4 &1033993787
 Transform:
   m_ObjectHideFlags: 0
@@ -2856,6 +2943,18 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_AttachTransform: {fileID: 0}
   m_StartingSelectedInteractable: {fileID: 0}
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
   m_OnHoverEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -2874,27 +2973,39 @@ MonoBehaviour:
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
   m_AudioClipForOnSelectExited: {fileID: 0}
+  m_PlayAudioClipOnSelectCanceled: 0
+  m_AudioClipForOnSelectCanceled: {fileID: 0}
   m_PlayAudioClipOnHoverEntered: 0
   m_AudioClipForOnHoverEntered: {fileID: 0}
   m_PlayAudioClipOnHoverExited: 0
   m_AudioClipForOnHoverExited: {fileID: 0}
+  m_PlayAudioClipOnHoverCanceled: 0
+  m_AudioClipForOnHoverCanceled: {fileID: 0}
   m_PlayHapticsOnSelectEntered: 0
   m_HapticSelectEnterIntensity: 0
   m_HapticSelectEnterDuration: 0
   m_PlayHapticsOnSelectExited: 0
   m_HapticSelectExitIntensity: 0
   m_HapticSelectExitDuration: 0
+  m_PlayHapticsOnSelectCanceled: 0
+  m_HapticSelectCancelIntensity: 0
+  m_HapticSelectCancelDuration: 0
   m_PlayHapticsOnHoverEntered: 0
   m_HapticHoverEnterIntensity: 0
   m_HapticHoverEnterDuration: 0
   m_PlayHapticsOnHoverExited: 0
   m_HapticHoverExitIntensity: 0
   m_HapticHoverExitDuration: 0
+  m_PlayHapticsOnHoverCanceled: 0
+  m_HapticHoverCancelIntensity: 0
+  m_HapticHoverCancelDuration: 0
   m_LineType: 0
+  m_BlendVisualLinePoints: 1
   m_MaxRaycastDistance: 30
   m_ReferenceFrame: {fileID: 0}
   m_Velocity: 16
   m_Acceleration: 9.8
+  m_AdditionalGroundHeight: 0.1
   m_AdditionalFlightTime: 0.5
   m_EndPointDistance: 30
   m_EndPointHeight: -10
@@ -2907,6 +3018,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RaycastTriggerInteraction: 1
+  m_HitClosestOnly: 0
   m_KeepSelectedTargetValid: 1
   m_HoverToSelect: 0
   m_HoverTimeToSelect: 0.5
@@ -2915,6 +3027,7 @@ MonoBehaviour:
   m_UseForceGrab: 1
   m_RotateSpeed: 180
   m_TranslateSpeed: 1
+  m_AnchorRotateReferenceFrame: {fileID: 0}
 --- !u!114 &1300471765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2931,12 +3044,11 @@ MonoBehaviour:
   m_EnableInputTracking: 1
   m_EnableInputActions: 0
   m_ModelPrefab: {fileID: 2438757715876879646, guid: 8565c76e56dc0e04e9857fe5d1a1c013, type: 3}
-  m_ModelTransform: {fileID: 1300471761}
+  m_ModelParent: {fileID: 1300471761}
+  m_Model: {fileID: 0}
   m_AnimateModel: 0
   m_ModelSelectTransition: 
   m_ModelDeSelectTransition: 
-  m_AnchorControlDeadzone: 0.75
-  m_AnchorControlOffAxisDeadzone: 0.3
   m_PositionAction:
     m_UseReference: 1
     m_Action:
@@ -3242,7 +3354,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1518192226
 GameObject:
@@ -3272,7 +3384,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1556901916
 PrefabInstance:
@@ -3319,79 +3431,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85dfab9623c67784fa7894de63cd1604, type: 3}
---- !u!1001 &1576263491
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -3355841739364403074, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_UseGravity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -3355841739364403074, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_Mass
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: -1673001783112686859, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: moveSpeed
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3123554068938783196, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_Name
-      value: Sphere
-      objectReference: {fileID: 0}
-    - target: {fileID: 3123554068938783196, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.43591
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.012272258
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.5858572
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.01047172
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.00349046
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.00003655335
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9999391
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3395006133108167528, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d6b44d521eaf00341985fa9ed46c08ab, type: 3}
 --- !u!1 &1576849316
 GameObject:
   m_ObjectHideFlags: 0
@@ -3599,7 +3638,7 @@ Transform:
   m_LocalScale: {x: 0.3, y: 0.5, z: 0.2}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &1576849323
 MonoBehaviour:
@@ -3739,7 +3778,7 @@ Transform:
   m_Children:
   - {fileID: 1872982577}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 20.146, y: 195.09, z: 0.001}
 --- !u!114 &1687258586
 MonoBehaviour:
@@ -4113,63 +4152,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 45, y: 130, z: 90}
---- !u!1001 &266155327373956264
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_RootOrder
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3927432276146303518, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8234133072196654983, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
-      propertyPath: m_Name
-      value: Cube
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e871ed1eb674ba245acbf5674b36e80f, type: 3}
 --- !u!1001 &289639469846255550
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4211,7 +4193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8187767559702539793, guid: 6f2d255839c8f0c4a8d2c69b39e39cc8, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8187767559702539793, guid: 6f2d255839c8f0c4a8d2c69b39e39cc8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4504,7 +4486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8215890545544546757, guid: 8e5a19d56d63ddf41b3db6c69bac8ad6, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8215890545544546757, guid: 8e5a19d56d63ddf41b3db6c69bac8ad6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4569,7 +4551,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4848016362827194945, guid: 08e7c8a4e3174454fbbdfc626c9f4f62, type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4848016362827194945, guid: 08e7c8a4e3174454fbbdfc626c9f4f62, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4630,7 +4612,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6094805347922404956, guid: 41614b92a5ff1b94da73fcea5ea92db8, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6094805347922404956, guid: 41614b92a5ff1b94da73fcea5ea92db8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
