@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
+using System;
 using UnityEngine.XR;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -25,16 +26,19 @@ public class GameStateManager : Singleton< GameStateManager >
         m_States.Add( GameState.State.PRE_GAME, new GameState_PreGame() );
         m_States.Add( GameState.State.IN_GAME, new GameState_InGame() );
         m_States.Add( GameState.State.POST_GAME, new GameState_PostGame() );
+        m_States.Add( GameState.State.PRE_TUTORIAL, new GameState_PreTutorial() );
+        m_States.Add( GameState.State.IN_TUTORIAL, new GameState_InTutorial() );
+        m_States.Add( GameState.State.POST_TUTORIAL, new GameState_PostTutorial() );
         m_States.Add( GameState.State.SCORE, new GameState_Score() );
         m_CurrentState = m_States[ GameState.State.MENU ];
 
         TimeController = new TimeController();
         ScoreController = GetComponent< ScoreController >();
-    }
 
-    private void Update()
-    {
-        m_CurrentState.OnProcess();
+        DontDestroyOnLoad( this );
+        DontDestroyOnLoad( ScoreController );
+
+        GetState( GameState.State.MENU ).Start();
     }
 
     public GameState.State Current
@@ -51,6 +55,8 @@ public class GameStateManager : Singleton< GameStateManager >
     public void OnPlayGame()
     {
         // Called when "PlayGame" target is shot.
+        GetState( GameState.State.MENU ).ForceStop();
+        GetState( GameState.State.PRE_GAME ).Start();
     }
 
     // Called when Play Tutorial target is shot.
@@ -161,14 +167,6 @@ public class GameStateManager : Singleton< GameStateManager >
         BowDockController.DockBow();
     }
 
-    // Fires end of current state, beginning of next state, and sets next state as current state.
-    public void SwitchToState( GameState.State a_NextState )
-    {
-        m_CurrentState.OnEnd();
-        m_CurrentState = m_States[ a_NextState ];
-        m_CurrentState.OnBegin();
-    }
-
     // Get State associated with the flag.
     public GameState GetState( GameState.State a_State )
     {
@@ -185,7 +183,6 @@ public class GameStateManager : Singleton< GameStateManager >
     private bool m_BowPickedUp;
 
     #pragma warning restore 0414
-
 }
 
 public abstract class GameState
@@ -196,25 +193,51 @@ public abstract class GameState
         PRE_GAME,
         IN_GAME,
         POST_GAME,
+        PRE_TUTORIAL,
+        IN_TUTORIAL,
+        POST_TUTORIAL,
         SCORE
     }
 
     public virtual State ThisState { get; protected set; } = State.MENU;
 
-    public virtual void OnBegin()
+    public void Start()
+    {
+        m_OnInitiate = GameStateManager.Instance.StartCoroutine( OnStart() );
+    }
+
+    public void ForceStop()
+    {
+        if ( m_OnInitiate != null )
+        {
+            GameStateManager.Instance.StopCoroutine( m_OnInitiate );
+            OnEnd();
+        }
+    }
+
+    private IEnumerator OnStart()
+    {
+        OnBegin();
+        yield return OnProcess();
+        OnEnd();
+    }
+
+    protected virtual void OnBegin()
     {
 
     }
 
-    public virtual void OnProcess()
+    protected virtual IEnumerator OnProcess()
+    {
+        yield return null;
+    }
+
+    protected virtual void OnEnd()
     {
 
     }
 
-    public virtual void OnEnd()
-    {
-
-    }
+    private Coroutine m_OnInitiate;
 }
 
 public sealed class GameState_Menu : GameState
@@ -224,17 +247,17 @@ public sealed class GameState_Menu : GameState
         ThisState = State.MENU;
     }
 
-    public override void OnBegin()
+    protected override void OnBegin()
     {
-        
+
     }
 
-    public override void OnProcess()
+    protected override IEnumerator OnProcess()
     {
-        
+        yield return null;
     }
 
-    public override void OnEnd()
+    protected override void OnEnd()
     {
 
     }
@@ -247,17 +270,17 @@ public sealed class GameState_PreGame : GameState
         ThisState = State.PRE_GAME;
     }
 
-    public override void OnBegin()
+    protected override void OnBegin()
     {
 
     }
 
-    public override void OnProcess()
+    protected override IEnumerator OnProcess()
     {
-
+        yield return null;
     }
 
-    public override void OnEnd()
+    protected override void OnEnd()
     {
 
     }
@@ -270,17 +293,17 @@ public sealed class GameState_InGame : GameState
         ThisState = State.IN_GAME;
     }
 
-    public override void OnBegin()
+    protected override void OnBegin()
     {
 
     }
 
-    public override void OnProcess()
+    protected override IEnumerator OnProcess()
     {
-
+        yield return null;
     }
 
-    public override void OnEnd()
+    protected override void OnEnd()
     {
 
     }
@@ -293,17 +316,86 @@ public sealed class GameState_PostGame : GameState
         ThisState = State.POST_GAME;
     }
 
-    public override void OnBegin()
+    protected override void OnBegin()
     {
 
     }
 
-    public override void OnProcess()
+    protected override IEnumerator OnProcess()
+    {
+        yield return null;
+    }
+
+    protected override void OnEnd()
+    {
+
+    }
+}
+
+public sealed class GameState_PreTutorial : GameState
+{
+    public GameState_PreTutorial()
+    {
+        ThisState = State.PRE_TUTORIAL;
+    }
+
+    protected override void OnBegin()
     {
 
     }
 
-    public override void OnEnd()
+    protected override IEnumerator OnProcess()
+    {
+        yield return null;
+    }
+
+    protected override void OnEnd()
+    {
+
+    }
+}
+
+public sealed class GameState_InTutorial : GameState
+{
+    public GameState_InTutorial()
+    {
+        ThisState = State.IN_TUTORIAL;
+    }
+
+    protected override void OnBegin()
+    {
+
+    }
+
+    protected override IEnumerator OnProcess()
+    {
+        yield return null;
+    }
+
+    protected override void OnEnd()
+    {
+
+    }
+}
+
+public sealed class GameState_PostTutorial : GameState
+{
+    public GameState_PostTutorial()
+    {
+        ThisState = State.POST_TUTORIAL;
+    }
+
+    protected override void OnBegin()
+    {
+
+    }
+
+    protected override IEnumerator OnProcess()
+    {
+        yield return null;
+    }
+
+    protected override void OnEnd()
     {
 
     }
@@ -316,17 +408,17 @@ public sealed class GameState_Score : GameState
         ThisState = State.SCORE;
     }
 
-    public override void OnBegin()
+    protected override void OnBegin()
     {
 
     }
 
-    public override void OnProcess()
+    protected override IEnumerator OnProcess()
     {
-
+        yield return null;
     }
 
-    public override void OnEnd()
+    protected override void OnEnd()
     {
 
     }
