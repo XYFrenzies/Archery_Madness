@@ -84,11 +84,7 @@ public class GameStateManager : Singleton< GameStateManager >
         m_BowPickedUp = true;
         Bow.SetPhysics( false );
 
-        if ( m_BowRedockTimer != null )
-        {
-            StopCoroutine( m_BowRedockTimer );
-            m_BowRedockTimer = null;
-        }
+        BowDockController.StopRedock();
     }
 
     // Called when Bow is dropped.
@@ -97,7 +93,7 @@ public class GameStateManager : Singleton< GameStateManager >
         m_BowPickedUp = false;
         Bow.SetPhysics( true );
         
-        m_BowRedockTimer =  StartCoroutine( BowRedockTimer() );
+        BowDockController.StartRedock();
     }
 
     // Called when arrow makes collides with something.
@@ -159,14 +155,6 @@ public class GameStateManager : Singleton< GameStateManager >
 
     //-------------------------------------------------------------
 
-    private IEnumerator BowRedockTimer()
-    {
-        yield return new WaitForSeconds( 2.0f );
-
-        Bow.SetPhysics( false );
-        BowDockController.DockBow();
-    }
-
     // Get State associated with the flag.
     public GameState GetState( GameState.State a_State )
     {
@@ -175,7 +163,6 @@ public class GameStateManager : Singleton< GameStateManager >
 
     private GameState m_CurrentState = null;
     private Dictionary< GameState.State, GameState > m_States;
-    private Coroutine m_BowRedockTimer;
 
     //-------------------------------Game Flags---------------------------------------------------
     #pragma warning disable 0414
