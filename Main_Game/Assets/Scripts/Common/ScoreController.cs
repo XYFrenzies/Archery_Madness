@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ScoreController : Singleton< ScoreController >
 {
-    [ Range( 0, 10 ) ] public int TrackedScores; 
+    [ Range( 0, 10 ) ] public int TrackedScores;
 
     public HighScore CurrentScore
     {
