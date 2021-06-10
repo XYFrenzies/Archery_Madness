@@ -17,6 +17,7 @@ public class GameStateManager : Singleton< GameStateManager >
     public Quiver QuiverWaterhead;
     public Bow Bow;
     public BowDockController BowDockController;
+    public GalleryController GalleryController;
 
     public ScoreController ScoreController { get; private set; }
 
@@ -24,59 +25,74 @@ public class GameStateManager : Singleton< GameStateManager >
     {
         m_States = new Dictionary< GameState.State, GameState >();
         m_States.Add( GameState.State.MENU, new GameState_Menu() );
-        m_States.Add( GameState.State.PRE_GAME, new GameState_PreGame() );
-        m_States.Add( GameState.State.IN_GAME, new GameState_InGame() );
-        m_States.Add( GameState.State.POST_GAME, new GameState_PostGame() );
-        m_States.Add( GameState.State.PRE_TUTORIAL, new GameState_PreTutorial() );
-        m_States.Add( GameState.State.IN_TUTORIAL, new GameState_InTutorial() );
-        m_States.Add( GameState.State.POST_TUTORIAL, new GameState_PostTutorial() );
         m_States.Add( GameState.State.SCORE, new GameState_Score() );
-        m_CurrentState = m_States[ GameState.State.MENU ];
+
+        m_States.Add( GameState.State.PRE_TUTORIAL, new GameState_PreTutorial() );
+        m_States.Add( GameState.State.TUTORIAL, new GameState_Tutorial() );
+        m_States.Add( GameState.State.POST_TUTORIAL, new GameState_PostTutorial() );
+
+        m_States.Add( GameState.State.PRE_PLAY, new GameState_PrePlay() );
+        m_States.Add( GameState.State.PLAY, new GameState_Play() );
+        m_States.Add( GameState.State.POST_PLAY, new GameState_PostPlay() );
+
+        m_States.Add( GameState.State.PRE_ENDLESS, new GameState_PreEndless() );
+        m_States.Add( GameState.State.ENDLESS, new GameState_Endless() );
+        m_States.Add( GameState.State.POST_ENDLESS, new GameState_PostEndless() );
+
+        m_CurrentState = GameState.State.MENU;
 
         TimeController = new TimeController();
         ScoreController = GetComponent< ScoreController >();
 
         DontDestroyOnLoad( this );
         DontDestroyOnLoad( ScoreController );
+        DontDestroyOnLoad( GalleryController );
 
-        GetState( GameState.State.MENU ).Start();
+        GetState( m_CurrentState ).Start();
     }
 
     public GameState.State Current
     {
         get
         {
-            return m_CurrentState.ThisState;
+            return m_CurrentState;
+        }
+        set
+        {
+            m_CurrentState = value;
         }
     }
 
     //-----------------------Callbacks------------------------
 
-    // Called when Play Game target is shot.
-    public void OnPlayGame()
+    public void OnTutorial()
     {
-        // Called when "PlayGame" target is shot.
-        GetState( GameState.State.MENU ).ForceStop();
-        GetState( GameState.State.PRE_GAME ).Start();
+
     }
 
-    // Called when Play Tutorial target is shot.
-    public void OnPlayTutorial()
+    public void OnPlay()
     {
-        // Called when "PlayTutorial" target is shot.
+
     }
 
-    // Called when Exit To Menu target is shot.
-    public void OnExitToMenu()
+    public void OnEndless()
     {
-        // Called when "Exit Tutorial" target is shot.
+
     }
 
-    // Called when Exit Game target is shot.
-    public void OnExitGame()
+    public void OnExitTutorial()
     {
-        // Called when "Exit" target is shot.
-        Application.Quit();
+
+    }
+
+    public void OnExitPlay()
+    {
+
+    }
+
+    public void OnExitEndless()
+    {
+
     }
 
     // Called when Bow is picked up.
@@ -112,26 +128,37 @@ public class GameStateManager : Singleton< GameStateManager >
             // If target was UI element.
             else if ( a_ContactScenario.Target.Type == Target.TargetType.UI )
             {
-                switch ( ( a_ContactScenario.Target as Target_UI ).ButtonType )
+                Target_UI button = a_ContactScenario.Target as Target_UI;
+                switch ( button.ButtonType )
                 {
-                    case Target_UI.UIButton.PLAY_GAME:
+                    case Target_UI.UIButton.TUTORIAL:
                         {
-                            OnPlayGame();
+                            OnTutorial();
                             break;
                         }
-                    case Target_UI.UIButton.PLAY_TUTORIAL:
+                    case Target_UI.UIButton.PLAY:
                         {
-                            OnPlayTutorial();
+                            OnPlay();
                             break;
                         }
-                    case Target_UI.UIButton.EXIT_TO_MENU:
+                    case Target_UI.UIButton.ENDLESS:
                         {
-                            OnExitToMenu();
+                            OnEndless();
                             break;
                         }
-                    case Target_UI.UIButton.EXIT_GAME:
+                    case Target_UI.UIButton.EXIT_TUTORIAL:
                         {
-                            OnExitGame();
+                            OnExitTutorial();
+                            break;
+                        }
+                    case Target_UI.UIButton.EXIT_PLAY:
+                        {
+                            OnExitPlay();
+                            break;
+                        }
+                    case Target_UI.UIButton.EXIT_ENDLESS:
+                        {
+                            OnExitEndless();
                             break;
                         }
                 }
@@ -162,7 +189,7 @@ public class GameStateManager : Singleton< GameStateManager >
         return m_States[ a_State ];
     }
 
-    private GameState m_CurrentState = null;
+    private GameState.State m_CurrentState;
     private Dictionary< GameState.State, GameState > m_States;
 
     //-------------------------------Game Flags---------------------------------------------------
@@ -171,243 +198,4 @@ public class GameStateManager : Singleton< GameStateManager >
     private bool m_BowPickedUp;
 
     #pragma warning restore 0414
-}
-
-public abstract class GameState
-{
-    public enum State
-    {
-        MENU,
-        PRE_GAME,
-        IN_GAME,
-        POST_GAME,
-        PRE_TUTORIAL,
-        IN_TUTORIAL,
-        POST_TUTORIAL,
-        SCORE
-    }
-
-    public virtual State ThisState { get; protected set; } = State.MENU;
-
-    public void Start()
-    {
-        m_OnInitiate = GameStateManager.Instance.StartCoroutine( OnStart() );
-    }
-
-    public void ForceStop()
-    {
-        if ( m_OnInitiate != null )
-        {
-            GameStateManager.Instance.StopCoroutine( m_OnInitiate );
-            OnEnd();
-        }
-    }
-
-    private IEnumerator OnStart()
-    {
-        OnBegin();
-        yield return OnProcess();
-        OnEnd();
-    }
-
-    protected virtual void OnBegin()
-    {
-
-    }
-
-    protected virtual IEnumerator OnProcess()
-    {
-        yield return null;
-    }
-
-    protected virtual void OnEnd()
-    {
-
-    }
-
-    private Coroutine m_OnInitiate;
-}
-
-public sealed class GameState_Menu : GameState
-{
-    public GameState_Menu()
-    {
-        ThisState = State.MENU;
-    }
-
-    protected override void OnBegin()
-    {
-
-    }
-
-    protected override IEnumerator OnProcess()
-    {
-        yield return null;
-    }
-
-    protected override void OnEnd()
-    {
-
-    }
-}
-
-public sealed class GameState_PreGame : GameState
-{
-    public GameState_PreGame()
-    {
-        ThisState = State.PRE_GAME;
-    }
-
-    protected override void OnBegin()
-    {
-
-    }
-
-    protected override IEnumerator OnProcess()
-    {
-        yield return null;
-    }
-
-    protected override void OnEnd()
-    {
-
-    }
-}
-
-public sealed class GameState_InGame : GameState
-{
-    public GameState_InGame()
-    {
-        ThisState = State.IN_GAME;
-    }
-
-    protected override void OnBegin()
-    {
-
-    }
-
-    protected override IEnumerator OnProcess()
-    {
-        yield return null;
-    }
-
-    protected override void OnEnd()
-    {
-
-    }
-}
-
-public sealed class GameState_PostGame : GameState
-{
-    public GameState_PostGame()
-    {
-        ThisState = State.POST_GAME;
-    }
-
-    protected override void OnBegin()
-    {
-
-    }
-
-    protected override IEnumerator OnProcess()
-    {
-        yield return null;
-    }
-
-    protected override void OnEnd()
-    {
-
-    }
-}
-
-public sealed class GameState_PreTutorial : GameState
-{
-    public GameState_PreTutorial()
-    {
-        ThisState = State.PRE_TUTORIAL;
-    }
-
-    protected override void OnBegin()
-    {
-
-    }
-
-    protected override IEnumerator OnProcess()
-    {
-        yield return null;
-    }
-
-    protected override void OnEnd()
-    {
-
-    }
-}
-
-public sealed class GameState_InTutorial : GameState
-{
-    public GameState_InTutorial()
-    {
-        ThisState = State.IN_TUTORIAL;
-    }
-
-    protected override void OnBegin()
-    {
-
-    }
-
-    protected override IEnumerator OnProcess()
-    {
-        yield return null;
-    }
-
-    protected override void OnEnd()
-    {
-
-    }
-}
-
-public sealed class GameState_PostTutorial : GameState
-{
-    public GameState_PostTutorial()
-    {
-        ThisState = State.POST_TUTORIAL;
-    }
-
-    protected override void OnBegin()
-    {
-
-    }
-
-    protected override IEnumerator OnProcess()
-    {
-        yield return null;
-    }
-
-    protected override void OnEnd()
-    {
-
-    }
-}
-
-public sealed class GameState_Score : GameState
-{
-    public GameState_Score()
-    {
-        ThisState = State.SCORE;
-    }
-
-    protected override void OnBegin()
-    {
-
-    }
-
-    protected override IEnumerator OnProcess()
-    {
-        yield return null;
-    }
-
-    protected override void OnEnd()
-    {
-
-    }
 }

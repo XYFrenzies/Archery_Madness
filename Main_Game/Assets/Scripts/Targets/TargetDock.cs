@@ -18,6 +18,7 @@ public class TargetDock : MonoBehaviour
     public Transform TargetAnchor;
 
     public Target DockedTarget { get; private set; }
+    public TrackDock TrackDock { get; private set; }
     public Direction RotationDirection
     {
         get
@@ -33,16 +34,40 @@ public class TargetDock : MonoBehaviour
         m_DegreesPerSecondDown = m_RotationAngle / m_TransitionTimeDown;
         m_DegreesPerSecondUp = m_RotationAngle / m_TransitionTimeUp;
         m_Wait = new WaitForEndOfFrame();
+        TrackDock = GetComponent< TrackDock >();
+        IsStanding = m_IsInitiallyStanding;
     }
 
-    public void TriggerSpawnTarget( Target.TargetType a_TargetType )
+    public void TriggerSpawnTargetWithFlip( Target.TargetType a_TargetType )
     {
-        if ( DockedTarget != null || a_TargetType == Target.TargetType.NONE )
+        if ( DockedTarget != null || 
+             a_TargetType == Target.TargetType.NONE || 
+             a_TargetType == Target.TargetType.UI )
         {
             return;
         }
 
-        StartCoroutine( SpawnTarget( a_TargetType ) );
+        StartCoroutine( SpawnTargetWithFlip( a_TargetType ) );
+    }
+
+    public void TriggerSpawnUITargetWithFlip( Target_UI.UIButton a_UIButtonType )
+    {
+        if ( DockedTarget != null )
+        {
+            return;
+        }
+
+        StartCoroutine( SpawnUITargetWithFlip( a_UIButtonType ) );
+    }
+
+    public void TriggerDestroyTargetWithFlip()
+    {
+        if ( DockedTarget == null )
+        {
+            return;
+        }
+
+        StartCoroutine( DestroyTargetWithFlip() );
     }
 
     public void TriggerFlipDown()
@@ -66,40 +91,92 @@ public class TargetDock : MonoBehaviour
         StartCoroutine( FlipUp() );
     }
 
-    private IEnumerator SpawnTarget( Target.TargetType a_TargetType )
+    private IEnumerator SpawnTargetWithFlip( Target.TargetType a_TargetType )
     {
-        if ( !IsStanding )
-        {
-            yield return FlipUp();
-        }
-
         GameObject targetToCreate = null;
 
         switch ( a_TargetType )
         {
-            case Target.TargetType.UI:
-                {
-                    targetToCreate = GalleryController.Instance.Target_UI;
-                    break;
-                }
             case Target.TargetType.WOOD:
                 {
-                    targetToCreate = GalleryController.Instance.Target_Wood;
+                    targetToCreate = GalleryController.Instance.TargetPrefab_Wood;
                     break;
                 }
             case Target.TargetType.FIRE:
                 {
-                    targetToCreate = GalleryController.Instance.Target_Fire;
+                    targetToCreate = GalleryController.Instance.TargetPrefabs_Fire;
                     break;
                 }
             case Target.TargetType.GLASS:
                 {
-                    targetToCreate = GalleryController.Instance.Target_Glass;
+                    targetToCreate = GalleryController.Instance.TargetPrefab_Glass;
                     break;
                 }
         }
 
         DockedTarget = Instantiate( targetToCreate, TargetAnchor.position, TargetAnchor.rotation ).GetComponent< Target >();
+        
+        if ( !IsStanding )
+        {
+            yield return FlipUp();
+        }
+    }
+
+    private IEnumerator SpawnUITargetWithFlip( Target_UI.UIButton a_ButtonType )
+    {
+        GameObject targetToCreate = null;
+
+        switch ( a_ButtonType )
+        {
+            case Target_UI.UIButton.TUTORIAL:
+                {
+                    targetToCreate = GalleryController.Instance.TargetUIPrefab_Tutorial;
+                    break;
+                }
+            case Target_UI.UIButton.PLAY:
+                {
+                    targetToCreate = GalleryController.Instance.TargetUIPrefab_Play;
+                    break;
+                }
+            case Target_UI.UIButton.ENDLESS:
+                {
+                    targetToCreate = GalleryController.Instance.TargetUIPrefab_Endless;
+                    break;
+                }
+            case Target_UI.UIButton.EXIT_TUTORIAL:
+                {
+                    targetToCreate = GalleryController.Instance.TargetUIPrefab_ExitTutorial;
+                    break;
+                }
+            case Target_UI.UIButton.EXIT_PLAY:
+                {
+                    targetToCreate = GalleryController.Instance.TargetUIPrefab_ExitPlay;
+                    break;
+                }
+            case Target_UI.UIButton.EXIT_ENDLESS:
+                {
+                    targetToCreate = GalleryController.Instance.TargetUIPrefab_ExitEndless;
+                    break;
+                }
+        }
+
+        DockedTarget = Instantiate( targetToCreate, TargetAnchor.position, TargetAnchor.rotation ).GetComponent< Target >();
+        
+        if ( !IsStanding )
+        {
+            yield return FlipUp();
+        }
+    }
+
+    private IEnumerator DestroyTargetWithFlip()
+    {
+        Destroy( DockedTarget.gameObject );
+        DockedTarget = null;
+
+        if ( IsStanding )
+        {
+            yield return FlipDown();
+        }
     }
 
     private IEnumerator FlipDown()
@@ -184,6 +261,9 @@ public class TargetDock : MonoBehaviour
             }
     }
 
+    #pragma warning disable 0649
+
+    [ SerializeField ] private bool m_IsInitiallyStanding = true;
     [ SerializeField ] [ Range( 0.0f, m_MaxRotationAngle ) ] private float m_RotationAngle = 90.0f;
     [ SerializeField ] [ Range( 0.1f, m_MaxTransitionTime ) ] private float m_TransitionTimeDown = 2.0f;
     [ SerializeField ] [ Range( 0.1f, m_MaxTransitionTime ) ] private float m_TransitionTimeUp = 2.0f; 
@@ -193,4 +273,6 @@ public class TargetDock : MonoBehaviour
     private WaitForEndOfFrame m_Wait;
     private const float m_MaxRotationAngle = 120.0f;
     private const float m_MaxTransitionTime = 10.0f;
+
+    #pragma warning restore
 }

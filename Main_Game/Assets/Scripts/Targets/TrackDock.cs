@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrackAnchor : MonoBehaviour
+public class TrackDock : MonoBehaviour
 {
     public enum Type
     {
@@ -73,6 +73,13 @@ public class TrackAnchor : MonoBehaviour
         set
         {
             m_IsActive = value;
+        }
+    }
+    public int CurrentIndex
+    {
+        get
+        {
+            return m_ComingFrom;
         }
     }
 
@@ -202,6 +209,8 @@ public class TrackAnchor : MonoBehaviour
         return Vector3.Dot( directionToNextIndex, m_MoveDirection ) <= 0;
     }
 
+    #pragma warning disable 0649
+
     [ SerializeField ] private Type m_TrackingType;
     [ SerializeField ] private Mode m_TrackingMode;
     [ SerializeField ] private Direction m_TrackingDirection;
@@ -211,5 +220,6 @@ public class TrackAnchor : MonoBehaviour
     private int m_GoingTo;
     private const float m_MaxSpeed = 5.0f;
     
+    #pragma warning restore
     private Vector3 m_MoveDirection;
 }

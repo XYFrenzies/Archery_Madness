@@ -288,6 +288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DockPivot: {fileID: 1976342239}
   TargetAnchor: {fileID: 0}
+  m_IsInitiallyStanding: 1
   m_RotationAngle: 90
   m_TransitionTimeDown: 0.11
   m_TransitionTimeUp: 2
