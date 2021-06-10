@@ -5,6 +5,7 @@ using UnityEngine.XR;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
+[ RequireComponent( typeof( DestructionController ) ) ]
 [ RequireComponent( typeof( GalleryController ) ) ]
 [ RequireComponent( typeof( ScoreController ) ) ]
 public class GameStateManager : Singleton< GameStateManager >
@@ -101,7 +102,7 @@ public class GameStateManager : Singleton< GameStateManager >
         m_BowPickedUp = true;
         Bow.SetPhysics( false );
 
-        BowDockController.StopRedock();
+        BowDockController.StopRedockTimer();
     }
 
     // Called when Bow is dropped.
@@ -110,7 +111,7 @@ public class GameStateManager : Singleton< GameStateManager >
         m_BowPickedUp = false;
         Bow.SetPhysics( true );
         
-        BowDockController.StartRedock();
+        BowDockController.StartRedockTimer();
     }
 
     // Called when arrow makes collides with something.
@@ -171,13 +172,23 @@ public class GameStateManager : Singleton< GameStateManager >
             {
                 // Define score calculation in ContactScenario.ResultantScore()
                 ScoreController.CurrentScore.Increment( a_ContactScenario.ResultantScore() );
+
+                if ( a_ContactScenario.HitCorrectTarget )
+                {
+                    DestructionController.Instance.BlowUpObject( a_ContactScenario.Target.gameObject );
+                    a_ContactScenario.Arrow.TriggerDespawn( 4.0f );
+                }
+                else
+                {
+                    DestructionController.Instance.BlowUpObject( a_ContactScenario.Arrow.gameObject );
+                }
             }
         }
 
         // No target hit of any kind.
         else
         {
-
+            a_ContactScenario.Arrow.TriggerDespawn( 4.0f );
         }
     }
 

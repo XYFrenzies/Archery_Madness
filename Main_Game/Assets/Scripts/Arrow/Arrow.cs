@@ -46,6 +46,11 @@ public class Arrow : XRGrabInteractable
         TogglePhysics( true );
     }
 
+    public void TriggerDespawn( float a_Time )
+    {
+        Destroy( gameObject, a_Time );
+    }
+
     protected override void OnSelectExited( SelectExitEventArgs a_Args )
     {
         base.OnSelectExited( a_Args );
@@ -144,7 +149,7 @@ public class Arrow : XRGrabInteractable
         Transform newParent = a_Hit.collider.transform;
         transform.SetParent( newParent );
     }
-    
+
     private void CheckForHittable( RaycastHit a_Hit )
     {
         GameObject hitObject = a_Hit.transform.gameObject;
