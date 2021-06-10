@@ -13,6 +13,8 @@ public abstract class Target : MonoBehaviour, IResettable, IArrowHittable
         GLASS
     }
 
+    public TargetDock TargetDock;
+
     public TargetType Type { get; protected set; }
 
     public void OnReset()

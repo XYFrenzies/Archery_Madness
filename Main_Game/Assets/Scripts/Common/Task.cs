@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Task
 {
+    public bool ResetOnChainComplete;
+    public bool TriggerRepeat;
+
     public bool IsComplete { get; private set; } = false;
     public bool IsChainComplete { get; private set; } = false;
 
@@ -41,6 +44,43 @@ public class Task
         GameStateManager.Instance.StartCoroutine( OnTrigger() );
     }
 
+    public void Reset()
+    {
+        if ( !IsChainComplete )
+        {
+            return;
+        }
+
+        IsChainComplete = false;
+        IsComplete = false;
+        Task task = m_OnComplete;
+
+        while ( task != null )
+        {
+            task.IsChainComplete = false;
+            task.IsComplete = false;
+            task = task.m_OnComplete;
+        }
+    }
+
+    public static Task operator +( Task a_LHS, Task a_RHS )
+    {
+        if ( a_LHS == null || a_RHS == null )
+        {
+            return a_LHS;
+        }
+
+        Task lastTask = a_LHS;
+
+        while ( a_LHS.m_OnComplete != null )
+        {
+            lastTask = lastTask.m_OnComplete;
+        }
+
+        lastTask.m_OnComplete = a_RHS;
+        return a_LHS;
+    }
+
     private IEnumerator OnTrigger()
     {
         yield return GameStateManager.Instance.StartCoroutine( m_Task.Invoke() );
@@ -54,11 +94,23 @@ public class Task
         {
             IsChainComplete = true;
             Task task = m_Caller;
+            Task thisTask = this;
             
             while ( task != null )
             {
                 task.IsChainComplete = true;
+                thisTask = task;
                 task = task.m_Caller;
+            }
+
+            if ( ResetOnChainComplete )
+            {
+                thisTask.Reset();
+
+                if ( TriggerRepeat )
+                {
+                    thisTask.Trigger();
+                }
             }
         }
     }

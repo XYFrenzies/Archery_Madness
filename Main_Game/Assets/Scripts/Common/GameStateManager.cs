@@ -5,6 +5,7 @@ using UnityEngine.XR;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
+[ RequireComponent( typeof( GalleryController ) ) ]
 [ RequireComponent( typeof( ScoreController ) ) ]
 public class GameStateManager : Singleton< GameStateManager >
 {
