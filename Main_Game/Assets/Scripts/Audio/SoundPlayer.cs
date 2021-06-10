@@ -4,10 +4,18 @@ using UnityEngine;
 public class SoundPlayer : MonoBehaviour
 {
     public AudioClipPool[] Pools;
-
+    private AudioSource audioListener;
     public void Play(string a_ClipName)
     {
         //find the pool in Pools that has the name, and play a random one.
+        for (int i = 0; i < Pools.Length; i++)
+        {
+            if (Pools[i].name == a_ClipName) 
+            {
+                audioListener.clip = Pools[i].Random;
+                audioListener.Play();
+            }
+        }
     }
 
     public static SoundPlayer Get(string a_Name)
