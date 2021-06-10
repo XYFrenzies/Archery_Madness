@@ -3,12 +3,17 @@ guid: 6bd14674866a4524180cdf010766034e
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: T_Barker
+    second: {instanceID: 0}
   materials:
     materialImportMode: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0

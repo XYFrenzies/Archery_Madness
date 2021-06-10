@@ -23,6 +23,17 @@ public class GalleryController : Singleton< GalleryController >
         }
     }
 
+    private void Awake()
+    {
+        GameObject targetsGameObject = GameObject.Find( "Targets" );
+        m_TargetDocksEnemy = targetsGameObject.GetComponentsInChildren< TargetDock >();
+
+        foreach ( TargetDock targetDock in m_TargetDocksEnemy )
+        {
+            targetDock.TriggerSpawnTargetWithFlip( ( Target.TargetType )UnityEngine.Random.Range( 2, 5 ) );
+        }
+    }
+
     public void TriggerRaiseMenu()
     {
         if ( m_IsMenuRaised )

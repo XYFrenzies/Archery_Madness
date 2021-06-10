@@ -16,7 +16,7 @@ public class DestructionController : Singleton<DestructionController>
     [Tooltip("Includes the script into the new fragments of the original object.")]
     public bool IncludeScript = true;
     //This function will be used if the player has a destruction controller on it.
-    public void MeshDestroy()
+    private void MeshDestroy()
     {
         Mesh originalMesh;
         //Quick out for if it doesnt contain a MeshFilter
@@ -65,17 +65,31 @@ public class DestructionController : Singleton<DestructionController>
         Destroy(gameObject);
     }
     //This is when you want to destroy a particular object.
-    public void MeshDestroy(GameObject a_obj, int a_SplitMultiplier, float a_ExplodeForce, bool a_includeScript)
+    private void MeshDestroy(GameObject a_obj, int a_SplitMultiplier, float a_ExplodeForce, bool a_includeScript, float a_DespawnTime )
     {
         Mesh originalMesh;
         //Quick out for if it doesnt contain a MeshFilter
-        if (a_obj.GetComponent<MeshFilter>())
-            originalMesh = a_obj.GetComponent<MeshFilter>().mesh;
+
+        MeshFilter meshFilter = a_obj.GetComponent< MeshFilter >();
+
+        if ( meshFilter != null )
+        {
+            originalMesh = meshFilter.mesh;
+        }
         else
         {
-            Debug.LogError("There is not Mesh Filter on the object or that the object can not be found.");
-            return;
+            meshFilter = a_obj.GetComponentInChildren< MeshFilter >();
+
+            if ( meshFilter != null )
+            {
+                originalMesh = meshFilter.mesh;
+            }
+            else
+            {
+                return;
+            }
         }
+
         originalMesh.RecalculateBounds();
         List<PartMesh> parts = new List<PartMesh>();
         List<PartMesh> subParts = new List<PartMesh>();
@@ -111,6 +125,7 @@ public class DestructionController : Singleton<DestructionController>
         {
             parts[i].MakeGameobject(this, a_obj, a_includeScript);
             parts[i].GameObject.GetComponent<Rigidbody>().AddForceAtPosition(parts[i].Bounds.center * a_ExplodeForce, a_obj.transform.position);
+            Destroy( parts[ i ].GameObject, a_DespawnTime );
         }
         Destroy(a_obj.gameObject);
     }
@@ -248,7 +263,10 @@ public class DestructionController : Singleton<DestructionController>
         }
     }
 
-
+    public void BlowUpObject( GameObject a_GameObject )
+    {
+        MeshDestroy( a_GameObject, 2, 500, false, 10.0f );
+    }
 }
 
 public class PartMesh

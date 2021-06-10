@@ -33,9 +33,9 @@ public class TargetDock : MonoBehaviour
     {
         m_DegreesPerSecondDown = m_RotationAngle / m_TransitionTimeDown;
         m_DegreesPerSecondUp = m_RotationAngle / m_TransitionTimeUp;
-        m_Wait = new WaitForEndOfFrame();
         TrackDock = GetComponent< TrackDock >();
         IsStanding = m_IsInitiallyStanding;
+        m_PersistantRotation = new Quaternion();
     }
 
     public void TriggerSpawnTargetWithFlip( Target.TargetType a_TargetType )
@@ -114,7 +114,10 @@ public class TargetDock : MonoBehaviour
                 }
         }
 
-        DockedTarget = Instantiate( targetToCreate, TargetAnchor.position, TargetAnchor.rotation ).GetComponent< Target >();
+        GameObject newTarget = Instantiate( targetToCreate, DockPivot.transform );
+        newTarget.transform.localPosition = TargetAnchor.localPosition;
+        DockedTarget = newTarget.GetComponentInChildren< Target >();
+        DockedTarget.TargetDock = this;
         
         if ( !IsStanding )
         {
@@ -160,7 +163,10 @@ public class TargetDock : MonoBehaviour
                 }
         }
 
-        DockedTarget = Instantiate( targetToCreate, TargetAnchor.position, TargetAnchor.rotation ).GetComponent< Target >();
+        GameObject newTarget = Instantiate( targetToCreate, DockPivot.transform );
+        newTarget.transform.localPosition = TargetAnchor.localPosition;
+        DockedTarget = newTarget.GetComponentInChildren< Target >();
+        DockedTarget.TargetDock = this;
         
         if ( !IsStanding )
         {
@@ -190,7 +196,7 @@ public class TargetDock : MonoBehaviour
 
         while ( accumulativeAngle < m_RotationAngle )
         {
-            yield return m_Wait;
+            yield return new WaitForEndOfFrame();
             accumulativeAngle += m_DegreesPerSecondDown * Time.deltaTime;
             SetRotation( rotationDirection, accumulativeAngle );
         }
@@ -211,7 +217,7 @@ public class TargetDock : MonoBehaviour
 
         while ( accumulativeAngle > 0 )
         {
-            yield return m_Wait;
+            yield return new WaitForEndOfFrame();
             accumulativeAngle -= m_DegreesPerSecondUp * Time.deltaTime;
 
             SetRotation( rotationDirection, accumulativeAngle );
@@ -227,38 +233,40 @@ public class TargetDock : MonoBehaviour
     private void SetRotation( Direction a_Direction, float a_Angle )
     {
         switch ( a_Direction )
-            {
-                case Direction.X_POS:
-                    {
-                        DockPivot.rotation = Quaternion.AngleAxis( a_Angle, Vector3.right );
-                        break;
-                    }
-                case Direction.Y_POS:
-                    {
-                        DockPivot.rotation = Quaternion.AngleAxis( a_Angle, Vector3.up );
-                        break;
-                    }
-                case Direction.Z_POS:
-                    {
-                        DockPivot.rotation = Quaternion.AngleAxis( a_Angle, Vector3.forward );
-                        break;
-                    }
-                case Direction.X_NEG:
-                    {
-                        DockPivot.rotation = Quaternion.AngleAxis( a_Angle, Vector3.left );
-                        break;
-                    }
-                case Direction.Y_NEG:
-                    {
-                        DockPivot.rotation = Quaternion.AngleAxis( a_Angle, Vector3.down );
-                        break;
-                    }
-                case Direction.Z_NEG:
-                    {
-                        DockPivot.rotation = Quaternion.AngleAxis( a_Angle, Vector3.back );
-                        break;
-                    }
-            }
+        {
+            case Direction.X_POS:
+                {
+                    m_PersistantRotation.eulerAngles = new Vector3( a_Angle, 0, 0 );
+                    break;
+                }
+            case Direction.Y_POS:
+                {
+                    m_PersistantRotation.eulerAngles = new Vector3( 0, a_Angle, 0 );
+                    break;
+                }
+            case Direction.Z_POS:
+                {
+                    m_PersistantRotation.eulerAngles = new Vector3( 0, 0, a_Angle );
+                    break;
+                }
+            case Direction.X_NEG:
+                {
+                    m_PersistantRotation.eulerAngles = new Vector3( -a_Angle, 0, 0 );
+                    break;
+                }
+            case Direction.Y_NEG:
+                {
+                    m_PersistantRotation.eulerAngles = new Vector3( 0, -a_Angle, 0 );
+                    break;
+                }
+            case Direction.Z_NEG:
+                {
+                    m_PersistantRotation.eulerAngles = new Vector3( 0, 0, -a_Angle );
+                    break;
+                }
+        }
+
+        DockPivot.transform.localRotation = m_PersistantRotation;
     }
 
     #pragma warning disable 0649
@@ -270,7 +278,7 @@ public class TargetDock : MonoBehaviour
     [ SerializeField ] private Direction m_RotationDirection;
     private float m_DegreesPerSecondDown;
     private float m_DegreesPerSecondUp;
-    private WaitForEndOfFrame m_Wait;
+    private Quaternion m_PersistantRotation;
     private const float m_MaxRotationAngle = 120.0f;
     private const float m_MaxTransitionTime = 10.0f;
 
