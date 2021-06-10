@@ -8,6 +8,9 @@ public class DestructionController : Singleton<DestructionController>
     private Vector3 edgeVertex = Vector3.zero;
     private Vector2 edgeUV = Vector2.zero;
     private Plane edgePlane = new Plane();
+
+    //_____________________________________________________________________________________________________
+    //These variables can be called within the 
     public int SplitMultiplier = 1;//The amount of times it splits per part of the original object.
     public float ExplodeForce = 0;//Force in direction.
     [Tooltip("Includes the script into the new fragments of the original object.")]
