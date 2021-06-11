@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6699122375668809273
+--- !u!1001 &4623906555501573008
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -9,15 +9,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 767731069931242315, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.653223
+      value: 2.4917052
       objectReference: {fileID: 0}
     - target: {fileID: 767731069931242315, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.34054035
+      value: 0.13235956
       objectReference: {fileID: 0}
     - target: {fileID: 767731069931242315, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.7638993
+      value: 2.6799173
       objectReference: {fileID: 0}
     - target: {fileID: 767731069931242315, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
       propertyPath: m_LocalRotation.x
@@ -51,13 +51,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5735702399173988434, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5735702399173988434, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5735702399173988434, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5735702399174791282, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 4300000, guid: 571ca82227e33ee49bfab56388a9ff84, type: 3}
+      objectReference: {fileID: -9008135710735128892, guid: 14a696bdcceae4a4c8581d8408d9cd7f, type: 3}
+    - target: {fileID: 5735702399175758514, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e3ae06a3979f53046aa05330d69de1fa, type: 3}
     - target: {fileID: 8789740216086474393, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
       propertyPath: m_Name
-      value: CratePrefab
+      value: BlueBirdDestrucatlbe
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 940b73ab5bce12847856eae368ffd365, type: 3}
