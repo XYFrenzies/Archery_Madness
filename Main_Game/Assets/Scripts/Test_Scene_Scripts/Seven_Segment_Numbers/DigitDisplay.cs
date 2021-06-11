@@ -9,27 +9,34 @@ public class DigitDisplay : Singleton<DigitDisplay>
     public GameObject[] displays;
     private int value;
 
+    //Must be less than 10 and that the digit has to be within 1-6 range.
+    public void SetDigit(int indexDigit, int singleValue)
+    {
+        SevenSegmentDisplay newDisplay = displays[indexDigit].GetComponent<SevenSegmentDisplay>();
+        newDisplay.SetDigit(singleValue);
+        //value /= 10;
+    }    
     //Adds the amount to the total.
-    public void IncreaseNumber(int amount) 
+    public void IncreaseNumber(int amount)
     {
         value += amount;
         SetDisplay(value);
     }
     //Decrease amount to total.
-    public void DecreaseNumber(int amount) 
+    public void DecreaseNumber(int amount)
     {
         value -= amount;
         SetDisplay(value);
     }
     //OriginalAmount of total.
-    public void StartAmount(int amountStart) 
+    public void StartAmount(int amountStart)
     {
         value += amountStart;
         SetDisplay(value);
     }
     //Returns the main amount.
-    public int ReturnAmount() 
-    { 
+    public int ReturnAmount()
+    {
         return value;
     }
     //Resets the value
@@ -49,7 +56,7 @@ public class DigitDisplay : Singleton<DigitDisplay>
         SetDisplay(value);
     }
     //Goes through all the boards and sets the displays.
-    private void SetDisplay(int value) 
+    private void SetDisplay(int value)
     {
         foreach (var i in Range(0, displays.Length))
         {
