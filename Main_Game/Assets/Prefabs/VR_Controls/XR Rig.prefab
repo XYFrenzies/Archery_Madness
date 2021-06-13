@@ -49,7 +49,7 @@ MonoBehaviour:
   m_CameraFloorOffsetObject: {fileID: 8638230770284966644}
   m_CameraGameObject: {fileID: 8638230771081305867}
   m_RequestedTrackingOriginMode: 2
-  m_CameraYOffset: 1.36144
+  m_CameraYOffset: 1.5
   m_TrackingSpace: 3
   m_TrackingOriginMode: -2147483648
 --- !u!114 &8638230770061107040
@@ -199,7 +199,7 @@ MonoBehaviour:
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
-    m_Reference: {fileID: 187161793506945269, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    m_Reference: {fileID: 7260729025598352725, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_ActivateAction:
     m_UseReference: 1
     m_Action:
@@ -298,7 +298,7 @@ MonoBehaviour:
   m_OnSelectExited:
     m_PersistentCalls:
       m_Calls: []
-  m_SelectActionTrigger: 1
+  m_SelectActionTrigger: 0
   m_HideControllerOnSelect: 1
   m_PlayAudioClipOnSelectEntered: 0
   m_AudioClipForOnSelectEntered: {fileID: 0}
@@ -755,7 +755,7 @@ MonoBehaviour:
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
-    m_Reference: {fileID: -6131295136447488360, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    m_Reference: {fileID: -9126532627186399860, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_ActivateAction:
     m_UseReference: 1
     m_Action:
@@ -854,7 +854,7 @@ MonoBehaviour:
   m_OnSelectExited:
     m_PersistentCalls:
       m_Calls: []
-  m_SelectActionTrigger: 1
+  m_SelectActionTrigger: 0
   m_HideControllerOnSelect: 1
   m_PlayAudioClipOnSelectEntered: 0
   m_AudioClipForOnSelectEntered: {fileID: 0}
