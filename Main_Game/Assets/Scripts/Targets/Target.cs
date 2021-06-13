@@ -13,9 +13,15 @@ public abstract class Target : MonoBehaviour, IResettable, IArrowHittable
         GLASS
     }
 
+    public Transform ParentMostTransform;
     public TargetDock TargetDock;
 
     public TargetType Type { get; protected set; }
+
+    public void DestroyTarget()
+    {
+        Destroy( ParentMostTransform.gameObject );
+    }
 
     public void OnReset()
     {

@@ -38,38 +38,6 @@ public class TargetDock : MonoBehaviour
         m_PersistantRotation = new Quaternion();
     }
 
-    public void TriggerSpawnTargetWithFlip( Target.TargetType a_TargetType )
-    {
-        if ( DockedTarget != null || 
-             a_TargetType == Target.TargetType.NONE || 
-             a_TargetType == Target.TargetType.UI )
-        {
-            return;
-        }
-
-        StartCoroutine( SpawnTargetWithFlip( a_TargetType ) );
-    }
-
-    public void TriggerSpawnUITargetWithFlip( Target_UI.UIButton a_UIButtonType )
-    {
-        if ( DockedTarget != null )
-        {
-            return;
-        }
-
-        StartCoroutine( SpawnUITargetWithFlip( a_UIButtonType ) );
-    }
-
-    public void TriggerDestroyTargetWithFlip()
-    {
-        if ( DockedTarget == null )
-        {
-            return;
-        }
-
-        StartCoroutine( DestroyTargetWithFlip() );
-    }
-
     public void TriggerFlipDown()
     {
         if ( IsTransitioning || !IsStanding )
@@ -91,42 +59,13 @@ public class TargetDock : MonoBehaviour
         StartCoroutine( FlipUp() );
     }
 
-    private IEnumerator SpawnTargetWithFlip( Target.TargetType a_TargetType )
+    public void SpawnUITarget( Target_UI.UIButton a_ButtonType, bool a_WithFlip )
     {
-        GameObject targetToCreate = null;
-
-        switch ( a_TargetType )
+        if ( DockedTarget != null )
         {
-            case Target.TargetType.WOOD:
-                {
-                    targetToCreate = GalleryController.Instance.TargetPrefab_Wood;
-                    break;
-                }
-            case Target.TargetType.FIRE:
-                {
-                    targetToCreate = GalleryController.Instance.TargetPrefabs_Fire;
-                    break;
-                }
-            case Target.TargetType.GLASS:
-                {
-                    targetToCreate = GalleryController.Instance.TargetPrefab_Glass;
-                    break;
-                }
+            DockedTarget.DestroyTarget();
         }
 
-        GameObject newTarget = Instantiate( targetToCreate, DockPivot.transform );
-        newTarget.transform.localPosition = TargetAnchor.localPosition;
-        DockedTarget = newTarget.GetComponentInChildren< Target >();
-        DockedTarget.TargetDock = this;
-        
-        if ( !IsStanding )
-        {
-            yield return FlipUp();
-        }
-    }
-
-    private IEnumerator SpawnUITargetWithFlip( Target_UI.UIButton a_ButtonType )
-    {
         GameObject targetToCreate = null;
 
         switch ( a_ButtonType )
@@ -163,25 +102,75 @@ public class TargetDock : MonoBehaviour
                 }
         }
 
+        if ( a_WithFlip )
+        {
+            IsStanding = false;
+            SetRotation( RotationDirection, m_RotationAngle );
+        }
+
         GameObject newTarget = Instantiate( targetToCreate, DockPivot.transform );
         newTarget.transform.localPosition = TargetAnchor.localPosition;
-        DockedTarget = newTarget.GetComponentInChildren< Target >();
+        newTarget.transform.localRotation = TargetAnchor.localRotation;
+        DockedTarget = GetTargetFromGameObject( newTarget );
         DockedTarget.TargetDock = this;
-        
-        if ( !IsStanding )
+
+        if ( a_WithFlip )
         {
-            yield return FlipUp();
+            StartCoroutine( FlipUp() );
         }
     }
 
-    private IEnumerator DestroyTargetWithFlip()
+    public void SpawnTarget( Target.TargetType a_TargetType, bool a_WithFlip )
     {
-        Destroy( DockedTarget.gameObject );
-        DockedTarget = null;
-
-        if ( IsStanding )
+        if ( DockedTarget != null )
         {
-            yield return FlipDown();
+            DockedTarget.DestroyTarget();
+        }
+
+        GameObject targetToCreate = null;
+
+        switch ( a_TargetType )
+        {
+            case Target.TargetType.WOOD:
+                {
+                    targetToCreate = GalleryController.Instance.TargetPrefab_Wood;
+                    break;
+                }
+            case Target.TargetType.FIRE:
+                {
+                    targetToCreate = GalleryController.Instance.TargetPrefabs_Fire;
+                    break;
+                }
+            case Target.TargetType.GLASS:
+                {
+                    targetToCreate = GalleryController.Instance.TargetPrefab_Glass;
+                    break;
+                }
+        }
+
+        if ( a_WithFlip )
+        {
+            IsStanding = false;
+            SetRotation( RotationDirection, m_RotationAngle );
+        }
+
+        GameObject newTarget = Instantiate( targetToCreate, DockPivot.transform );
+        newTarget.transform.localPosition = TargetAnchor.localPosition;
+        newTarget.transform.localRotation = TargetAnchor.localRotation;
+        DockedTarget = GetTargetFromGameObject( newTarget );
+        DockedTarget.TargetDock = this;
+
+        if ( a_WithFlip )
+        {
+            StartCoroutine( FlipUp() );
+        }
+    }
+
+    public void DestroyTarget()
+    {
+        if ( DockedTarget != null )
+        {
+            DockedTarget.DestroyTarget();
         }
     }
 
@@ -228,6 +217,19 @@ public class TargetDock : MonoBehaviour
 
         IsStanding = true;
         IsTransitioning = false;
+    }
+
+    public Target GetTargetFromGameObject( GameObject a_GameObject )
+    {
+        Target target = a_GameObject.GetComponent< Target >();
+
+        if ( target != null )
+        {
+            return target;
+        }
+
+        target = a_GameObject.GetComponentInChildren< Target >();
+        return target;
     }
 
     private void SetRotation( Direction a_Direction, float a_Angle )
@@ -279,7 +281,7 @@ public class TargetDock : MonoBehaviour
     private float m_DegreesPerSecondDown;
     private float m_DegreesPerSecondUp;
     private Quaternion m_PersistantRotation;
-    private const float m_MaxRotationAngle = 120.0f;
+    private const float m_MaxRotationAngle = 360.0f;
     private const float m_MaxTransitionTime = 10.0f;
 
     #pragma warning restore

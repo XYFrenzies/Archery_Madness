@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Linq;
 
 public class GalleryController : Singleton< GalleryController >
 {
@@ -15,84 +16,212 @@ public class GalleryController : Singleton< GalleryController >
     public GameObject TargetUIPrefab_ExitPlay;
     public GameObject TargetUIPrefab_ExitEndless;
 
-    public bool IsMenuMoving
+    public TargetDock UIDock_Left;
+    public TargetDock UIDock_Middle;
+    public TargetDock UIDock_Right;
+
+    public TargetDock testDock;
+
+    public bool AllTargetsFilled
     {
         get
         {
-            return m_IsMenuMoving;
+            return Array.TrueForAll( BirdTargetDocks, targetDock => targetDock.DockedTarget );
+        }
+    }
+
+    public int ActiveTargets
+    {
+        get
+        {
+            return m_ActiveTargets;
+        }
+    }
+
+    public int InactiveTargets
+    {
+        get
+        {
+            return BirdTargetDocks.Length - m_ActiveTargets;
+        }
+    }
+
+    public int TargetDockCount
+    {
+        get
+        {
+            return BirdTargetDocks.Length;
         }
     }
 
     private void Awake()
     {
         GameObject targetsGameObject = GameObject.Find( "Targets" );
-        m_TargetDocksEnemy = targetsGameObject.GetComponentsInChildren< TargetDock >();
+        BirdTargetDocks = targetsGameObject.GetComponentsInChildren< TargetDock >();
+    }
 
-        foreach ( TargetDock targetDock in m_TargetDocksEnemy )
+    public void NotifyOfKill()
+    {
+        // This function is called when the player destroys an enemy target.
+        --m_ActiveTargets;
+
+        if ( m_ActiveTargets < m_PersistantCount )
         {
-            targetDock.TriggerSpawnTargetWithFlip( ( Target.TargetType )UnityEngine.Random.Range( 2, 5 ) );
+            SpawnRandomNewTarget();
         }
+    }
+
+    private void NotifyOfRespawn()
+    {
+        // This function is called when a target is spawned.
+        ++m_ActiveTargets;
+    }
+
+    public void TriggerTutorialSpawningRoutine()
+    {
+        if ( m_TutorialSpawningRoutine != null )
+        {
+            StopCoroutine( m_TutorialSpawningRoutine );
+        }
+
+        m_TutorialSpawningRoutine = StartCoroutine( BeginTutorialSpawningRoutine() );
+    }
+
+    public void TriggerPlaySpawningRoutine()
+    {
+        if ( m_PlaySpawningRoutine != null )
+        {
+            StopCoroutine( m_PlaySpawningRoutine );
+        }
+
+        m_PlaySpawningRoutine = StartCoroutine( BeginPlaySpawningRoutine() );
+    }
+
+    public void TriggerEndlessSpawningRoutine()
+    {
+        if ( m_EndlessSpawningRoutine != null )
+        {
+            StopCoroutine( m_EndlessSpawningRoutine );
+        }
+
+        m_EndlessSpawningRoutine = StartCoroutine( BeginEndlessSpawningRoutine() );
+    }
+
+    private IEnumerator BeginTutorialSpawningRoutine()
+    {
+        yield return null;
+    }
+
+    private IEnumerator BeginPlaySpawningRoutine()
+    {
+        yield return null;
+    }
+
+    private IEnumerator BeginEndlessSpawningRoutine()
+    {
+        while ( true )
+        {
+            yield return new WaitForSeconds( m_RespawnLoopTimer );
+            SpawnRandomNewTarget();
+        }
+    }
+
+    private bool SpawnRandomNewTarget()
+    {
+        Target.TargetType randomType = ( Target.TargetType )
+            UnityEngine.Random.Range( 2, 5 );
+
+        if ( SpawnNewTarget( randomType ) )
+        {
+            NotifyOfRespawn();
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool SpawnNewTarget( Target.TargetType a_TargetType )
+    {
+        TargetDock emptyDock = FindRandomEmptyTargetDock();
+        
+        if ( emptyDock == null )
+        {
+            return false;
+        }
+
+        emptyDock.SpawnTarget( a_TargetType, true );
+        return true;
     }
 
     public void TriggerRaiseMenu()
     {
-        if ( m_IsMenuRaised )
-        {
-            return;
-        }
-
-        StartCoroutine( RaiseMenu() );
+        StartCoroutine( RaiseMainMenu() );
     }
 
     public void TriggerLowerMenu()
     {
-        if ( !m_IsMenuRaised )
+        StartCoroutine( LowerMainMenu() );
+    }
+
+    private IEnumerator RaiseMainMenu()
+    {
+        UIDock_Left.SpawnUITarget( Target_UI.UIButton.TUTORIAL, true );
+        UIDock_Middle.SpawnUITarget(Target_UI.UIButton.PLAY, true );
+        UIDock_Right.SpawnUITarget( Target_UI.UIButton.ENDLESS, true );
+
+        yield return new WaitUntil( () => 
+        !UIDock_Left.IsTransitioning && 
+        !UIDock_Middle.IsTransitioning && 
+        !UIDock_Right.IsTransitioning );
+
+        // Put things here to occur after menu raised.
+    }
+
+    private IEnumerator LowerMainMenu()
+    {
+        UIDock_Left.TriggerFlipDown();
+        UIDock_Middle.TriggerFlipDown();
+        UIDock_Right.TriggerFlipDown();
+
+        yield return new WaitUntil( () => 
+        !UIDock_Left.IsTransitioning && 
+        !UIDock_Middle.IsTransitioning && 
+        !UIDock_Right.IsTransitioning );
+
+        // Put things here to occur after menu raised.
+    }
+
+    private TargetDock FindRandomEmptyTargetDock()
+    {
+        if ( InactiveTargets == 0 )
         {
-            return;
+            return null;
         }
 
-        StartCoroutine( LowerMenu() );
-    }
+        int index = UnityEngine.Random.Range( 0, InactiveTargets );
+        int currentIndex = 0;
 
-    private IEnumerator RaiseMenu()
-    {
-        m_IsMenuMoving = true;
+        foreach ( TargetDock targetDock in BirdTargetDocks )
+        {
+            if ( targetDock.DockedTarget == null )
+            {
+                if ( currentIndex == index )
+                {
+                    return targetDock;
+                }
+                else
+                {
+                    ++currentIndex;
+                }
+            }
+        }
 
-        m_TargetDock_UI_Tutorial.TrackDock.IsActive = true;
-        m_TargetDock_UI_Play.TrackDock.IsActive = true;
-        m_TargetDock_UI_Endless.TrackDock.IsActive = true;
-
-        Func< bool > allRaised = () => ( m_TargetDock_UI_Tutorial.TrackDock.CurrentIndex == 1 ) &&
-                                       ( m_TargetDock_UI_Play.TrackDock.CurrentIndex == 1 ) && 
-                                       ( m_TargetDock_UI_Endless.TrackDock.CurrentIndex == 1 );
-
-        yield return new WaitUntil( allRaised );
-
-        m_IsMenuRaised = true;
-        m_IsMenuMoving = false;
-    }
-
-    private IEnumerator LowerMenu()
-    {
-        m_IsMenuMoving = true;
-
-        m_TargetDock_UI_Tutorial.TrackDock.IsActive = true;
-        m_TargetDock_UI_Play.TrackDock.IsActive = true;
-        m_TargetDock_UI_Endless.TrackDock.IsActive = true;
-
-        Func< bool > allLowered = () => ( m_TargetDock_UI_Tutorial.TrackDock.CurrentIndex == 0 ) &&
-                                       ( m_TargetDock_UI_Play.TrackDock.CurrentIndex == 0 ) && 
-                                       ( m_TargetDock_UI_Endless.TrackDock.CurrentIndex == 0 );
-
-        yield return new WaitUntil( allLowered );
-
-        m_IsMenuRaised = false;
-        m_IsMenuMoving = false;
+        return null;
     }
     
     #pragma warning disable 0649
 
-    [ SerializeField ] private TargetDock[] m_TargetDocksEnemy;
+    [ SerializeField ] private TargetDock[] BirdTargetDocks;
     [ SerializeField ] private TargetDock m_TargetDock_UI_Tutorial;
     [ SerializeField ] private TargetDock m_TargetDock_UI_Play;
     [ SerializeField ] private TargetDock m_TargetDock_UI_Endless;
@@ -100,8 +229,12 @@ public class GalleryController : Singleton< GalleryController >
     [ SerializeField ] private TargetDock m_TargetDock_UI_ExitPlay;
     [ SerializeField ] private TargetDock m_TargetDock_UI_ExitEndless;
 
-    private bool m_IsMenuRaised;
-    private bool m_IsMenuMoving;
+    [ SerializeField ] [ Range( 0, 23 ) ] private int m_PersistantCount;
+    [ SerializeField ] [ Range( 0.1f, 10.0f ) ] private float m_RespawnLoopTimer;
+    private Coroutine m_TutorialSpawningRoutine;
+    private Coroutine m_PlaySpawningRoutine;
+    private Coroutine m_EndlessSpawningRoutine;
+    private int m_ActiveTargets;
 
     #pragma warning restore
 

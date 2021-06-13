@@ -18,7 +18,6 @@ public class GameStateManager : Singleton< GameStateManager >
     public Quiver QuiverWaterhead;
     public Bow Bow;
     public BowDockController BowDockController;
-    public GalleryController GalleryController;
 
     public ScoreController ScoreController { get; private set; }
 
@@ -47,9 +46,13 @@ public class GameStateManager : Singleton< GameStateManager >
 
         DontDestroyOnLoad( this );
         DontDestroyOnLoad( ScoreController );
-        DontDestroyOnLoad( GalleryController );
+        DontDestroyOnLoad( GalleryController.Instance );
 
         GetState( m_CurrentState ).Start();
+
+
+        // Test stuff.
+        GalleryController.Instance.TriggerRaiseMenu();
     }
 
     public GameState.State Current
@@ -68,17 +71,18 @@ public class GameStateManager : Singleton< GameStateManager >
 
     public void OnTutorial()
     {
-
+        GalleryController.Instance.TriggerLowerMenu();
     }
 
     public void OnPlay()
     {
-
+        GalleryController.Instance.TriggerLowerMenu();
     }
 
     public void OnEndless()
     {
-
+        GalleryController.Instance.TriggerLowerMenu();
+        GalleryController.Instance.TriggerEndlessSpawningRoutine();
     }
 
     public void OnExitTutorial()
@@ -135,31 +139,37 @@ public class GameStateManager : Singleton< GameStateManager >
                     case Target_UI.UIButton.TUTORIAL:
                         {
                             OnTutorial();
+                            button.DestroyTarget();
                             break;
                         }
                     case Target_UI.UIButton.PLAY:
                         {
                             OnPlay();
+                            button.DestroyTarget();
                             break;
                         }
                     case Target_UI.UIButton.ENDLESS:
                         {
                             OnEndless();
+                            button.DestroyTarget();
                             break;
                         }
                     case Target_UI.UIButton.EXIT_TUTORIAL:
                         {
                             OnExitTutorial();
+                            button.DestroyTarget();
                             break;
                         }
                     case Target_UI.UIButton.EXIT_PLAY:
                         {
                             OnExitPlay();
+                            button.DestroyTarget();
                             break;
                         }
                     case Target_UI.UIButton.EXIT_ENDLESS:
                         {
                             OnExitEndless();
+                            button.DestroyTarget();
                             break;
                         }
                 }
@@ -177,6 +187,7 @@ public class GameStateManager : Singleton< GameStateManager >
                 {
                     DestructionController.Instance.BlowUpObject( a_ContactScenario.Target.gameObject );
                     a_ContactScenario.Arrow.TriggerDespawn( 4.0f );
+                    GalleryController.Instance.NotifyOfKill();
                 }
                 else
                 {

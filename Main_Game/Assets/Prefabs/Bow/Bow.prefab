@@ -314,7 +314,7 @@ MonoBehaviour:
   - {fileID: 6145401482120967771}
   m_InteractionLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
   m_CustomReticle: {fileID: 0}
   m_FirstHoverEntered:
     m_PersistentCalls:
@@ -404,6 +404,7 @@ MonoBehaviour:
   m_ForceGravityOnDetach: 0
   m_RetainTransformParent: 1
   m_AttachPointCompatibilityMode: 0
+  m_PhysicsCollider: {fileID: 0}
 --- !u!65 &4061900467564264968
 BoxCollider:
   m_ObjectHideFlags: 0
