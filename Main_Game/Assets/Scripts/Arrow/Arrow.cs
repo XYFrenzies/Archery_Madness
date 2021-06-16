@@ -15,6 +15,8 @@ public class Arrow : XRGrabInteractable
     [ Header( "Settings" ) ]
     public float Speed = 2000.0f;
 
+    public AudioSource AudioSource;
+
     [ Header( "Hit" ) ]
     public Transform Tip = null;
     public LayerMask LayerMask = Physics.IgnoreRaycastLayer;
@@ -28,22 +30,30 @@ public class Arrow : XRGrabInteractable
         base.Awake();
         m_Collider = GetComponent< Collider >();
         m_ThisRigidbody = GetComponent< Rigidbody >();
+        AudioSource = GetComponent< AudioSource >();
+        
     }
 
     protected override void OnSelectEntering( SelectEnterEventArgs a_Args )
     {
+        base.OnSelectEntering( a_Args );
         if ( a_Args.interactor is XRDirectInteractor )
         {
             Clear();
         }
 
-        base.OnSelectEntering( a_Args );
+        //base.OnSelectEntering( a_Args );
     }
 
     private void Clear()
     {
         SetLaunch( false );
         TogglePhysics( true );
+    }
+
+    public void DestroyArrow()
+    {
+        GetComponent< DestructionController >()?.BlowUp();
     }
 
     public void TriggerDespawn( float a_Time )
@@ -69,6 +79,9 @@ public class Arrow : XRGrabInteractable
             UpdateLastPosition();
             SetInitialPosition( Tip.position );
             ApplyForce( a_Notch.PullMeasurer );
+            //AudioSource.clip = SoundPlayer.Instance.GetClip( "ArrowFlight" );
+            //AudioSource.Play();
+            //SoundPlayer.Instance.Play( "BowTwang", "Notch", 1.0f );
         }
     }
 
@@ -130,12 +143,18 @@ public class Arrow : XRGrabInteractable
     {
         if ( Physics.Linecast( m_LastKnownPosition, Tip.position, out RaycastHit hit, LayerMask ) )
         {
-            TogglePhysics( false );
-            ChildArrow( hit );
-            CheckForHittable( hit );
+            OnCollision( hit );
         }
 
         return hit.collider != null;
+    }
+
+    private void OnCollision( RaycastHit a_Hit )
+    {
+        TogglePhysics( false );
+        ChildArrow( a_Hit );
+        CheckForHittable( a_Hit );
+        TriggerDespawn( 3.0f );
     }
 
     private void TogglePhysics( bool a_Value )

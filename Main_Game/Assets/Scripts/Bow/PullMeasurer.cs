@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -23,7 +24,6 @@ public class PullMeasurer : XRBaseInteractable
     {
         base.OnSelectExited( a_Args );
         m_PullingInteractor = null;
-
         SetPullValues( Start.position, 0.0f );
     }
 

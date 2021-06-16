@@ -20,8 +20,6 @@ public class GalleryController : Singleton< GalleryController >
     public TargetDock UIDock_Middle;
     public TargetDock UIDock_Right;
 
-    public TargetDock testDock;
-
     public bool AllTargetsFilled
     {
         get
@@ -77,6 +75,30 @@ public class GalleryController : Singleton< GalleryController >
         ++m_ActiveTargets;
     }
 
+    public void SetMovementSpeeds( float a_Speed )
+    {
+        foreach ( TargetDock birdDock in BirdTargetDocks )
+        {
+            birdDock.TrackDock.Speed = a_Speed;
+        }
+    }
+
+    public void EnableTrackMovement()
+    {
+        foreach ( TargetDock birdDock in BirdTargetDocks )
+        {
+            birdDock.TrackDock.IsActive = true;
+        }
+    }
+
+    public void DisableTrackMovement()
+    {
+        foreach ( TargetDock birdDock in BirdTargetDocks )
+        {
+            birdDock.TrackDock.IsActive = false;
+        }
+    }
+
     public void TriggerTutorialSpawningRoutine()
     {
         if ( m_TutorialSpawningRoutine != null )
@@ -107,31 +129,34 @@ public class GalleryController : Singleton< GalleryController >
         m_EndlessSpawningRoutine = StartCoroutine( BeginEndlessSpawningRoutine() );
     }
 
-    private IEnumerator BeginTutorialSpawningRoutine()
+    public IEnumerator BeginTutorialSpawningRoutine()
     {
         yield return null;
     }
 
-    private IEnumerator BeginPlaySpawningRoutine()
+    public IEnumerator BeginPlaySpawningRoutine()
     {
         yield return null;
     }
 
-    private IEnumerator BeginEndlessSpawningRoutine()
+    public IEnumerator BeginEndlessSpawningRoutine()
     {
+        EnableTrackMovement();
+
         while ( true )
         {
             yield return new WaitForSeconds( m_RespawnLoopTimer );
-            SpawnRandomNewTarget();
+
+            SpawnRandomNewTarget( m_EndlessFlipDownTimer );
         }
     }
 
-    private bool SpawnRandomNewTarget()
+    private bool SpawnRandomNewTarget( float a_DespawnTimer = -1 )
     {
         Target.TargetType randomType = ( Target.TargetType )
             UnityEngine.Random.Range( 2, 5 );
-
-        if ( SpawnNewTarget( randomType ) )
+        bool spawnedTarget = SpawnNewTarget( randomType, a_DespawnTimer );
+        if ( spawnedTarget )
         {
             NotifyOfRespawn();
             return true;
@@ -140,7 +165,7 @@ public class GalleryController : Singleton< GalleryController >
         return false;
     }
 
-    private bool SpawnNewTarget( Target.TargetType a_TargetType )
+    private bool SpawnNewTarget( Target.TargetType a_TargetType, float a_DespawnTimer = -1 )
     {
         TargetDock emptyDock = FindRandomEmptyTargetDock();
         
@@ -149,21 +174,33 @@ public class GalleryController : Singleton< GalleryController >
             return false;
         }
 
-        emptyDock.SpawnTarget( a_TargetType, true );
+        emptyDock.SpawnTarget( a_TargetType, true, a_DespawnTimer, true );
         return true;
     }
 
-    public void TriggerRaiseMenu()
+    public void TriggerRaiseMenu( Task a_OnComplete = null )
     {
-        StartCoroutine( RaiseMainMenu() );
+        StartCoroutine( RaiseMainMenu( a_OnComplete ) );
     }
 
-    public void TriggerLowerMenu()
+    public void TriggerLowerMenu( Task a_OnComplete = null )
     {
-        StartCoroutine( LowerMainMenu() );
+        StartCoroutine( LowerMainMenu( a_OnComplete ) );
     }
 
-    private IEnumerator RaiseMainMenu()
+    public IEnumerator RaiseMainMenu( Task a_OnComplete = null )
+    {
+        UIDock_Middle.SpawnUITarget(Target_UI.UIButton.ENDLESS, true );
+
+        yield return new WaitUntil( () => !UIDock_Middle.IsTransitioning );
+
+        if ( a_OnComplete != null )
+        {
+            a_OnComplete.Trigger();
+        }
+    }
+
+    public IEnumerator RaiseMainMenu()
     {
         UIDock_Left.SpawnUITarget( Target_UI.UIButton.TUTORIAL, true );
         UIDock_Middle.SpawnUITarget(Target_UI.UIButton.PLAY, true );
@@ -173,11 +210,9 @@ public class GalleryController : Singleton< GalleryController >
         !UIDock_Left.IsTransitioning && 
         !UIDock_Middle.IsTransitioning && 
         !UIDock_Right.IsTransitioning );
-
-        // Put things here to occur after menu raised.
     }
 
-    private IEnumerator LowerMainMenu()
+    public IEnumerator LowerMainMenu( Task a_OnComplete = null )
     {
         UIDock_Left.TriggerFlipDown();
         UIDock_Middle.TriggerFlipDown();
@@ -188,7 +223,39 @@ public class GalleryController : Singleton< GalleryController >
         !UIDock_Middle.IsTransitioning && 
         !UIDock_Right.IsTransitioning );
 
-        // Put things here to occur after menu raised.
+        // Put things here to occur after menu lowered.
+        if ( a_OnComplete != null )
+        {
+            a_OnComplete.Trigger();
+        }
+    }
+
+    public IEnumerator LowerMainMenu()
+    {
+        UIDock_Middle.TriggerFlipDown();
+
+        yield return new WaitUntil( () => !UIDock_Middle.IsTransitioning );
+    }
+
+    public IEnumerator RaiseTutorialExit()
+    {
+        UIDock_Middle.SpawnUITarget( Target_UI.UIButton.EXIT_TUTORIAL, true );
+
+        yield return new WaitUntil( () => !UIDock_Middle.IsTransitioning );
+    }
+
+    public IEnumerator RaisePlayExit()
+    {
+        UIDock_Middle.SpawnUITarget( Target_UI.UIButton.EXIT_PLAY, true );
+
+        yield return new WaitUntil( () => !UIDock_Middle.IsTransitioning );
+    }
+
+    public IEnumerator RaiseEndlessExit()
+    {
+        UIDock_Middle.SpawnUITarget( Target_UI.UIButton.EXIT_ENDLESS, true );
+
+        yield return new WaitUntil( () => !UIDock_Middle.IsTransitioning );
     }
 
     private TargetDock FindRandomEmptyTargetDock()
@@ -222,15 +289,10 @@ public class GalleryController : Singleton< GalleryController >
     #pragma warning disable 0649
 
     [ SerializeField ] private TargetDock[] BirdTargetDocks;
-    [ SerializeField ] private TargetDock m_TargetDock_UI_Tutorial;
-    [ SerializeField ] private TargetDock m_TargetDock_UI_Play;
-    [ SerializeField ] private TargetDock m_TargetDock_UI_Endless;
-    [ SerializeField ] private TargetDock m_TargetDock_UI_ExitTutorial;
-    [ SerializeField ] private TargetDock m_TargetDock_UI_ExitPlay;
-    [ SerializeField ] private TargetDock m_TargetDock_UI_ExitEndless;
 
     [ SerializeField ] [ Range( 0, 23 ) ] private int m_PersistantCount;
     [ SerializeField ] [ Range( 0.1f, 10.0f ) ] private float m_RespawnLoopTimer;
+    [ SerializeField ] [ Range( 0.1f, 10.0f ) ] private float m_EndlessFlipDownTimer;
     private Coroutine m_TutorialSpawningRoutine;
     private Coroutine m_PlaySpawningRoutine;
     private Coroutine m_EndlessSpawningRoutine;

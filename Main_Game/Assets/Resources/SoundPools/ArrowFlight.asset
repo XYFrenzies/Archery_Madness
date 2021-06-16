@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acd0e736ee620e7419d7c369f763fbcd, type: 3}
+  m_Name: ArrowFlight
+  m_EditorClassIdentifier: 
+  m_Clips:
+  - {fileID: 8300000, guid: cb021324dcdb2564685a6a5ea16f9c60, type: 3}
+  - {fileID: 8300000, guid: ed9490d56ef87494f8ab6beb9d4dcf89, type: 3}
+  - {fileID: 8300000, guid: a0f7cb2dda337e243afa0063bf298368, type: 3}

@@ -23,6 +23,8 @@ public class TrackDock : MonoBehaviour
     }
 
     public Transform[] AnchorPoints;
+    public AudioSource AudioSource;
+
     public Type TrackingType
     {
         get
@@ -73,6 +75,17 @@ public class TrackDock : MonoBehaviour
         set
         {
             m_IsActive = value;
+            if ( value )
+            {
+                AudioSource.clip = SoundPlayer.Instance.GetClip( "SqueakyWheels" );
+                AudioSource.loop = true;
+                AudioSource.volume = 0.1f;
+                AudioSource.Play();
+            }
+            else
+            {
+                AudioSource.Stop();
+            }
         }
     }
     public int CurrentIndex
@@ -83,10 +96,12 @@ public class TrackDock : MonoBehaviour
         }
     }
 
-    private void Awake()
+    private void Start()
     {
+        AudioSource = GetComponent< AudioSource >();
         m_ComingFrom = Mathf.Clamp( m_ComingFrom, 0, AnchorPoints.Length - 1 );
         m_GoingTo = GetNextIndex( m_ComingFrom );
+        IsActive = false;
         SetMoveDirection();
     }
 

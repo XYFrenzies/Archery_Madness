@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 2059713307783728289}
   - component: {fileID: 4502196758152601664}
   - component: {fileID: 3838123534318014551}
+  - component: {fileID: 5496375143417887136}
   m_Layer: 2
   m_Name: Arrow_Waterballoon
   m_TagString: Untagged
@@ -111,7 +112,7 @@ MonoBehaviour:
   m_Colliders: []
   m_InteractionLayerMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 307
   m_CustomReticle: {fileID: 0}
   m_FirstHoverEntered:
     m_PersistentCalls:
@@ -205,7 +206,22 @@ MonoBehaviour:
   Tip: {fileID: 4198533584035688143}
   LayerMask:
     serializedVersion: 2
-    m_Bits: 307
+    m_Bits: 55
+--- !u!114 &5496375143417887136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2933709761867829036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExplodeForce: 1000
+  Cuts: 3
+  m_MeshDestroyers: []
 --- !u!136 &3967771025604925605
 CapsuleCollider:
   m_ObjectHideFlags: 0

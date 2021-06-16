@@ -16,9 +16,9 @@ public class TargetDock : MonoBehaviour
 
     public Transform DockPivot;
     public Transform TargetAnchor;
+    public AudioSource AudioSource;
 
     public Target DockedTarget { get; private set; }
-    public TrackDock TrackDock { get; private set; }
     public Direction RotationDirection
     {
         get
@@ -29,6 +29,23 @@ public class TargetDock : MonoBehaviour
     public bool IsStanding { get; private set; } = true;
     public bool IsTransitioning { get; private set; } = false;
 
+    public TrackDock TrackDock
+    {
+        get
+        {
+            if ( m_TrackDock == null )
+            {
+                m_TrackDock = GetComponent< TrackDock >();
+            }
+
+            return m_TrackDock;
+        }
+        private set
+        {
+            m_TrackDock = value;
+        }
+    }
+
     private void Awake()
     {
         m_DegreesPerSecondDown = m_RotationAngle / m_TransitionTimeDown;
@@ -36,6 +53,7 @@ public class TargetDock : MonoBehaviour
         TrackDock = GetComponent< TrackDock >();
         IsStanding = m_IsInitiallyStanding;
         m_PersistantRotation = new Quaternion();
+        AudioSource = GetComponent< AudioSource >();
     }
 
     public void TriggerFlipDown()
@@ -63,7 +81,7 @@ public class TargetDock : MonoBehaviour
     {
         if ( DockedTarget != null )
         {
-            DockedTarget.DestroyTarget();
+            Destroy( DockedTarget.gameObject );
         }
 
         GameObject targetToCreate = null;
@@ -120,7 +138,7 @@ public class TargetDock : MonoBehaviour
         }
     }
 
-    public void SpawnTarget( Target.TargetType a_TargetType, bool a_WithFlip )
+    public void SpawnTarget( Target.TargetType a_TargetType, bool a_WithFlip, float a_FlipDownTimer = -1, bool a_NotifyOfKill = false )
     {
         if ( DockedTarget != null )
         {
@@ -162,7 +180,7 @@ public class TargetDock : MonoBehaviour
 
         if ( a_WithFlip )
         {
-            StartCoroutine( FlipUp() );
+            StartCoroutine( FlipUp( a_FlipDownTimer, a_NotifyOfKill ) );
         }
     }
 
@@ -174,8 +192,10 @@ public class TargetDock : MonoBehaviour
         }
     }
 
-    private IEnumerator FlipDown()
+    public IEnumerator FlipDown()
     {
+        AudioSource.clip = SoundPlayer.Instance.GetClip( "Actuator" );
+        AudioSource.Play();
         IsTransitioning = true;
         IsStanding = false;
 
@@ -196,8 +216,43 @@ public class TargetDock : MonoBehaviour
         IsTransitioning = false;
     }
 
-    private IEnumerator FlipUp()
+    public IEnumerator FlipDownAndDestroy( bool a_NotifyOfKill )
     {
+        AudioSource.clip = SoundPlayer.Instance.GetClip( "Actuator" );
+        AudioSource.Play();
+
+        IsTransitioning = true;
+        IsStanding = false;
+
+        //----------------------------------------------
+        Direction rotationDirection = RotationDirection;
+        float accumulativeAngle = 0.0f;
+
+        while ( accumulativeAngle < m_RotationAngle )
+        {
+            yield return new WaitForEndOfFrame();
+            accumulativeAngle += m_DegreesPerSecondDown * Time.deltaTime;
+            SetRotation( rotationDirection, accumulativeAngle );
+        }
+
+        SetRotation( rotationDirection, m_RotationAngle );
+        //----------------------------------------------
+
+        IsTransitioning = false;
+
+        if ( a_NotifyOfKill )
+        {
+            GalleryController.Instance.NotifyOfKill();
+        }
+
+        Destroy( DockedTarget.gameObject );
+    }
+
+    public IEnumerator FlipUp( float a_FlipDownTimer = -1, bool a_NotifyOfKill = false )
+    {
+        AudioSource.clip = SoundPlayer.Instance.GetClip( "Actuator" );
+        AudioSource.Play();
+
         IsTransitioning = true;
 
         //----------------------------------------------
@@ -217,6 +272,12 @@ public class TargetDock : MonoBehaviour
 
         IsStanding = true;
         IsTransitioning = false;
+
+        if ( a_FlipDownTimer != -1 )
+        {
+            yield return new WaitForSeconds( a_FlipDownTimer );
+            StartCoroutine( FlipDownAndDestroy( a_NotifyOfKill ) );
+        }
     }
 
     public Target GetTargetFromGameObject( GameObject a_GameObject )
@@ -278,6 +339,7 @@ public class TargetDock : MonoBehaviour
     [ SerializeField ] [ Range( 0.1f, m_MaxTransitionTime ) ] private float m_TransitionTimeDown = 2.0f;
     [ SerializeField ] [ Range( 0.1f, m_MaxTransitionTime ) ] private float m_TransitionTimeUp = 2.0f; 
     [ SerializeField ] private Direction m_RotationDirection;
+    private TrackDock m_TrackDock;
     private float m_DegreesPerSecondDown;
     private float m_DegreesPerSecondUp;
     private Quaternion m_PersistantRotation;

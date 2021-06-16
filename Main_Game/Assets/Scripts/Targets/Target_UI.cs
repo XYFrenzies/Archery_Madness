@@ -21,6 +21,13 @@ public class Target_UI : Target
         Type = TargetType.UI;
     }
 
+    public override void DestroyTarget()
+    {
+        gameObject.transform.DetachChildren();
+        //gameObject.GetComponent< Rigidbody >().isKinematic = false;
+        GetComponent< DestructionController >()?.BlowUp();
+    }
+
     public override void OnArrowHit( Arrow a_Arrow )
     {
         base.OnArrowHit( a_Arrow );

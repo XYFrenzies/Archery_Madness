@@ -25,11 +25,12 @@ public class Bow : XRGrabInteractable
 
     protected override void OnDisable()
     {
-        base.OnDisable();
+        //base.OnDisable();
         selectEntered.RemoveListener( m_Notch.SetReady );
         selectExited.RemoveListener( m_Notch.SetReady );
         selectEntered.RemoveListener( GameStateManager.Instance.OnBowPickup );
         selectExited.RemoveListener( GameStateManager.Instance.OnBowDrop );
+        base.OnDisable();
     }
 
     public void SetPhysics( bool a_Value )

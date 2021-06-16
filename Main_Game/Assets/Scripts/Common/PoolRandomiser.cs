@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public abstract class PoolRandomiser< T > : ScriptableObject
+public class PoolRandomiser< T > : ScriptableObject
 {
     public int Count
     {
@@ -39,7 +39,7 @@ public abstract class PoolRandomiser< T > : ScriptableObject
         return m_Items[ a_Index ];
     }
 
-    [ RuntimeInitializeOnLoadMethod( RuntimeInitializeLoadType.AfterAssembliesLoaded ) ]
+    [ RuntimeInitializeOnLoadMethod( RuntimeInitializeLoadType.AfterSceneLoad ) ]
     private static void OnLoad()
     {
         m_AllPools = new Dictionary< string, PoolRandomiser< T > >();

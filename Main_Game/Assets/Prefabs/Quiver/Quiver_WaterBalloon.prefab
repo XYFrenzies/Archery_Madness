@@ -76,7 +76,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 4794017296815812796}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -132,7 +133,7 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  ArrowPrefab: {fileID: 2933709761867829036, guid: c5dcb7604b0ba5843a088513b13fffcd, type: 3}
+  ArrowPrefab: {fileID: 2102440058248084647, guid: 2280bacbcae8b3a468b9e54069cc7acb, type: 3}
 --- !u!1 &6688029733296491893
 GameObject:
   m_ObjectHideFlags: 0

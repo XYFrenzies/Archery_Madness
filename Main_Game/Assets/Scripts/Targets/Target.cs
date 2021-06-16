@@ -15,12 +15,30 @@ public abstract class Target : MonoBehaviour, IResettable, IArrowHittable
 
     public Transform ParentMostTransform;
     public TargetDock TargetDock;
+    public Collider Collider;
 
     public TargetType Type { get; protected set; }
 
-    public void DestroyTarget()
+    public virtual void DestroyTarget()
     {
-        Destroy( ParentMostTransform.gameObject );
+        transform.SetParent( null );
+        GetComponent< DestructionController >()?.BlowUp();
+    }
+
+    public void EnableCollider()
+    {
+        if ( Collider != null )
+        {
+            Collider.enabled = true;
+        }
+    }
+
+    public void DisableCollider()
+    {
+        if ( Collider != null )
+        {
+            Collider.enabled = false;
+        }
     }
 
     public void OnReset()
@@ -41,5 +59,6 @@ public abstract class Target : MonoBehaviour, IResettable, IArrowHittable
     public virtual void OnArrowHit( Arrow a_Arrow )
     {
         // Do something when arrow hits this object.
+
     }
 }

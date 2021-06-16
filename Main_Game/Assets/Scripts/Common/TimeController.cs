@@ -22,6 +22,7 @@ public class TimeController
     public void StopTimer()
     {
         GameStateManager.Instance.StopCoroutine( m_TimerCoroutine );
+        DigitDisplay.Instance.SetNumber( 0 );
         m_TimerCoroutine = null;
     }
 
@@ -42,17 +43,21 @@ public class TimeController
 
     private IEnumerator Begin()
     {
-        while ( m_Paused )
+        while ( true )
         {
+            while ( m_Paused )
+            {
+                yield return m_Wait;
+            }
+            
             yield return m_Wait;
-        }
-        
-        yield return m_Wait;
+            DigitDisplay.Instance.SetNumber( Seconds );
 
-        if ( ++Seconds > 59 )
-        {
-            Seconds = 0;
-            ++Minutes;
+            if ( ++Seconds > 59 )
+            {
+                Seconds = 0;
+                ++Minutes;
+            }
         }
     }
 

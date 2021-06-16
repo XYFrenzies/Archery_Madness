@@ -1,44 +1,131 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class SoundPlayer : MonoBehaviour
+
+public class SoundPlayer : Singleton< SoundPlayer >
 {
-    public AudioClipPool[] Pools;
-    private AudioSource audioListener;
-    public void Play(string a_ClipName)
+    public AudioSource[] AudioSources;
+    public AudioClipPool[] AudioPools;
+
+    private void Awake()
     {
-        //find the pool in Pools that has the name, and play a random one.
-        for (int i = 0; i < Pools.Length; i++)
+        m_ClipPools = new Dictionary< string, AudioClipPool >();
+        m_SoundSources = new Dictionary< string, AudioSource >();
+        foreach ( AudioSource source in AudioSources )
         {
-            if (Pools[i].name == a_ClipName) 
+            m_SoundSources.Add( source.gameObject.name, source );
+        }
+        foreach ( AudioClipPool pool in AudioPools )
+        {
+            m_ClipPools.Add( pool.name, pool );
+        }
+    }
+
+    public void Play( string a_AudioPool, float a_Volume )
+    {
+        if ( m_ClipPools.TryGetValue( a_AudioPool, out AudioClipPool pool ) && 
+             m_SoundSources.TryGetValue( "Main Camera", out AudioSource audioSource ) )
+        {
+            audioSource.clip = pool.Random;
+            audioSource.loop = false;
+            audioSource.volume = a_Volume;
+            audioSource.Play();
+        }
+    }
+
+    public void Play( string a_AudioPool, string a_AudioSource, float a_Volume, bool a_Windup = false )
+    {
+        if ( m_ClipPools.TryGetValue( a_AudioPool, out AudioClipPool pool ) && 
+             m_SoundSources.TryGetValue( a_AudioSource, out AudioSource audioSource ) )
+        {
+            audioSource.clip = pool.Random;
+            audioSource.volume = a_Volume;
+            audioSource.loop = false;
+
+            if ( a_Windup )
             {
-                audioListener.clip = Pools[i].Random;
-                audioListener.Play();
+                StartCoroutine( WindSoundUp( audioSource, 1.0f ) );
+            }
+
+            audioSource.Play();
+        }
+    }
+
+    public void PlayRepeat( string a_AudioPool, float a_Volume, bool a_Windup )
+    {
+        if ( m_ClipPools.TryGetValue( a_AudioPool, out AudioClipPool pool ) && 
+             m_SoundSources.TryGetValue( "Main Camera", out AudioSource audioSource ) )
+        {
+            audioSource.clip = pool.Random;
+            audioSource.loop = true;
+            audioSource.volume = a_Volume;
+
+            if ( a_Windup )
+            {
+                StartCoroutine( WindSoundUp( audioSource, 2.0f ) );
+            }
+
+            audioSource.Play();
+        }
+    }
+
+    private IEnumerator WindSoundUp( AudioSource a_AudioSource, float a_Time )
+    {
+        a_AudioSource.pitch = 0.0f;
+
+        while ( a_AudioSource.pitch < 1.0f )
+        {
+            yield return null;
+            a_AudioSource.pitch += Time.deltaTime / a_Time;
+        }
+
+        a_AudioSource.pitch = 1.0f;
+
+        while ( a_AudioSource.isPlaying )
+        {
+            yield return new WaitForSeconds( Random.Range( 4.0f, 20.0f ) );
+            float time = 0.0f;
+
+            while ( time < 1.0f )
+            {
+                yield return null;
+                time += Time.deltaTime * 1.0f;
+                a_AudioSource.pitch = Mathf.Sin( time * 2 * Mathf.PI ) * 0.3f + 1.0f;
             }
         }
     }
 
-    public static SoundPlayer Get(string a_Name)
+    public void PlayRepeat( string a_AudioPool, string a_AudioSource, float a_Volume )
     {
-        if (m_AllPlayers.TryGetValue(a_Name, out SoundPlayer player))
+        if ( m_ClipPools.TryGetValue( a_AudioPool, out AudioClipPool pool ) && 
+             m_SoundSources.TryGetValue( a_AudioSource, out AudioSource audioSource ) )
         {
-            return player;
+            audioSource.clip = pool.Random;
+            audioSource.loop = true;
+            audioSource.volume = a_Volume;
+            audioSource.Play();
+        }
+    }
+
+    public void PlayAtLocation( string a_AudioPool, Vector3 a_Location, float a_Volume )
+    {
+        if ( m_ClipPools.TryGetValue( a_AudioPool, out AudioClipPool pool ) )
+        {
+            AudioSource.PlayClipAtPoint( pool.Random, a_Location, a_Volume );
+        }
+    }
+
+    public AudioClip GetClip( string a_AudioPool )
+    {
+        if ( m_ClipPools.TryGetValue( a_AudioPool, out AudioClipPool pool ) )
+        {
+            return pool.Random;
         }
 
         return null;
     }
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-    private static void OnLoad()
-    {
-        SoundPlayer[] soundPlayers = Resources.FindObjectsOfTypeAll<SoundPlayer>();
-        m_AllPlayers = new Dictionary<string, SoundPlayer>();
-        foreach (SoundPlayer player in soundPlayers)
-        {
-            m_AllPlayers.Add(player.gameObject.name, player);
-        }
-    }
-
-    private static Dictionary<string, SoundPlayer> m_AllPlayers;
+    
+    private Dictionary< string, AudioClipPool > m_ClipPools;
+    private Dictionary< string, AudioSource > m_SoundSources;
 }
 

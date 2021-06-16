@@ -82,7 +82,7 @@ MonoBehaviour:
   - {fileID: 4502196758152601664}
   m_InteractionLayerMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 307
   m_CustomReticle: {fileID: 0}
   m_FirstHoverEntered:
     m_PersistentCalls:
@@ -176,7 +176,7 @@ MonoBehaviour:
   Tip: {fileID: 4198533584035688143}
   LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967291
+    m_Bits: 55
 --- !u!54 &2059713307783728289
 Rigidbody:
   m_ObjectHideFlags: 0
