@@ -9,16 +9,10 @@ public class GalleryController : Singleton< GalleryController >
     public GameObject TargetPrefab_Glass;
     public GameObject TargetPrefabs_Fire;
 
-    public GameObject TargetUIPrefab_Tutorial;
     public GameObject TargetUIPrefab_Play;
-    public GameObject TargetUIPrefab_Endless;
-    public GameObject TargetUIPrefab_ExitTutorial;
-    public GameObject TargetUIPrefab_ExitPlay;
-    public GameObject TargetUIPrefab_ExitEndless;
+    public GameObject TargetUIPrefab_Exit;
 
-    public TargetDock UIDock_Left;
-    public TargetDock UIDock_Middle;
-    public TargetDock UIDock_Right;
+    public TargetDock UIDock;
 
     public bool AllTargetsFilled
     {
@@ -60,10 +54,9 @@ public class GalleryController : Singleton< GalleryController >
 
     public void NotifyOfKill()
     {
-        // This function is called when the player destroys an enemy target.
         --m_ActiveTargets;
 
-        if ( m_ActiveTargets < m_PersistantCount )
+        if ( m_ActiveTargets < m_PersistantCount && GameStateManager.Instance.InGame )
         {
             SpawnRandomNewTarget();
         }
@@ -71,7 +64,6 @@ public class GalleryController : Singleton< GalleryController >
 
     private void NotifyOfRespawn()
     {
-        // This function is called when a target is spawned.
         ++m_ActiveTargets;
     }
 
@@ -81,6 +73,7 @@ public class GalleryController : Singleton< GalleryController >
         {
             birdDock.TrackDock.Speed = a_Speed;
         }
+        m_AllMovementSpeeds = a_Speed;
     }
 
     public void EnableTrackMovement()
@@ -99,51 +92,59 @@ public class GalleryController : Singleton< GalleryController >
         }
     }
 
-    public void TriggerTutorialSpawningRoutine()
+    public void DestroyAllTargets()
     {
-        if ( m_TutorialSpawningRoutine != null )
+        foreach ( TargetDock dock in BirdTargetDocks )
         {
-            StopCoroutine( m_TutorialSpawningRoutine );
+            dock.TriggerFlipDownAndDestroy();
+        }
+    }
+
+    public void TriggerSlowDown()
+    {
+        StartCoroutine( SlowDown() );
+    }
+
+    private IEnumerator SlowDown()
+    {
+        float timeLeft = 1.0f;
+        float initialSpeed = m_AllMovementSpeeds;
+
+        while ( timeLeft > 0.0f )
+        {
+            timeLeft -= Time.deltaTime;
+            SetMovementSpeeds( initialSpeed * timeLeft );
+            yield return null;
+        }
+    }
+
+    public void TriggerSpawning()
+    {
+        if ( m_SpawningRoutine != null )
+        {
+            StopCoroutine( m_SpawningRoutine );
         }
 
-        m_TutorialSpawningRoutine = StartCoroutine( BeginTutorialSpawningRoutine() );
+        m_SpawningRoutine = StartCoroutine( BeginSpawning() );
     }
 
-    public void TriggerPlaySpawningRoutine()
+    public void TriggerStopSpawning()
     {
-        if ( m_PlaySpawningRoutine != null )
+        if ( m_SpawningRoutine != null )
         {
-            StopCoroutine( m_PlaySpawningRoutine );
+            StopCoroutine( m_SpawningRoutine );
         }
 
-        m_PlaySpawningRoutine = StartCoroutine( BeginPlaySpawningRoutine() );
+        TriggerSlowDown();
+        DestroyAllTargets();
     }
 
-    public void TriggerEndlessSpawningRoutine()
-    {
-        if ( m_EndlessSpawningRoutine != null )
-        {
-            StopCoroutine( m_EndlessSpawningRoutine );
-        }
-
-        m_EndlessSpawningRoutine = StartCoroutine( BeginEndlessSpawningRoutine() );
-    }
-
-    public IEnumerator BeginTutorialSpawningRoutine()
-    {
-        yield return null;
-    }
-
-    public IEnumerator BeginPlaySpawningRoutine()
-    {
-        yield return null;
-    }
-
-    public IEnumerator BeginEndlessSpawningRoutine()
+    public IEnumerator BeginSpawning()
     {
         EnableTrackMovement();
+        SetMovementSpeeds( 0.5f );
 
-        while ( true )
+        while ( GameStateManager.Instance.InGame )
         {
             yield return new WaitForSeconds( m_RespawnLoopTimer );
 
@@ -178,21 +179,21 @@ public class GalleryController : Singleton< GalleryController >
         return true;
     }
 
-    public void TriggerRaiseMenu( Task a_OnComplete = null )
+    public void TriggerRaisePlay( Task a_OnComplete = null )
     {
-        StartCoroutine( RaiseMainMenu( a_OnComplete ) );
+        StartCoroutine( RaisePlay( a_OnComplete ) );
     }
 
-    public void TriggerLowerMenu( Task a_OnComplete = null )
+    public void TriggerLowerPlay( Task a_OnComplete = null )
     {
-        StartCoroutine( LowerMainMenu( a_OnComplete ) );
+        StartCoroutine( LowerPlay( a_OnComplete ) );
     }
 
-    public IEnumerator RaiseMainMenu( Task a_OnComplete = null )
+    public IEnumerator RaisePlay( Task a_OnComplete = null )
     {
-        UIDock_Middle.SpawnUITarget(Target_UI.UIButton.ENDLESS, true );
+        UIDock.SpawnUITarget(Target_UI.UIButton.PLAY, true );
 
-        yield return new WaitUntil( () => !UIDock_Middle.IsTransitioning );
+        yield return new WaitUntil( () => !UIDock.IsTransitioning );
 
         if ( a_OnComplete != null )
         {
@@ -200,28 +201,18 @@ public class GalleryController : Singleton< GalleryController >
         }
     }
 
-    public IEnumerator RaiseMainMenu()
+    public IEnumerator RaisePlay()
     {
-        UIDock_Left.SpawnUITarget( Target_UI.UIButton.TUTORIAL, true );
-        UIDock_Middle.SpawnUITarget(Target_UI.UIButton.PLAY, true );
-        UIDock_Right.SpawnUITarget( Target_UI.UIButton.ENDLESS, true );
+        UIDock.SpawnUITarget(Target_UI.UIButton.PLAY, true );
 
-        yield return new WaitUntil( () => 
-        !UIDock_Left.IsTransitioning && 
-        !UIDock_Middle.IsTransitioning && 
-        !UIDock_Right.IsTransitioning );
+        yield return new WaitUntil( () => !UIDock.IsTransitioning );
     }
 
-    public IEnumerator LowerMainMenu( Task a_OnComplete = null )
+    public IEnumerator LowerPlay( Task a_OnComplete = null )
     {
-        UIDock_Left.TriggerFlipDown();
-        UIDock_Middle.TriggerFlipDown();
-        UIDock_Right.TriggerFlipDown();
+        UIDock.TriggerFlipDown();
 
-        yield return new WaitUntil( () => 
-        !UIDock_Left.IsTransitioning && 
-        !UIDock_Middle.IsTransitioning && 
-        !UIDock_Right.IsTransitioning );
+        yield return new WaitUntil( () => !UIDock.IsTransitioning );
 
         // Put things here to occur after menu lowered.
         if ( a_OnComplete != null )
@@ -230,32 +221,18 @@ public class GalleryController : Singleton< GalleryController >
         }
     }
 
-    public IEnumerator LowerMainMenu()
+    public IEnumerator LowerPlay()
     {
-        UIDock_Middle.TriggerFlipDown();
+        UIDock.TriggerFlipDown();
 
-        yield return new WaitUntil( () => !UIDock_Middle.IsTransitioning );
+        yield return new WaitUntil( () => !UIDock.IsTransitioning );
     }
 
-    public IEnumerator RaiseTutorialExit()
+    public IEnumerator RaiseExit()
     {
-        UIDock_Middle.SpawnUITarget( Target_UI.UIButton.EXIT_TUTORIAL, true );
+        UIDock.SpawnUITarget( Target_UI.UIButton.EXIT, true );
 
-        yield return new WaitUntil( () => !UIDock_Middle.IsTransitioning );
-    }
-
-    public IEnumerator RaisePlayExit()
-    {
-        UIDock_Middle.SpawnUITarget( Target_UI.UIButton.EXIT_PLAY, true );
-
-        yield return new WaitUntil( () => !UIDock_Middle.IsTransitioning );
-    }
-
-    public IEnumerator RaiseEndlessExit()
-    {
-        UIDock_Middle.SpawnUITarget( Target_UI.UIButton.EXIT_ENDLESS, true );
-
-        yield return new WaitUntil( () => !UIDock_Middle.IsTransitioning );
+        yield return new WaitUntil( () => !UIDock.IsTransitioning );
     }
 
     private TargetDock FindRandomEmptyTargetDock()
@@ -295,8 +272,9 @@ public class GalleryController : Singleton< GalleryController >
     [ SerializeField ] [ Range( 0.1f, 10.0f ) ] private float m_EndlessFlipDownTimer;
     private Coroutine m_TutorialSpawningRoutine;
     private Coroutine m_PlaySpawningRoutine;
-    private Coroutine m_EndlessSpawningRoutine;
+    private Coroutine m_SpawningRoutine;
     private int m_ActiveTargets;
+    private float m_AllMovementSpeeds;
 
     #pragma warning restore
 

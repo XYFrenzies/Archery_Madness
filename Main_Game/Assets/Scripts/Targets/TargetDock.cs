@@ -58,12 +58,24 @@ public class TargetDock : MonoBehaviour
 
     public void TriggerFlipDown()
     {
-        if ( IsTransitioning || !IsStanding )
+        // remove !IsTransitioning check
+        if ( !IsStanding )
         {
             return;
         }
 
         StartCoroutine( FlipDown() );
+        IsTransitioning = true;
+    }
+
+    public void TriggerFlipDownAndDestroy()
+    {
+        if ( !IsStanding )
+        {
+            return;
+        }
+
+        StartCoroutine( FlipDownAndDestroy( true ) );
         IsTransitioning = true;
     }
 
@@ -88,34 +100,14 @@ public class TargetDock : MonoBehaviour
 
         switch ( a_ButtonType )
         {
-            case Target_UI.UIButton.TUTORIAL:
-                {
-                    targetToCreate = GalleryController.Instance.TargetUIPrefab_Tutorial;
-                    break;
-                }
             case Target_UI.UIButton.PLAY:
                 {
                     targetToCreate = GalleryController.Instance.TargetUIPrefab_Play;
                     break;
                 }
-            case Target_UI.UIButton.ENDLESS:
+            case Target_UI.UIButton.EXIT:
                 {
-                    targetToCreate = GalleryController.Instance.TargetUIPrefab_Endless;
-                    break;
-                }
-            case Target_UI.UIButton.EXIT_TUTORIAL:
-                {
-                    targetToCreate = GalleryController.Instance.TargetUIPrefab_ExitTutorial;
-                    break;
-                }
-            case Target_UI.UIButton.EXIT_PLAY:
-                {
-                    targetToCreate = GalleryController.Instance.TargetUIPrefab_ExitPlay;
-                    break;
-                }
-            case Target_UI.UIButton.EXIT_ENDLESS:
-                {
-                    targetToCreate = GalleryController.Instance.TargetUIPrefab_ExitEndless;
+                    targetToCreate = GalleryController.Instance.TargetUIPrefab_Exit;
                     break;
                 }
         }

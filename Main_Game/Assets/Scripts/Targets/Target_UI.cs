@@ -6,12 +6,8 @@ public class Target_UI : Target
 {
     public enum UIButton
     {
-        TUTORIAL,
         PLAY,
-        ENDLESS,
-        EXIT_TUTORIAL,
-        EXIT_PLAY,
-        EXIT_ENDLESS
+        EXIT
     }
 
     public UIButton ButtonType;

@@ -124,6 +124,16 @@ public class SoundPlayer : Singleton< SoundPlayer >
 
         return null;
     }
+
+    public AudioSource GetSource( string a_AudioSource )
+    {
+        if ( m_SoundSources.TryGetValue( a_AudioSource, out AudioSource source ) )
+        {
+            return source;
+        }
+
+        return null;
+    }
     
     private Dictionary< string, AudioClipPool > m_ClipPools;
     private Dictionary< string, AudioSource > m_SoundSources;

@@ -7,7 +7,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 [ RequireComponent( typeof( SoundPlayer ) ) ]
 [ RequireComponent( typeof( GalleryController ) ) ]
-[ RequireComponent( typeof( ScoreController ) ) ]
+[ RequireComponent( typeof( TimeScoreController ) ) ]
 public class GameStateManager : Singleton< GameStateManager >
 {
     public HandController LeftController;
@@ -20,8 +20,16 @@ public class GameStateManager : Singleton< GameStateManager >
     public BowDockController BowDockController;
     public Light DirectionalLight;
 
+    public bool InGame
+    {
+        get
+        {
+            return m_InGame;
+        }
+    }
 
-    public ScoreController ScoreController { get; private set; }
+
+    public TimeScoreController ScoreController { get; private set; }
 
     private void Start()
     {
@@ -44,51 +52,58 @@ public class GameStateManager : Singleton< GameStateManager >
         m_CurrentState = GameState.State.MENU;
 
         TimeController = new TimeController();
-        ScoreController = GetComponent< ScoreController >();
+        ScoreController = GetComponent< TimeScoreController >();
 
         DontDestroyOnLoad( this );
         DontDestroyOnLoad( ScoreController );
         DontDestroyOnLoad( GalleryController.Instance );
 
-        GetState( m_CurrentState ).Start();
+        m_MainCamera = SoundPlayer.Instance.GetSource( "Main Camera" );
+        TimeController.OnSecondElapsed.AddListener( SpeedUp );
+        TimeController.OnTimeUp.AddListener( OnTimeUp );
 
-        //----OnTutorial----
-        
-        //----OnTutorialExit----
-        m_OnTutorialExit = new Task( GalleryController.Instance.UIDock_Middle.FlipDown );
-        Task turnOffLights1;
-        Task raiseMenu1 = new Task( GalleryController.Instance.RaiseMainMenu );
-        m_OnTutorialExit.OnComplete = raiseMenu1;
         //----OnPlay----
-
-        //----OnPlayExit----
-
-        //----OnEndless----
-        m_OnEndless = new Task( GalleryController.Instance.LowerMainMenu );
-        Task raiseExit = new Task( GalleryController.Instance.RaiseEndlessExit );
+        m_OnPlay = new Task( GalleryController.Instance.LowerPlay );
+        Task raiseExit = new Task( GalleryController.Instance.RaiseExit );
         Task turnOnLights3 = new Task( TurnOnLight );
-        Task playIntroDialougue = new Task( PlayGameStateDialogue );
-        Task startTimer = new Task( StartTimer  );
-        Task triggerSpawning = new Task( GalleryController.Instance.BeginEndlessSpawningRoutine );
+        Task playIntroDialougue = new Task( PlayIntroDialogue );
+        Task startTimer = new Task( StartTimer );
+        Task triggerSpawning = new Task( GalleryController.Instance.BeginSpawning );
 
-        m_OnEndless.OnComplete = raiseExit;
+        m_OnPlay.OnComplete = raiseExit;
         raiseExit.OnComplete = turnOnLights3;
         turnOnLights3.OnComplete = playIntroDialougue;
         playIntroDialougue.OnComplete = startTimer;
         startTimer.OnComplete = triggerSpawning;
-        //----OnEndlessExit----
-        m_OnEndlessExit = new Task( GalleryController.Instance.UIDock_Middle.FlipDown );
-        Task turnOffLights3 = new Task( TurnOffLight );
-        Task raiseMenu3 = new Task( GalleryController.Instance.RaiseMainMenu );
-        m_OnEndlessExit.OnComplete = raiseMenu3;
 
-        // Test stuff.
-        
-        //GalleryController.Instance.DisableTrackMovement();
-        GalleryController.Instance.TriggerRaiseMenu( new Task( PlayIntroSounds ) );
-        
-        //OnEndless();
+        //----OnExit----
+        m_OnExit = new Task( StopSpawning );
+        Task lowerExit1 = new Task( GalleryController.Instance.UIDock.FlipDown );
+        Task resetRange1 = new Task( ResetRange );
+        Task turnOffLights2 = new Task( TurnOffLight );
+        Task raiseMenu1 = new Task( GalleryController.Instance.RaisePlay );
+
+        m_OnExit.OnComplete = lowerExit1;
+        lowerExit1.OnComplete = resetRange1;
+        resetRange1.OnComplete = turnOffLights2;
+        turnOffLights2.OnComplete = raiseMenu1;
+
+        //---OnTimeUp---
+        m_OnTimeUp = new Task( StopSpawning );
+        Task lowerExit2 = new Task( GalleryController.Instance.UIDock.FlipDown );
+        Task resetRange2 = new Task( ResetRange );
+        Task turnOffLights3 = new Task( TurnOffLight );
+        Task raiseMenu2 = new Task( GalleryController.Instance.RaisePlay );
+
+        m_OnTimeUp.OnComplete = lowerExit2;
+        lowerExit2.OnComplete = resetRange2;
+        resetRange2.OnComplete = turnOffLights3;
+        turnOffLights3.OnComplete = raiseMenu2;
+
+        GalleryController.Instance.TriggerRaisePlay( new Task( PlayIntroSounds ) );
     }
+    
+    //-----------------------Callbacks------------------------
 
     public IEnumerator PlayIntroSounds()
     {
@@ -97,9 +112,32 @@ public class GameStateManager : Singleton< GameStateManager >
         SoundPlayer.Instance.PlayRepeat( "Music", 0.2f, true );
     }
 
-    public IEnumerator PlayGameStateDialogue()
+    public IEnumerator PlayIntroDialogue()
     {
         SoundPlayer.Instance.Play( "EvilBirdReminder", "Barker", 1.0f, true );
+        yield return null;
+    }
+
+    public IEnumerator ResetRange()
+    {
+        GalleryController.Instance.TriggerStopSpawning();
+        TimeController.StopTimer();
+        yield return null;
+    }
+
+    private void SpeedUp()
+    {
+        GalleryController.Instance.SetMovementSpeeds( TimeController.Progression * 3.0f + 0.5f );
+    }
+
+    public void OnTimeUp()
+    {
+        m_OnTimeUp.Trigger();
+    }
+
+    public IEnumerator StopSpawning()
+    {
+        GalleryController.Instance.TriggerStopSpawning();
         yield return null;
     }
 
@@ -127,60 +165,40 @@ public class GameStateManager : Singleton< GameStateManager >
         }
     }
 
-    //-----------------------Callbacks------------------------
-
     public IEnumerator OnKill()
     {
-        GalleryController.Instance.UIDock_Middle.DestroyTarget();
+        GalleryController.Instance.UIDock.DestroyTarget();
         yield return new WaitForEndOfFrame();
-    }
-
-    public void OnTutorial()
-    {
-        m_OnTutorial.Trigger();
     }
 
     public void OnPlay()
     {
-
+        m_OnPlay.Trigger();
     }
 
-    public void OnEndless()
+    public void OnExit()
     {
-        m_OnEndless.Trigger();
-    }
-
-    public void OnExitTutorial()
-    {
-
-    }
-
-    public void OnExitPlay()
-    {
-
-    }
-
-    public void OnExitEndless()
-    {
-
+        m_OnExit.Trigger();
     }
 
     public IEnumerator StartTimer()
     {
-        TimeController.StartTimer();
+        yield return TimeScoreController.Instance.TurnOnDisplay( 0, 2, 0 );
+        TimeController.StartTimer( 2, 0 );
+        m_InGame = true;
         yield return new WaitForSeconds( 1.0f );
     }
 
     public IEnumerator StopTimer()
     {
         TimeController.StopTimer();
+        m_InGame = false;
         yield return new WaitForSeconds( 1.0f );
     }
 
     // Called when Bow is picked up.
     public void OnBowPickup( BaseInteractionEventArgs a_Args )
     {
-        m_BowPickedUp = true;
         Bow.SetPhysics( false );
 
         BowDockController.StopRedockTimer();
@@ -189,7 +207,6 @@ public class GameStateManager : Singleton< GameStateManager >
     // Called when Bow is dropped.
     public void OnBowDrop( BaseInteractionEventArgs a_Args )
     {
-        m_BowPickedUp = false;
         Bow.SetPhysics( true );
         
         BowDockController.StartRedockTimer();
@@ -198,13 +215,18 @@ public class GameStateManager : Singleton< GameStateManager >
     // Called when arrow makes collides with something.
     public void RegisterShot( ContactScenario a_ContactScenario )
     {
+        if ( m_InGame )
+        {
+            TimeScoreController.Instance.AddToScore( a_ContactScenario.ResultantScore() );
+        }
+        
         // Called when arrow hits something.
         if ( a_ContactScenario.HitTarget )
         {
             // If target was not a specific type.
             if ( a_ContactScenario.Target.Type == Target.TargetType.NONE )
             {
-                //a_ContactScenario.Arrow.DestroyArrow();
+
             }
 
             // If target was UI element.
@@ -213,46 +235,16 @@ public class GameStateManager : Singleton< GameStateManager >
                 Target_UI button = a_ContactScenario.Target as Target_UI;
                 switch ( button.ButtonType )
                 {
-                    case Target_UI.UIButton.TUTORIAL:
-                        {
-                            OnTutorial();
-                            button.DestroyTarget();
-                            //a_ContactScenario.Arrow.DestroyArrow();
-                            break;
-                        }
                     case Target_UI.UIButton.PLAY:
                         {
                             OnPlay();
                             button.DestroyTarget();
-                            //a_ContactScenario.Arrow.DestroyArrow();
                             break;
                         }
-                    case Target_UI.UIButton.ENDLESS:
+                    case Target_UI.UIButton.EXIT:
                         {
-                            OnEndless();
+                            OnExit();
                             button.DestroyTarget();
-                            //a_ContactScenario.Arrow.DestroyArrow();
-                            break;
-                        }
-                    case Target_UI.UIButton.EXIT_TUTORIAL:
-                        {
-                            OnExitTutorial();
-                            button.DestroyTarget();
-                            //a_ContactScenario.Arrow.DestroyArrow();
-                            break;
-                        }
-                    case Target_UI.UIButton.EXIT_PLAY:
-                        {
-                            OnExitPlay();
-                            button.DestroyTarget();
-                            //a_ContactScenario.Arrow.DestroyArrow();
-                            break;
-                        }
-                    case Target_UI.UIButton.EXIT_ENDLESS:
-                        {
-                            OnExitEndless();
-                            button.DestroyTarget();
-                            //a_ContactScenario.Arrow.DestroyArrow();
                             break;
                         }
                 }
@@ -263,8 +255,6 @@ public class GameStateManager : Singleton< GameStateManager >
             // Not None or UI Element, must be a bird.
             else
             {
-                // Define score calculation in ContactScenario.ResultantScore()
-                ScoreController.CurrentScore.Increment( a_ContactScenario.ResultantScore() );
 
                 if ( a_ContactScenario.HitCorrectTarget )
                 {
@@ -320,17 +310,15 @@ public class GameStateManager : Singleton< GameStateManager >
     private GameState.State m_CurrentState;
     private Dictionary< GameState.State, GameState > m_States;
 
-    private Task m_OnTutorial;
     private Task m_OnPlay;
-    private Task m_OnEndless;
-    private Task m_OnTutorialExit;
-    private Task m_OnPlayExit;
-    private Task m_OnEndlessExit;
+    private Task m_OnExit;
+    private Task m_OnTimeUp;
+
+    private bool m_InGame;
+    private AudioSource m_MainCamera;
 
     //-------------------------------Game Flags---------------------------------------------------
     #pragma warning disable 0414
-
-    private bool m_BowPickedUp;
 
     #pragma warning restore 0414
 }

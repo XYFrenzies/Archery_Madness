@@ -1,29 +1,48 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TimeController
 {
     public int Minutes { get; private set; } = 0;
     public int Seconds { get; private set; } = 0;
 
-    public bool IsActive { get { return m_TimerCoroutine != null; } }
+    public bool IsActive { get { return m_IsActive; } }
+
+    public float Progression
+    {
+        get
+        {
+            return 1.0f - ( float )( Minutes * 60 + Seconds ) / m_BeginningSeconds;
+        }
+    }
+
+    public UnityEvent OnSecondElapsed = new UnityEvent();
+    public UnityEvent OnMinuteElapsed = new UnityEvent();
+    public UnityEvent OnTimeUp = new UnityEvent();
 
     public TimeController()
     {
         m_Wait = new WaitForSeconds( 1.0f );
     }
 
-    public void StartTimer()
+    public void StartTimer( int a_Minutes, int a_Seconds )
     {
-        m_TimerCoroutine = GameStateManager.Instance.StartCoroutine( Begin() );
+        Minutes = a_Minutes;
+        Seconds = a_Seconds;
+        m_BeginningSeconds = a_Minutes * 60 + a_Seconds;
+        m_IsActive = true;
+        GameStateManager.Instance.StartCoroutine( Begin() );
     }
 
     public void StopTimer()
     {
-        GameStateManager.Instance.StopCoroutine( m_TimerCoroutine );
-        DigitDisplay.Instance.SetNumber( 0 );
-        m_TimerCoroutine = null;
+        m_IsActive = false;
+        TimeScoreController.Instance.DigitalDisplay.SetNumber( 0, 0 );
+        TimeScoreController.Instance.DigitalDisplay.SetNumber( 1, 0 );
+        TimeScoreController.Instance.DigitalDisplay.SetNumber( 2, 0 );
+        TimeScoreController.Instance.DigitalDisplay.TurnOffAll();
     }
 
     public void PauseTimer()
@@ -43,7 +62,7 @@ public class TimeController
 
     private IEnumerator Begin()
     {
-        while ( true )
+        while ( m_IsActive )
         {
             while ( m_Paused )
             {
@@ -51,17 +70,28 @@ public class TimeController
             }
             
             yield return m_Wait;
-            DigitDisplay.Instance.SetNumber( Seconds );
+            OnSecondElapsed.Invoke();
 
-            if ( ++Seconds > 59 )
+            if ( --Seconds < 0 )
             {
-                Seconds = 0;
-                ++Minutes;
+                Seconds = 59;
+                OnMinuteElapsed.Invoke();
+
+                if ( --Minutes == 0 && Seconds == 0 )
+                {
+                    m_IsActive = false;
+                    OnTimeUp.Invoke();
+                }
+
+                TimeScoreController.Instance.DigitalDisplay.SetNumber( 1, Minutes );
             }
+            
+            TimeScoreController.Instance.DigitalDisplay.SetNumber( 2, Seconds );
         }
     }
 
     private bool m_Paused;
+    private bool m_IsActive;
+    private int m_BeginningSeconds;
     private WaitForSeconds m_Wait;
-    private Coroutine m_TimerCoroutine;
 }

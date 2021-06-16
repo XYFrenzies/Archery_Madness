@@ -13,16 +13,6 @@ public class HighScore : IComparable
         ++Value;
     }
 
-    public void Increment( int a_Count )
-    {
-        if ( a_Count < 1 )
-        {
-            return;
-        }
-
-        Value += a_Count;
-    }
-
     public void Decrement()
     {
         if ( Value == 0 )
@@ -33,15 +23,10 @@ public class HighScore : IComparable
         --Value;
     }
 
-    public void Decrement( int a_Count )
+    public void Add( int a_Count )
     {
-        if ( a_Count < 1 )
-        {
-            return;
-        }
-
-        Value -= a_Count;
-        Value = Math.Max( 0, Value );
+        Value += a_Count;
+        Value = Mathf.Max( Value, 0 );
     }
 
     public int CompareTo( object a_Object )

@@ -156,8 +156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplodeForce: 500
-  Cuts: 4
+  ExplodeForce: 2000
+  Cuts: 2
   m_MeshDestroyers:
   - {fileID: 7134054460882107984}
 --- !u!114 &7134054460897956859

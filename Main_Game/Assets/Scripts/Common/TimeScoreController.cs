@@ -4,9 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScoreController : Singleton< ScoreController >
+public class TimeScoreController : Singleton< TimeScoreController >
 {
     [ Range( 0, 10 ) ] public int TrackedScores;
+    public DigitalDisplay DigitalDisplay;
 
     public HighScore CurrentScore
     {
@@ -31,6 +32,11 @@ public class ScoreController : Singleton< ScoreController >
         }
     }
 
+    private void Start()
+    {
+        DigitalDisplay.TurnOffAll();
+    }
+
     public void ResetCurrentScore()
     {
         m_CurrentScore = new HighScore();
@@ -44,6 +50,34 @@ public class ScoreController : Singleton< ScoreController >
         }
 
         Insert( m_CurrentScore );
+    }
+
+    public void AddToScore( int a_Value )
+    {
+        CurrentScore.Add( a_Value );
+        DigitalDisplay.SetNumber( 0, CurrentScore.Value );
+    }
+
+    public void TriggerTurnOnDisplay( int a_Score, int a_Minutes, int a_Seconds )
+    {
+        StartCoroutine( TurnOnDisplay( a_Score, a_Minutes, a_Seconds ) );
+    }
+
+    public IEnumerator TurnOnDisplay( int a_Score, int a_Minutes, int a_Seconds )
+    {
+        DigitalDisplay.SetNumber( 0, a_Score );
+        DigitalDisplay.SetNumber( 1, a_Minutes );
+        DigitalDisplay.SetNumber( 2, a_Seconds );
+
+        for ( int i = 0; i < 2; ++i )
+        {
+            DigitalDisplay.TurnOnAll();
+            yield return new WaitForSeconds( 0.5f );
+            DigitalDisplay.TurnOffAll();
+            yield return new WaitForSeconds( 0.5f );
+        }
+
+        DigitalDisplay.TurnOnAll();
     }
 
     public HighScore GetHighScore( int a_Index )

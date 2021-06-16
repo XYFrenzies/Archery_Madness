@@ -30,8 +30,17 @@ public struct ContactScenario
 
     public int ResultantScore()
     {
-        // Define scoring parameters.
-
-        return 0;
+        if ( HitCorrectTarget )
+        {
+            return ( int )( TravelDistance * 4 );
+        }
+        else if ( HitTarget )
+        {
+            return -1;
+        }
+        else
+        {
+            return -20;
+        }
     }
 }
