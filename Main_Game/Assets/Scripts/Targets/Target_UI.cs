@@ -19,9 +19,16 @@ public class Target_UI : Target
 
     public override void DestroyTarget()
     {
-        gameObject.transform.DetachChildren();
+        //gameObject.transform.DetachChildren();
         //gameObject.GetComponent< Rigidbody >().isKinematic = false;
-        GetComponent< DestructionController >()?.BlowUp();
+        //GetComponent< DestructionController >()?.BlowUp();
+        //if ( TryGetComponent( out ShatterObject shatter ) )
+        //{
+        //    shatter.enabled = true;
+        //}
+
+        //GetComponent< ShatterObject >()?.TriggerExplosion();
+        base.DestroyTarget();
     }
 
     public override void OnArrowHit( Arrow a_Arrow )

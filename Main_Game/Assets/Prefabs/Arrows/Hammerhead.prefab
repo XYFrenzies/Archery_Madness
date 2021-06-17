@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3778538156570270743}
   - component: {fileID: 6644811232865558022}
   - component: {fileID: 4084318479506041995}
-  - component: {fileID: 2145530912899148463}
   m_Layer: 2
   m_Name: Tip
   m_TagString: Untagged
@@ -82,20 +81,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2145530912899148463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 680324446639141037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 1
-  ExplodeForce: 0
 --- !u!1 &4158960283924683125
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +92,6 @@ GameObject:
   - component: {fileID: 1853046300840485135}
   - component: {fileID: 974334783709586793}
   - component: {fileID: 8987830308211458346}
-  - component: {fileID: 4194626563288774425}
   m_Layer: 2
   m_Name: Nock
   m_TagString: Untagged
@@ -178,20 +162,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4194626563288774425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4158960283924683125}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 1
-  ExplodeForce: 0
 --- !u!1 &4488931544102547877
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,7 +173,6 @@ GameObject:
   - component: {fileID: 6458183006144671746}
   - component: {fileID: 1655228023235992352}
   - component: {fileID: 8003223246030253718}
-  - component: {fileID: 5104001270754681182}
   m_Layer: 2
   m_Name: Fletching
   m_TagString: Untagged
@@ -274,20 +243,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5104001270754681182
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4488931544102547877}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 1
-  ExplodeForce: 0
 --- !u!1 &7123493051961854756
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +254,6 @@ GameObject:
   - component: {fileID: 3673811409991288307}
   - component: {fileID: 1376696564090038855}
   - component: {fileID: 3590263845313934662}
-  - component: {fileID: 8139666048335993652}
   m_Layer: 2
   m_Name: Shaft
   m_TagString: Untagged
@@ -370,20 +324,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8139666048335993652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7123493051961854756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 1
-  ExplodeForce: 0
 --- !u!1 &8909697097331101484
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,8 +365,8 @@ GameObject:
   - component: {fileID: 8549490721956593490}
   - component: {fileID: 2075234935371953770}
   - component: {fileID: 7602816783830641895}
-  - component: {fileID: 7179124954149626583}
   - component: {fileID: 6418203601553548230}
+  - component: {fileID: 2203710514878870757}
   m_Layer: 2
   m_Name: Hammerhead
   m_TagString: Untagged
@@ -483,25 +423,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7179124954149626583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9074247676438521320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ExplodeForce: 0
-  Cuts: 2
-  m_MeshDestroyers:
-  - {fileID: 2145530912899148463}
-  - {fileID: 5104001270754681182}
-  - {fileID: 4194626563288774425}
-  - {fileID: 8139666048335993652}
 --- !u!114 &6418203601553548230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -614,3 +535,20 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 307
+--- !u!114 &2203710514878870757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9074247676438521320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0cf184079af9544b2c6e14d6914946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriangleCount: 50
+  ExplosionForce: 2000
+  DisableDelay: 3
+  ExplosionPointOffset: {x: 0, y: 0, z: 0}
+  DisableObject: {fileID: 9074247676438521320}

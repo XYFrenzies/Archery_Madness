@@ -121,7 +121,7 @@ public class ObjectPool< T > where T : IResettable
         if ( spawnedObject.m_Object != null)
         {
             m_LastActiveIndex = spawnedIndex;
-            m_Pool[m_LastInactiveIndex].m_IsActive = true;
+            m_Pool[m_LastActiveIndex].m_IsActive = true;
             m_OnActive(spawnedObject.m_Object);
             ++m_CountActive;
             return true;
@@ -140,6 +140,27 @@ public class ObjectPool< T > where T : IResettable
         m_Pool[a_Index].m_IsActive = false;
         m_OnInactive(m_Pool[a_Index].m_Object);
         m_LastInactiveIndex = a_Index;
+        --m_CountActive;
+        return true;
+    }
+
+    public bool Despawn( T a_Object )
+    {
+        if ( !m_IsPopulated )
+        {
+            return false;
+        }
+
+        int foundIndex = Array.FindIndex( m_Pool, 0, lookingFor => ReferenceEquals( a_Object, lookingFor.m_Object ) );
+
+        if ( foundIndex == -1 )
+        {
+            return false;
+        }
+
+        m_Pool[ foundIndex ].m_IsActive = false;
+        m_OnInactive( m_Pool[ foundIndex ].m_Object );
+        m_LastInactiveIndex = foundIndex;
         --m_CountActive;
         return true;
     }

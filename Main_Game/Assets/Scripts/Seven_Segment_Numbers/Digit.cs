@@ -36,6 +36,7 @@ public class Digit : MonoBehaviour
     public void SetDigit( int a_Digit ) 
     {
         m_DigitShowing = a_Digit;
+        TurnOn();
     }
 
     public void TurnOn() 

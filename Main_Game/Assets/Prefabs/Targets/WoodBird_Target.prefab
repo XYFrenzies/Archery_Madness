@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7971951326811516950}
   - component: {fileID: 2066389039306812769}
   - component: {fileID: 2066389039306812774}
-  - component: {fileID: 2066389039306812768}
   - component: {fileID: 5078190786068154147}
+  - component: {fileID: 7386496324639332503}
   m_Layer: 0
   m_Name: WoodBird_Target
   m_TagString: Untagged
@@ -63,22 +63,6 @@ MonoBehaviour:
   ParentMostTransform: {fileID: 7971951326811516950}
   TargetDock: {fileID: 0}
   Collider: {fileID: 2066389039306812769}
---- !u!114 &2066389039306812768
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2066389039306812775}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ExplodeForce: 2000
-  Cuts: 2
-  m_MeshDestroyers:
-  - {fileID: 2229463352272684688}
 --- !u!54 &5078190786068154147
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -95,6 +79,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7386496324639332503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066389039306812775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0cf184079af9544b2c6e14d6914946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriangleCount: 50
+  ExplosionForce: 2000
+  DisableDelay: 3
+  ExplosionPointOffset: {x: 0, y: 0, z: 0}
+  DisableObject: {fileID: 2066389039306812775}
 --- !u!1 &2229463352272684689
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +107,6 @@ GameObject:
   - component: {fileID: 1565974727859067947}
   - component: {fileID: 2455779160346874766}
   - component: {fileID: 427940282732422980}
-  - component: {fileID: 2229463352272684688}
   m_Layer: 0
   m_Name: SM_Wooden_Bird
   m_TagString: Untagged
@@ -177,17 +177,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2229463352272684688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2229463352272684689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 3
-  ExplodeForce: 500
