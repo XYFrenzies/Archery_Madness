@@ -3,7 +3,12 @@ guid: fe5704edc6070834fbf3d14ed9db54d7
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Gradient_
+    second: {fileID: 2100000, guid: 9fe7d7f38aeff52408b07ef0fe08f170, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
