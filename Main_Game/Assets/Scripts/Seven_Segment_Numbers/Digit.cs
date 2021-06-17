@@ -21,6 +21,8 @@ public class Digit : MonoBehaviour
         private readonly byte m_ShapeBits;
     }
 
+    public bool IsOn { get; private set; }
+
     private void Awake() 
     {
         m_Renderers = gameObject.GetComponentsInChildren< Renderer >();
@@ -34,7 +36,6 @@ public class Digit : MonoBehaviour
     public void SetDigit( int a_Digit ) 
     {
         m_DigitShowing = a_Digit;
-        TurnOn();
     }
 
     public void TurnOn() 
@@ -48,6 +49,8 @@ public class Digit : MonoBehaviour
             segmentRenderer.material = on ? m_Display.DigitOnMaterial : 
                                             m_Display.DigitOffMaterial;
         }
+
+        IsOn = true;
     }
 
     public void TurnOff() 
@@ -56,6 +59,8 @@ public class Digit : MonoBehaviour
         {
             renderer.material = m_Display.DigitOffMaterial;
         }
+
+        IsOn = false;
     }
     
     private int m_DigitShowing;

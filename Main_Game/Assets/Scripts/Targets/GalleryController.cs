@@ -102,10 +102,10 @@ public class GalleryController : Singleton< GalleryController >
 
     public void TriggerSlowDown()
     {
-        StartCoroutine( SlowDown() );
+        StartCoroutine( SlowDownAndStop() );
     }
 
-    private IEnumerator SlowDown()
+    private IEnumerator SlowDownAndStop()
     {
         float timeLeft = 1.0f;
         float initialSpeed = m_AllMovementSpeeds;
@@ -116,6 +116,8 @@ public class GalleryController : Singleton< GalleryController >
             SetMovementSpeeds( initialSpeed * timeLeft );
             yield return null;
         }
+
+        DisableTrackMovement();
     }
 
     public void TriggerSpawning()
@@ -126,17 +128,6 @@ public class GalleryController : Singleton< GalleryController >
         }
 
         m_SpawningRoutine = StartCoroutine( BeginSpawning() );
-    }
-
-    public void TriggerStopSpawning()
-    {
-        if ( m_SpawningRoutine != null )
-        {
-            StopCoroutine( m_SpawningRoutine );
-        }
-
-        TriggerSlowDown();
-        DestroyAllTargets();
     }
 
     public IEnumerator BeginSpawning()
@@ -150,6 +141,9 @@ public class GalleryController : Singleton< GalleryController >
 
             SpawnRandomNewTarget( m_EndlessFlipDownTimer );
         }
+
+        DestroyAllTargets();
+        yield return SlowDownAndStop();
     }
 
     private bool SpawnRandomNewTarget( float a_DespawnTimer = -1 )

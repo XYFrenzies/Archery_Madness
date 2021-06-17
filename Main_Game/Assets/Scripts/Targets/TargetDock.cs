@@ -70,11 +70,6 @@ public class TargetDock : MonoBehaviour
 
     public void TriggerFlipDownAndDestroy()
     {
-        if ( !IsStanding )
-        {
-            return;
-        }
-
         StartCoroutine( FlipDownAndDestroy( true ) );
         IsTransitioning = true;
     }
