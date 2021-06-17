@@ -1,6 +1,7 @@
 
 1 - Arrows object pooled
 2 - Haptic Feedback
+-- Haptic Events in the controller left and right hand. get access to them via getcomponent<HandController>.HapticEvents.
 3 - Aim Curve
 4 - Bow Breaking
 5 - Arrow Breaking
