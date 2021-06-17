@@ -1,13 +1,13 @@
 
-- Arrows object pooled
-- Bow Breaking
-- Arrow Breaking
-- Barker Damage
-- Aim Curve
-- Haptic Feedback
-- Animations
-- Music
-- Environment
+1 - Arrows object pooled
+2 - Haptic Feedback
+3 - Aim Curve
+4 - Bow Breaking
+5 - Arrow Breaking
+6 - Barker Damage
+7 - Animations
+8 - Music
+9 - Environment
 -- Models
--- Effects (on targets when hit)
-- Barker Dialogue
+-- Effects (on targets when hit )
+10 - Barker Dialogue
