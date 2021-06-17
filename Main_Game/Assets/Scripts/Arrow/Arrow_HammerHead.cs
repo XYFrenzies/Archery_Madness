@@ -6,8 +6,8 @@ public class Arrow_Hammerhead : Arrow
 {
     private new void Awake()
     {
-        base.Awake();
         Type = ArrowType.HAMMER;
         IntendedTarget = Target.TargetType.WOOD;
+        base.Awake();
     }
 }

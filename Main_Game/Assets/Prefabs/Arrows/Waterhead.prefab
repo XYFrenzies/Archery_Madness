@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5926572408078818492}
   - component: {fileID: 8347536310305813256}
   - component: {fileID: 5841247635963964425}
-  - component: {fileID: 1988066819750012696}
   m_Layer: 2
   m_Name: Shaft
   m_TagString: Untagged
@@ -82,20 +81,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1988066819750012696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 151100417479266923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 1
-  ExplodeForce: 0
 --- !u!1 &2102440058248084647
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +93,7 @@ GameObject:
   - component: {fileID: 4263359094742891206}
   - component: {fileID: 9215281248699569539}
   - component: {fileID: 3713076259095027117}
-  - component: {fileID: 4689084574385078515}
+  - component: {fileID: 7824899106786087810}
   m_Layer: 2
   m_Name: Waterhead
   m_TagString: Untagged
@@ -278,7 +263,7 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 307
---- !u!114 &4689084574385078515
+--- !u!114 &7824899106786087810
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,16 +272,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2102440058248084647}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
+  m_Script: {fileID: 11500000, guid: ca0cf184079af9544b2c6e14d6914946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplodeForce: 0
-  Cuts: 2
-  m_MeshDestroyers:
-  - {fileID: 5690823726133614849}
-  - {fileID: 5416651139293474805}
-  - {fileID: 1988066819750012696}
-  - {fileID: 1018577864384082241}
+  TriangleCount: 50
+  ExplosionForce: 2000
+  DisableDelay: 3
+  ExplosionPointOffset: {x: 0, y: 0, z: 0}
+  DisableObject: {fileID: 2102440058248084647}
 --- !u!1 &4508881077291756377
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,7 +321,6 @@ GameObject:
   - component: {fileID: 8751688136458205248}
   - component: {fileID: 7874229926154779686}
   - component: {fileID: 2051488846579406949}
-  - component: {fileID: 5416651139293474805}
   m_Layer: 2
   m_Name: Nock
   m_TagString: Untagged
@@ -409,20 +391,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5416651139293474805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6446043464985231418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 1
-  ExplodeForce: 0
 --- !u!1 &6677413071094178141
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,7 +402,6 @@ GameObject:
   - component: {fileID: 6332412249045351399}
   - component: {fileID: 6939735823547970626}
   - component: {fileID: 5163961635935731848}
-  - component: {fileID: 1018577864384082241}
   m_Layer: 2
   m_Name: Tip
   m_TagString: Untagged
@@ -505,20 +472,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1018577864384082241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6677413071094178141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 1
-  ExplodeForce: 0
 --- !u!1 &6811845359738988778
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,7 +483,6 @@ GameObject:
   - component: {fileID: 4135281979745773901}
   - component: {fileID: 8519657283987522159}
   - component: {fileID: 1140047411048986585}
-  - component: {fileID: 5690823726133614849}
   m_Layer: 2
   m_Name: Fletching
   m_TagString: Untagged
@@ -601,17 +553,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5690823726133614849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6811845359738988778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 1
-  ExplodeForce: 0

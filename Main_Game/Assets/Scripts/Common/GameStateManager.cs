@@ -110,6 +110,7 @@ public class GameStateManager : Singleton< GameStateManager >
         yield return new WaitForSeconds( 1.0f );
         SoundPlayer.Instance.Play( "PlayerInvitation", "Barker", 1.0f, true );
         SoundPlayer.Instance.PlayRepeat( "Music", 0.2f, true );
+        //OnPlay();
     }
 
     public IEnumerator PlayIntroDialogue()
@@ -297,6 +298,8 @@ public class GameStateManager : Singleton< GameStateManager >
             //a_ContactScenario.Arrow.DestroyArrow();
             SoundPlayer.Instance.Play( "OnMiss", "Barker", 1.0f );
         }
+
+        a_ContactScenario.Arrow.DestroyArrow();
     }
 
     //-------------------------------------------------------------

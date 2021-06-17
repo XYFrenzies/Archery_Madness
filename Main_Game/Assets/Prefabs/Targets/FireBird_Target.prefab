@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7897028534466151430}
   - component: {fileID: 7897028534466151429}
-  - component: {fileID: 7897028534466151428}
   - component: {fileID: 7897028534466151431}
   - component: {fileID: 6992400318112855966}
+  - component: {fileID: 9167364471597788830}
   m_Layer: 0
   m_Name: FireBird_Target
   m_TagString: Untagged
@@ -50,22 +50,6 @@ MonoBehaviour:
   ParentMostTransform: {fileID: 7897028534466151430}
   TargetDock: {fileID: 0}
   Collider: {fileID: 7897028534466151431}
---- !u!114 &7897028534466151428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7897028534466151481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ExplodeForce: 2000
-  Cuts: 2
-  m_MeshDestroyers:
-  - {fileID: 7897028534996248596}
 --- !u!65 &7897028534466151431
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -95,6 +79,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &9167364471597788830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7897028534466151481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0cf184079af9544b2c6e14d6914946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriangleCount: 300
+  ExplosionForce: 2000
+  DisableDelay: 3
+  ExplosionPointOffset: {x: 0, y: 0, z: 0}
+  DisableObject: {fileID: 7897028534466151481}
 --- !u!1 &7897028534996248598
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +107,6 @@ GameObject:
   - component: {fileID: 7897028534996248599}
   - component: {fileID: 7897028534996248593}
   - component: {fileID: 7897028534996248592}
-  - component: {fileID: 7897028534996248596}
   m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
@@ -177,17 +177,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7897028534996248596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7897028534996248598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 3
-  ExplodeForce: 500

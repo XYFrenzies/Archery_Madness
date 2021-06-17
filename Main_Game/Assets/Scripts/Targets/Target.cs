@@ -21,8 +21,10 @@ public abstract class Target : MonoBehaviour, IResettable, IArrowHittable
 
     public virtual void DestroyTarget()
     {
+        //transform.SetParent( null );
+        //GetComponent< DestructionController >()?.BlowUp();
         transform.SetParent( null );
-        GetComponent< DestructionController >()?.BlowUp();
+        GetComponent< ShatterObject >()?.TriggerExplosion();
     }
 
     public void EnableCollider()

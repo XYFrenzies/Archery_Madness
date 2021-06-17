@@ -7,13 +7,53 @@ public class GalleryController : Singleton< GalleryController >
 {
     public GameObject TargetPrefab_Wood;
     public GameObject TargetPrefab_Glass;
-    public GameObject TargetPrefabs_Fire;
+    public GameObject TargetPrefab_Fire;
 
     public GameObject TargetUIPrefab_Play;
     public GameObject TargetUIPrefab_Exit;
 
     public TargetDock UIDock;
 
+    public ObjectPool< Target_FireBird > PoolFireBird
+    {
+        get
+        {
+            return m_Firebirds;
+        }
+    }
+
+    public ObjectPool< Target_GlassBird > PoolGlassBird
+    {
+        get
+        {
+            return m_Glassbirds;
+        }
+    }
+
+    public ObjectPool< Target_WoodBird > PoolWoodBird
+    {
+        get
+        {
+            return m_Woodbirds;
+        }
+    }
+
+    public ObjectPool< Target_UI > PoolPlayUI
+    {
+        get
+        {
+            return m_UIPlay;
+        }
+    }
+
+    public ObjectPool< Target_UI > PoolExitUI
+    {
+        get
+        {
+            return m_UIExit;
+        }
+    }
+ 
     public bool AllTargetsFilled
     {
         get
@@ -50,6 +90,64 @@ public class GalleryController : Singleton< GalleryController >
     {
         GameObject targetsGameObject = GameObject.Find( "Targets" );
         BirdTargetDocks = targetsGameObject.GetComponentsInChildren< TargetDock >();
+
+        m_Firebirds = new ObjectPool< Target_FireBird >( CreateFirebird, OnBirdActive, OnBirdInactive );
+        m_Glassbirds = new ObjectPool< Target_GlassBird >( CreateGlassbird, OnBirdActive, OnBirdInactive );
+        m_Woodbirds = new ObjectPool< Target_WoodBird >( CreateWoodbird, OnBirdActive, OnBirdInactive );
+        m_UIPlay = new ObjectPool< Target_UI >( CreatePlayUI, OnUIActive, OnUIInactive );
+        m_UIExit = new ObjectPool< Target_UI >( CreateExitUI, OnUIActive, OnUIInactive );
+
+        m_Firebirds.Populate( 10 );
+        m_Glassbirds.Populate( 10 );
+        m_Woodbirds.Populate( 10 );
+        m_UIPlay.Populate( 1 );
+        m_UIExit.Populate( 1 );
+    }
+
+    private static Target_FireBird CreateFirebird()
+    {
+        return Instantiate( Instance.TargetPrefab_Fire, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Target_FireBird >();
+    }
+
+    private static Target_GlassBird CreateGlassbird()
+    {
+        return Instantiate( Instance.TargetPrefab_Glass, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Target_GlassBird >();
+    }
+
+    private static Target_WoodBird CreateWoodbird()
+    {
+        return Instantiate( Instance.TargetPrefab_Wood, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Target_WoodBird >();
+    }
+
+    private static Target_UI CreatePlayUI()
+    {
+        return Instantiate( Instance.TargetUIPrefab_Play, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Target_UI >();
+    }
+
+    private static Target_UI CreateExitUI()
+    {
+        return Instantiate( Instance.TargetUIPrefab_Exit, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Target_UI >();
+    }
+
+    private static void OnBirdActive( Target a_Bird )
+    {
+        a_Bird.GetComponent< ShatterObject >().gameObject?.SetActive( true );
+    }
+
+    private static void OnBirdInactive( Target a_Bird )
+    {
+        a_Bird.gameObject.transform.position = new Vector3( 0, -10, 0 );
+        //a_Bird.GetComponent< ShatterObject >().gameObject?.SetActive( false );
+    }
+
+    private static void OnUIActive( Target_UI a_UI )
+    {
+        a_UI.GetComponent< ShatterObject >().gameObject?.SetActive( true );
+    }
+
+    private static void OnUIInactive( Target_UI a_UI )
+    {
+        a_UI.gameObject.transform.position = new Vector3( 0, -10, 0 );
     }
 
     public void NotifyOfKill()
@@ -92,6 +190,7 @@ public class GalleryController : Singleton< GalleryController >
         }
     }
 
+    // Needs change for object pooling
     public void DestroyAllTargets()
     {
         foreach ( TargetDock dock in BirdTargetDocks )
@@ -269,6 +368,12 @@ public class GalleryController : Singleton< GalleryController >
     private Coroutine m_SpawningRoutine;
     private int m_ActiveTargets;
     private float m_AllMovementSpeeds;
+
+    private ObjectPool< Target_FireBird > m_Firebirds;
+    private ObjectPool< Target_GlassBird > m_Glassbirds;
+    private ObjectPool< Target_WoodBird > m_Woodbirds;
+    private ObjectPool< Target_UI > m_UIPlay;
+    private ObjectPool< Target_UI > m_UIExit;
 
     #pragma warning restore
 

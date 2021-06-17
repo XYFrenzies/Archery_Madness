@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7134054460882107991}
   - component: {fileID: 7134054460882108076}
   - component: {fileID: 7134054460882107987}
-  - component: {fileID: 7134054460882107984}
   m_Layer: 0
   m_Name: GlassBird_Target
   m_TagString: Untagged
@@ -82,20 +81,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7134054460882107984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7134054460882107990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912f8241e29c6164ea491298f3082df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CutCascades: 4
-  ExplodeForce: 500
 --- !u!1 &7134054460897956863
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,9 +91,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7134054460897956856}
   - component: {fileID: 7134054460897956857}
-  - component: {fileID: 7134054460897956858}
   - component: {fileID: 7134054460897956859}
   - component: {fileID: 8179292971772155361}
+  - component: {fileID: 6094946664614136560}
   m_Layer: 0
   m_Name: GlassBird_Target
   m_TagString: Untagged
@@ -144,22 +129,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.3, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7134054460897956858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7134054460897956863}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9249e8ba6e2e35c4388f59dd6752b597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ExplodeForce: 2000
-  Cuts: 2
-  m_MeshDestroyers:
-  - {fileID: 7134054460882107984}
 --- !u!114 &7134054460897956859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,3 +160,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6094946664614136560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7134054460897956863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0cf184079af9544b2c6e14d6914946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriangleCount: 300
+  ExplosionForce: 2000
+  DisableDelay: 3
+  ExplosionPointOffset: {x: 0, y: 0, z: 0}
+  DisableObject: {fileID: 7134054460897956863}

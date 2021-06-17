@@ -2,7 +2,7 @@
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections;
 
-public class Arrow : XRGrabInteractable
+public class Arrow : XRGrabInteractable, IResettable
 {
     public enum ArrowType
     {
@@ -31,7 +31,6 @@ public class Arrow : XRGrabInteractable
         m_Collider = GetComponent< Collider >();
         m_ThisRigidbody = GetComponent< Rigidbody >();
         AudioSource = GetComponent< AudioSource >();
-        
     }
 
     protected override void OnSelectEntering( SelectEnterEventArgs a_Args )
@@ -53,7 +52,41 @@ public class Arrow : XRGrabInteractable
 
     public void DestroyArrow()
     {
-        GetComponent< DestructionController >()?.BlowUp();
+        ShatterObject shatter = GetComponent< ShatterObject >();
+        shatter.SetOnDisable( DisableArrow );
+        transform.SetParent( null );
+        shatter.TriggerExplosion();
+    }
+
+    private static void DisableArrow( GameObject a_GameObject )
+    {
+        Arrow arrow = a_GameObject.GetComponent< Arrow >();
+
+        switch (arrow.Type)
+        {
+            case ArrowType.BROAD:
+                {
+                    Arrow_Broadhead broadhead = arrow as Arrow_Broadhead;
+                    GameStateManager.Instance.QuiverBroadhead.ArrowPool.Despawn( broadhead );
+                    break;
+                }
+            case ArrowType.HAMMER:
+                {
+                    Arrow_Hammerhead hammerhead = arrow as Arrow_Hammerhead;
+                    GameStateManager.Instance.QuiverHammerhead.ArrowPool.Despawn( hammerhead );
+                    break;
+                }
+            case ArrowType.WATER:
+                {
+                    Arrow_WaterBalloon waterhead = arrow as Arrow_WaterBalloon;
+                    GameStateManager.Instance.QuiverWaterhead.ArrowPool.Despawn( waterhead );
+                    break;
+                }
+            default:
+                {
+                    return;
+                }
+        }
     }
 
     public void TriggerDespawn( float a_Time )
@@ -188,7 +221,12 @@ public class Arrow : XRGrabInteractable
             GameStateManager.Instance.RegisterShot( new ContactScenario( this, Tip.position ) );
         }
     }
-    
+
+    public void OnReset()
+    {
+        
+    }
+
     private Collider m_Collider;
     private Rigidbody m_ThisRigidbody;
 

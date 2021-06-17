@@ -7,7 +7,7 @@ public class ShatterObject : MonoBehaviour
     [SerializeField] int TriangleCount;
     [SerializeField] float ExplosionForce, DisableDelay;
     [SerializeField] Vector3 ExplosionPointOffset;
-    [SerializeField] GameObject DisableObject;
+    public GameObject DisableObject;
 
     RendererVariables Meshs;
     GameObject ShatterContainer, ExplosionPoint;
@@ -33,19 +33,30 @@ public class ShatterObject : MonoBehaviour
 
         CreateContainer();
     }
-    private void FixedUpdate()
+
+    private void Update()
     {
         if(run)
         {
-            elapsed += Time.fixedDeltaTime;
+            elapsed += Time.deltaTime;
             if(elapsed >= DisableDelay)
             {
                 elapsed = 0f;
                 run = false;
+                m_OnDisable.Invoke( DisableObject );
                 DisableObject.SetActive(false);
             }
         }
     }
+
+    public void TriggerExplosion()
+    {
+        run = true;
+        ShatterContainer.SetActive(true);
+        foreach (MeshRenderer mr in Meshs._Renderer)
+            mr.enabled = false;
+    }
+
     private void InstantiateBrokenObject()
     {
         //add meshes
@@ -85,6 +96,7 @@ public class ShatterObject : MonoBehaviour
             CreateFragment(i);
         }
     }
+
     void CreateFragment(int i)
     {
         GameObject ob;
@@ -190,12 +202,12 @@ public class ShatterObject : MonoBehaviour
         }
     }
 
-  private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        run = true;
-        ShatterContainer.SetActive(true);
-        foreach (MeshRenderer mr in Meshs._Renderer)
-            mr.enabled = false;
+        //run = true;
+        //ShatterContainer.SetActive(true);
+        //foreach (MeshRenderer mr in Meshs._Renderer)
+        //    mr.enabled = false;
     }
 
     private void OnEnable()
@@ -204,6 +216,13 @@ public class ShatterObject : MonoBehaviour
         foreach (MeshRenderer mr in Meshs._Renderer)
             mr.enabled = true;
     }
+
+    public void SetOnDisable( Action< GameObject > a_OnDisable )
+    {
+        m_OnDisable = a_OnDisable;
+    }
+
+    Action< GameObject > m_OnDisable;
 }
 struct RendererVariables
 {
