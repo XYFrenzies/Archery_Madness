@@ -79,7 +79,7 @@ public class GameStateManager : Singleton< GameStateManager >
         //----OnExit----
         m_OnExit = new Task( StopSpawning );
         Task lowerExit1 = new Task( GalleryController.Instance.UIDock.FlipDown );
-        Task resetRange1 = new Task( ResetRange );
+        Task resetRange1 = new Task( EndGame );
         Task turnOffLights2 = new Task( TurnOffLight );
         Task raiseMenu1 = new Task( GalleryController.Instance.RaisePlay );
 
@@ -91,7 +91,7 @@ public class GameStateManager : Singleton< GameStateManager >
         //---OnTimeUp---
         m_OnTimeUp = new Task( StopSpawning );
         Task lowerExit2 = new Task( GalleryController.Instance.UIDock.FlipDown );
-        Task resetRange2 = new Task( ResetRange );
+        Task resetRange2 = new Task( EndGame );
         Task turnOffLights3 = new Task( TurnOffLight );
         Task raiseMenu2 = new Task( GalleryController.Instance.RaisePlay );
 
@@ -118,9 +118,9 @@ public class GameStateManager : Singleton< GameStateManager >
         yield return null;
     }
 
-    public IEnumerator ResetRange()
+    public IEnumerator EndGame()
     {
-        GalleryController.Instance.TriggerStopSpawning();
+        m_InGame = false;
         TimeController.StopTimer();
         yield return null;
     }
@@ -137,7 +137,7 @@ public class GameStateManager : Singleton< GameStateManager >
 
     public IEnumerator StopSpawning()
     {
-        GalleryController.Instance.TriggerStopSpawning();
+        m_InGame = false;
         yield return null;
     }
 
