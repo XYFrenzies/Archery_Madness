@@ -65,6 +65,7 @@ public class ShatterObject : MonoBehaviour
                 Meshs._Filter.Add(_mf);
                 Meshs._Renderer.Add(transform.GetChild(i).GetComponent<MeshRenderer>());
                 Meshs._Transform.Add(transform.GetChild(i).transform);
+                Meshs._Transform[Meshs._Transform.Count - 1].localScale = Vector3.Scale(Meshs._Transform[Meshs._Transform.Count - 1].localScale, transform.localScale);
             }
         }
     }
