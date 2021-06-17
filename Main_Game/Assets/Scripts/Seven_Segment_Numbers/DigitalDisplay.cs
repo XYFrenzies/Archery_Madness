@@ -75,6 +75,21 @@ public class DigitGroup
     public Renderer[] Dividers;
     public int Number;
 
+    public bool IsOn
+    {
+        get
+        {
+            bool value = false;
+            
+            foreach ( Digit digit in Digits )
+            {
+                value = value || digit.IsOn;
+            }
+
+            return value;
+        }
+    }
+
     public void Setup( DigitalDisplay a_Display )
     {
         for ( int i = 0; i < Digits.Length; ++i )

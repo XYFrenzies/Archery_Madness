@@ -121,7 +121,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 6145401482060955307}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -226,7 +227,7 @@ MonoBehaviour:
   m_InteractableCantHoverMeshMaterial: {fileID: 0}
   m_SocketActive: 1
   m_InteractableHoverScale: 1
-  m_RecycleDelayTime: 1
+  m_RecycleDelayTime: 0.1
   ReleaseThreshold: 0.25
 --- !u!1 &6145401482120967749
 GameObject:
@@ -368,7 +369,7 @@ MonoBehaviour:
       m_Calls: []
   m_AttachTransform: {fileID: 6145401482891719731}
   m_AttachEaseInTime: 0.15
-  m_MovementType: 1
+  m_MovementType: 2
   m_VelocityDamping: 1
   m_VelocityScale: 1
   m_AngularVelocityDamping: 1
