@@ -7,6 +7,7 @@ public class ShatterObject : MonoBehaviour
     [SerializeField] int TriangleCount;
     [SerializeField] float ExplosionForce, DisableDelay;
     [SerializeField] Vector3 ExplosionPointOffset;
+    [SerializeField] ParticleSystem PS;
     public GameObject DisableObject;
 
     RendererVariables Meshs;
@@ -53,6 +54,8 @@ public class ShatterObject : MonoBehaviour
     public void TriggerExplosion()
     {
         run = true;
+        if(PS != null)
+            PS.gameObject.SetActive(false);
         GameObject thisObject = gameObject;
         enabled = true;
         ShatterContainer.SetActive(true);

@@ -6,11 +6,11 @@ public class MusicManager : Singleton< MusicManager >
 {
     public void PlayMenuMusic()
     {
-        SoundPlayer.Instance.PlayRepeat( "MainMenuMusic", 0.5f, true );
+        SoundPlayer.Instance.PlayRepeat( "MainMenuMusic", 0.3f, true );
     }
 
     public void PlayGamePlayMusic()
     {
-        SoundPlayer.Instance.PlayRepeat( "GamePlayMusic", 0.5f, true );
+        SoundPlayer.Instance.PlayRepeat( "GamePlayMusic", 0.3f, true );
     }
 }

@@ -41,10 +41,25 @@ public class TimeController
     public void StopTimer()
     {
         m_IsActive = false;
-        TimeScoreController.Instance.DigitalDisplay.SetNumber( 0, 0 );
+        //TimeScoreController.Instance.DigitalDisplay.SetNumber( 0, 0 );
         TimeScoreController.Instance.DigitalDisplay.SetNumber( 1, 0 );
         TimeScoreController.Instance.DigitalDisplay.SetNumber( 2, 0 );
+
+        // Show highscore
+        GameStateManager.Instance.StartCoroutine( ShowHighScore() );
+    }
+
+    public IEnumerator ShowHighScore()
+    {
         TimeScoreController.Instance.DigitalDisplay.TurnOffAll();
+        yield return new WaitForSeconds( 1.0f );
+        TimeScoreController.Instance.DigitalDisplay.SetNumber( 0, 
+            TimeScoreController.Instance.CurrentScore.Value );
+        TimeScoreController.Instance.DigitalDisplay.TurnOnAll();
+        yield return new WaitForSeconds( 1.0f );
+        TimeScoreController.Instance.DigitalDisplay.TurnOffAll();
+        yield return new WaitForSeconds( 1.0f );
+        TimeScoreController.Instance.DigitalDisplay.TurnOnAll();
     }
 
     public void PauseTimer()
