@@ -26,6 +26,10 @@ public class GameStateManager : Singleton< GameStateManager >
         {
             return m_InGame;
         }
+        set
+        {
+            m_InGame = value;
+        }
     }
 
 
@@ -63,54 +67,53 @@ public class GameStateManager : Singleton< GameStateManager >
         TimeController.OnTimeUp.AddListener( OnTimeUp );
 
         //----OnPlay----
-        m_OnPlay = new Task( GalleryController.Instance.LowerPlay );
-        Task raiseExit = new Task( GalleryController.Instance.RaiseExit );
+        m_OnPlay = new Task( GalleryController.Instance.New_RaiseExit );
+        Task resetScore = new Task( ResetScore );
         Task turnOnLights3 = new Task( TurnOnLight );
         Task playIntroDialougue = new Task( PlayIntroDialogue );
         Task startTimer = new Task( StartTimer );
-        Task triggerSpawning = new Task( GalleryController.Instance.BeginSpawning );
+        Task triggerSpawning = new Task( GalleryController.Instance.New_BeginSpawning );
 
-        m_OnPlay.OnComplete = raiseExit;
-        raiseExit.OnComplete = turnOnLights3;
+        m_OnPlay.OnComplete = resetScore;
+        resetScore.OnComplete = turnOnLights3;
         turnOnLights3.OnComplete = playIntroDialougue;
         playIntroDialougue.OnComplete = startTimer;
         startTimer.OnComplete = triggerSpawning;
 
         //----OnExit----
         m_OnExit = new Task( StopSpawning );
-        Task lowerExit1 = new Task( GalleryController.Instance.UIDock.FlipDown );
+        Task lowerExit1 = new Task( GalleryController.Instance.New_RaisePlay );
+        Task outroDialogue1 = new Task( PlayOutroDialogue );
         Task resetRange1 = new Task( EndGame );
         Task turnOffLights2 = new Task( TurnOffLight );
-        Task raiseMenu1 = new Task( GalleryController.Instance.RaisePlay );
 
         m_OnExit.OnComplete = lowerExit1;
-        lowerExit1.OnComplete = resetRange1;
+        lowerExit1.OnComplete = outroDialogue1;
+        outroDialogue1.OnComplete = resetRange1;
         resetRange1.OnComplete = turnOffLights2;
-        turnOffLights2.OnComplete = raiseMenu1;
 
         //---OnTimeUp---
         m_OnTimeUp = new Task( StopSpawning );
-        Task lowerExit2 = new Task( GalleryController.Instance.UIDock.FlipDown );
+        Task lowerExit2 = new Task( GalleryController.Instance.New_RaisePlay );
+        Task outroDialogue2 = new Task( PlayOutroDialogue );
         Task resetRange2 = new Task( EndGame );
         Task turnOffLights3 = new Task( TurnOffLight );
-        Task raiseMenu2 = new Task( GalleryController.Instance.RaisePlay );
 
         m_OnTimeUp.OnComplete = lowerExit2;
-        lowerExit2.OnComplete = resetRange2;
+        lowerExit2.OnComplete = outroDialogue2;
+        outroDialogue2.OnComplete = resetRange2;
         resetRange2.OnComplete = turnOffLights3;
-        turnOffLights3.OnComplete = raiseMenu2;
 
-        GalleryController.Instance.TriggerRaisePlay( new Task( PlayIntroSounds ) );
+        StartCoroutine( PlayIntroSounds() );
     }
     
     //-----------------------Callbacks------------------------
 
     public IEnumerator PlayIntroSounds()
     {
-        yield return new WaitForSeconds( 1.0f );
+        yield return GalleryController.Instance.New_RaisePlay();
         SoundPlayer.Instance.Play( "PlayerInvitation", "Barker", 1.0f, true );
-        SoundPlayer.Instance.PlayRepeat( "Music", 0.2f, true );
-        //OnPlay();
+        MusicManager.Instance.PlayMenuMusic();
     }
 
     public IEnumerator PlayIntroDialogue()
@@ -119,16 +122,36 @@ public class GameStateManager : Singleton< GameStateManager >
         yield return null;
     }
 
+    public IEnumerator PlayOutroDialogue()
+    {
+        if ( ScoreController.CurrentScore.Value < 50 )
+        {
+            BarkerDialogueController.Instance.TriggerBarker( BarkerDialogueController.BarkerDialogue.LowScore );
+        }
+        else
+        {
+            BarkerDialogueController.Instance.TriggerBarker( BarkerDialogueController.BarkerDialogue.HighScore );
+        }
+        yield return null;
+    }
+
     public IEnumerator EndGame()
     {
+        MusicManager.Instance.PlayMenuMusic();
         m_InGame = false;
         TimeController.StopTimer();
         yield return null;
     }
 
+    public IEnumerator ResetScore()
+    {
+        ScoreController.ResetCurrentScore();
+        yield return null;
+    }
+
     private void SpeedUp()
     {
-        GalleryController.Instance.SetMovementSpeeds( TimeController.Progression * 3.0f + 0.5f );
+        GalleryController.Instance.SetMovementSpeeds( TimeController.Progression * 1.5f + 0.5f );
     }
 
     public void OnTimeUp()
@@ -185,9 +208,10 @@ public class GameStateManager : Singleton< GameStateManager >
     public IEnumerator StartTimer()
     {
         yield return TimeScoreController.Instance.TurnOnDisplay( 0, 2, 0 );
-        TimeController.StartTimer( 2, 0 );
+        MusicManager.Instance.PlayGamePlayMusic();
         m_InGame = true;
-        yield return new WaitForSeconds( 1.0f );
+        TimeController.StartTimer( 2, 0 );
+        yield return new WaitForSeconds( 0.1f );
     }
 
     public IEnumerator StopTimer()
@@ -219,6 +243,7 @@ public class GameStateManager : Singleton< GameStateManager >
         if ( m_InGame )
         {
             TimeScoreController.Instance.AddToScore( a_ContactScenario.ResultantScore() );
+            TimeController.RegisterShotFired();
         }
         
         // Called when arrow hits something.
@@ -227,13 +252,14 @@ public class GameStateManager : Singleton< GameStateManager >
             // If target was not a specific type.
             if ( a_ContactScenario.Target.Type == Target.TargetType.NONE )
             {
-
+                // Do nothing
             }
 
             // If target was UI element.
             else if ( a_ContactScenario.Target.Type == Target.TargetType.UI )
             {
                 Target_UI button = a_ContactScenario.Target as Target_UI;
+
                 switch ( button.ButtonType )
                 {
                     case Target_UI.UIButton.PLAY:
@@ -256,12 +282,11 @@ public class GameStateManager : Singleton< GameStateManager >
             // Not None or UI Element, must be a bird.
             else
             {
-
                 if ( a_ContactScenario.HitCorrectTarget )
                 {
                     a_ContactScenario.Target.DestroyTarget();
                     GalleryController.Instance.NotifyOfKill();
-                    SoundPlayer.Instance.Play( "OnHit", "Barker", 1.0f );
+                    BarkerDialogueController.Instance.TriggerBarker( BarkerDialogueController.BarkerDialogue.PlayerHit );
 
                     switch (a_ContactScenario.Target.Type)
                     {
@@ -284,19 +309,19 @@ public class GameStateManager : Singleton< GameStateManager >
                 }
                 else
                 {
-                    //a_ContactScenario.Arrow.DestroyArrow();
-                    SoundPlayer.Instance.Play( "OnMiss", "Barker", 1.0f );
+                    if ( InGame )
+                    // Animation broken, reenable on fix.
+                    BarkerDialogueController.Instance.TriggerBarker( BarkerDialogueController.BarkerDialogue.PlayerMiss );
                 }
-
-                //a_ContactScenario.Arrow.DestroyArrow();
             }
         }
 
         // No target hit of any kind.
         else
         {
-            //a_ContactScenario.Arrow.DestroyArrow();
-            SoundPlayer.Instance.Play( "OnMiss", "Barker", 1.0f );
+            if ( InGame )
+            // Animation broken, reenable on fix.
+            BarkerDialogueController.Instance.TriggerBarker( BarkerDialogueController.BarkerDialogue.PlayerMiss );
         }
 
         a_ContactScenario.Arrow.DestroyArrow();

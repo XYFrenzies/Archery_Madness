@@ -1,14 +1,15 @@
 
-1 - Arrows object pooled
-2 - Haptic Feedback
+1 - Arrows object pooled - done
+2 - Haptic Feedback - done, extra could be for quiver arrow retrieval.
 -- Haptic Events in the controller left and right hand. get access to them via getcomponent<HandController>.HapticEvents.
 3 - Aim Curve
 4 - Bow Breaking
 5 - Arrow Breaking
-6 - Barker Damage
-7 - Animations
+Arrows resetting on drop
+6 - Barker Damage - done
+7 - Animations - done
 8 - Music
 9 - Environment
 -- Models
 -- Effects (on targets when hit )
-10 - Barker Dialogue
+10 - Barker Dialogue - done, except for taking too long to fire.

@@ -4,8 +4,47 @@ using UnityEngine;
 
 public class LineOfShot : MonoBehaviour
 {
+    public Transform RayTransform;
+    public LineRenderer RayRenderer;
 
-    public void ShowLine(LineRenderer LineRenderer, Vector3 startPos, Vector3 direction, float speed, float timePerSegmentInSeconds, float maxTravelDistance)
+    public Material Broad;
+    public Material Hammer;
+    public Material Water;
+
+    public void ShowLine( float a_Speed, Arrow.ArrowType a_ArrowType )
+    {
+        RayRenderer.enabled = true;
+
+        switch (a_ArrowType)
+        {
+            case Arrow.ArrowType.BROAD:
+                {
+                    RayRenderer.material = Broad;
+                    break;
+                }
+            case Arrow.ArrowType.HAMMER:
+                {
+                    RayRenderer.material = Hammer;
+                    break;
+                }
+            case Arrow.ArrowType.WATER:
+                {
+                    RayRenderer.material = Water;
+                    break;
+                }
+            default:
+                break;
+        }
+
+        ShowLine( RayRenderer, RayTransform.position, RayTransform.forward, a_Speed * 2800.0f, 0.0001f, 10.0f );
+    }
+
+    public void HideLine()
+    {
+        RayRenderer.enabled = false;
+    }
+
+    private void ShowLine(LineRenderer LineRenderer, Vector3 startPos, Vector3 direction, float speed, float timePerSegmentInSeconds, float maxTravelDistance)
     {
         var positions = new List<Vector3>();
         Vector3 currentPos = startPos;

@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Target : MonoBehaviour, IResettable, IArrowHittable
+public class Target : MonoBehaviour, IResettable, IArrowHittable
 {
+    
     public enum TargetType
     {
         NONE,
         UI,
         WOOD,
         FIRE,
-        GLASS
+        GLASS,
+        BARKER
     }
 
     public Transform ParentMostTransform;
@@ -21,10 +23,10 @@ public abstract class Target : MonoBehaviour, IResettable, IArrowHittable
 
     public virtual void DestroyTarget()
     {
-        //transform.SetParent( null );
-        //GetComponent< DestructionController >()?.BlowUp();
         transform.SetParent( null );
         GetComponent< ShatterObject >()?.TriggerExplosion();
+        TargetDock.DockedTarget = null;
+        TargetDock = null;
     }
 
     public void EnableCollider()

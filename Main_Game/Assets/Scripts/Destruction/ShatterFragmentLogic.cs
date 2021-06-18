@@ -22,19 +22,30 @@ public class ShatterFragmentLogic : MonoBehaviour
 
         run = false;
     }
-    private void FixedUpdate()
-    {
-        if(run)
-        {
-            run = false;
-            Explode();
-        }
-    }
+    //private void FixedUpdate()
+    //{
+    //    if(run)
+    //    {
+    //        run = false;
+    //        Explode();
+    //    }
+    //}
+    //private void OnEnable()
+    //{
+    //    ResetFragment();
+    //    run = true;
+    //}
+
     private void OnEnable()
     {
-        ResetFragment();
-        run = true;
+        Explode();
     }
+
+    private void OnDisable()
+    {
+        ResetFragment();
+    }
+
     private void ResetFragment()
     {
         myBody.isKinematic = true;

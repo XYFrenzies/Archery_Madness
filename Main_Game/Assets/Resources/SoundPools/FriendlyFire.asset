@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acd0e736ee620e7419d7c369f763fbcd, type: 3}
+  m_Name: FriendlyFire
+  m_EditorClassIdentifier: 
+  m_Clips:
+  - {fileID: 8300000, guid: a258c2c8c892cf24bb9cbafb4eb6528a, type: 3}
+  - {fileID: 8300000, guid: 251ad094516dea640adf06d59ed11034, type: 3}
+  - {fileID: 8300000, guid: 587a9c05c5f064042a27cdecba41886c, type: 3}
+  - {fileID: 8300000, guid: ab09696058a4f804c8246f7bc8a41853, type: 3}
+  - {fileID: 8300000, guid: 2f9d9a004a8e310439a82c876b59ea50, type: 3}
+  - {fileID: 8300000, guid: ef3fd6cbc962d8642941c83a03a2c254, type: 3}

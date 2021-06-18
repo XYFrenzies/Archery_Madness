@@ -19,7 +19,7 @@ public class TargetDock : MonoBehaviour
     public Transform TargetAnchor;
     public AudioSource AudioSource;
 
-    public Target DockedTarget { get; private set; }
+    public Target DockedTarget { get; set; }
     public Direction RotationDirection
     {
         get
@@ -85,7 +85,6 @@ public class TargetDock : MonoBehaviour
         StartCoroutine( FlipUp() );
     }
 
-    // Needs to change for object pools.
     //public void SpawnUITarget( Target_UI.UIButton a_ButtonType, bool a_WithFlip )
     //{
     //    if ( DockedTarget != null )
@@ -132,7 +131,7 @@ public class TargetDock : MonoBehaviour
     {
         if ( DockedTarget != null )
         {
-            Destroy( DockedTarget.gameObject );
+            DockedTarget.DestroyTarget();
         }
 
         GameObject pooledUIObject = null;
@@ -237,11 +236,234 @@ public class TargetDock : MonoBehaviour
     //    }
     //}
 
+    public IEnumerator New_ShowTarget( Target.TargetType a_TargetType, float a_FlipDownTimer )
+    {
+        Target pooledTarget = null;
+
+        // Attempt to get from pool.
+        switch ( a_TargetType )
+        {
+            case Target.TargetType.WOOD:
+                {
+                    pooledTarget = Instantiate( GalleryController.Instance.PersistantWoodBird ).GetComponent< Target >();
+                    break;
+                }
+            case Target.TargetType.FIRE:
+                {
+                    pooledTarget = Instantiate( GalleryController.Instance.PersistantFireBird ).GetComponent< Target >();
+                    break;
+                }
+            case Target.TargetType.GLASS:
+                {
+                    pooledTarget = Instantiate( GalleryController.Instance.PersistantGlassBird ).GetComponent< Target >();
+                    break;
+                }
+        }
+        {
+            // If a pooled object could be pooled.
+            IsStanding = false;
+            SetRotation( RotationDirection, m_RotationAngle );
+            pooledTarget.transform.SetParent( DockPivot.transform );
+            pooledTarget.transform.localPosition = TargetAnchor.localPosition;
+            pooledTarget.transform.localRotation = TargetAnchor.localRotation;
+            pooledTarget.transform.localScale = TargetAnchor.localScale;
+            DockedTarget = pooledTarget;
+            pooledTarget.gameObject.SetActive( true );
+            DockedTarget.TargetDock = this;
+            GalleryController.Instance.NotifyOfRespawn();
+
+            AudioSource.clip = SoundPlayer.Instance.GetClip( "Actuator" );
+            AudioSource.Play();
+
+            IsTransitioning = true;
+
+            //----------------------------------------------
+            Direction rotationDirection = RotationDirection;
+            float accumulativeAngle = m_RotationAngle;
+
+            while ( accumulativeAngle > 0 )
+            {
+                yield return new WaitForEndOfFrame();
+                accumulativeAngle -= m_DegreesPerSecondUp * Time.deltaTime;
+
+                SetRotation( rotationDirection, accumulativeAngle );
+            }
+            
+            SetRotation( rotationDirection, 0.0f );
+            //----------------------------------------------
+
+            IsStanding = true;
+            IsTransitioning = false;
+
+            // Wait for 5 seconds standing.
+            float elapsedTime = 0.0f;
+
+            while ( DockedTarget != null && elapsedTime < a_FlipDownTimer )
+            {
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            AudioSource.clip = SoundPlayer.Instance.GetClip( "Actuator" );
+            AudioSource.Play();
+
+            IsTransitioning = true;
+            IsStanding = false;
+
+            //----------------------------------------------
+            rotationDirection = RotationDirection;
+            accumulativeAngle = 0.0f;
+
+            while ( accumulativeAngle < m_RotationAngle )
+            {
+                yield return new WaitForEndOfFrame();
+                accumulativeAngle += m_DegreesPerSecondDown * Time.deltaTime;
+                SetRotation( rotationDirection, accumulativeAngle );
+            }
+
+            SetRotation( rotationDirection, m_RotationAngle );
+
+            //----------------------------------------------
+
+            IsTransitioning = false;
+
+            if ( DockedTarget != null )
+            {
+                Destroy( DockedTarget.gameObject );
+                DockedTarget = null;
+                GalleryController.Instance.NotifyOfKill();
+            }            
+        }
+    }
+
+    public IEnumerator New_ShowUI( Target_UI.UIButton a_ButtonType )
+    {
+        Direction rotationDirection;
+        float accumulativeAngle;
+
+        // If a button is already docked, rotate, and despawn it.
+        if ( DockedTarget != null && DockedTarget is Target_UI ui )
+        {
+            AudioSource.clip = SoundPlayer.Instance.GetClip( "Actuator" );
+            AudioSource.Play();
+
+            IsTransitioning = true;
+            IsStanding = false;
+
+            //----------------------------------------------
+            rotationDirection = RotationDirection;
+            accumulativeAngle = 0.0f;
+
+            while ( accumulativeAngle < m_RotationAngle )
+            {
+                yield return new WaitForEndOfFrame();
+                accumulativeAngle += m_DegreesPerSecondDown * Time.deltaTime;
+                SetRotation( rotationDirection, accumulativeAngle );
+            }
+
+            SetRotation( rotationDirection, m_RotationAngle );
+
+            //----------------------------------------------
+
+            IsTransitioning = false;
+
+            switch ( ui.ButtonType )
+            {
+                case Target_UI.UIButton.PLAY:
+                    {
+                        Destroy( ui.gameObject );
+                        break;
+                    }
+                case Target_UI.UIButton.EXIT:
+                    {
+                        Destroy( ui.gameObject );
+                        break;
+                    }
+            }
+
+            IsStanding = false;
+        }
+
+        Target_UI pooledUITarget = null;
+
+        // Attempt to get from pool.
+        switch ( a_ButtonType )
+        {
+            case Target_UI.UIButton.PLAY:
+                {
+                    pooledUITarget = Instantiate( GalleryController.Instance.PersistantUIPlay ).GetComponent< Target_UI >();
+                    break;
+                }
+            case Target_UI.UIButton.EXIT:
+                {
+                    pooledUITarget = Instantiate( GalleryController.Instance.PersistantUIExit ).GetComponent< Target_UI >();
+                    break;
+                }
+        }
+
+        // Set it to the docks position.
+        SetRotation( RotationDirection, m_RotationAngle );
+        pooledUITarget.transform.SetParent( DockPivot.transform );
+        pooledUITarget.transform.localPosition = TargetAnchor.localPosition;
+        pooledUITarget.transform.localRotation = TargetAnchor.localRotation;
+        pooledUITarget.transform.localScale = TargetAnchor.localScale;
+        pooledUITarget.gameObject.SetActive( true );
+        DockedTarget = pooledUITarget;
+        DockedTarget.TargetDock = this;
+
+        // Play dock actuator sound.
+        AudioSource.clip = SoundPlayer.Instance.GetClip( "Actuator" );
+        AudioSource.Play();
+
+        // Rotate new button back up.
+        IsTransitioning = true;
+
+        //----------------------------------------------
+        rotationDirection = RotationDirection;
+        accumulativeAngle = m_RotationAngle;
+
+        while ( accumulativeAngle > 0 )
+        {
+            yield return new WaitForEndOfFrame();
+            accumulativeAngle -= m_DegreesPerSecondUp * Time.deltaTime;
+
+            SetRotation( rotationDirection, accumulativeAngle );
+        }
+        
+        SetRotation( rotationDirection, 0.0f );
+        //----------------------------------------------
+
+        IsStanding = true;
+        IsTransitioning = false;
+    }
+
     public void SpawnTarget( Target.TargetType a_TargetType, bool a_WithFlip, float a_FlipDownTimer = -1, bool a_NotifyOfKill = false )
     {
         if ( DockedTarget != null )
         {
-            DockedTarget.DestroyTarget();
+            //DockedTarget.DestroyTarget();
+
+            switch (DockedTarget.Type)
+            {
+                case Target.TargetType.WOOD:
+                    {
+                        GalleryController.Instance.PoolWoodBird.Despawn( DockedTarget as Target_WoodBird );
+                        break;
+                    }
+                case Target.TargetType.FIRE:
+                    {
+                        GalleryController.Instance.PoolFireBird.Despawn( DockedTarget as Target_FireBird );
+                        break;
+                    }
+                case Target.TargetType.GLASS:
+                    {
+                        GalleryController.Instance.PoolGlassBird.Despawn( DockedTarget as Target_GlassBird );
+                        break;
+                    }
+            }
+
+            DockedTarget = null;
+            GalleryController.Instance.NotifyOfKill();
         }
 
         GameObject pooledObject = null;

@@ -14,10 +14,9 @@ public class Quiver : XRBaseInteractable
         }
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        m_ArrowPool = new ObjectPool< Arrow >( CreateArrow, OnArrowActive, OnArrowInactive );
-        m_ArrowPool.Populate( 3 );
+        base.Awake();
     }
 
     protected override void OnEnable()
@@ -38,15 +37,30 @@ public class Quiver : XRBaseInteractable
         {
             case Arrow.ArrowType.BROAD:
                 {
-                    return Instantiate( ArrowPrefab, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Arrow_Broadhead >();
+                    GameObject newObject = Instantiate( ArrowPrefab, new Vector3( 0, -10, 0 ), Quaternion.identity );
+                    Arrow_Broadhead arrow = newObject.GetComponent< Arrow_Broadhead >();
+                    arrow.Pool = m_ArrowPool;
+                    arrow.gameObject.SetActive( false );
+
+                    return arrow;
                 }
             case Arrow.ArrowType.HAMMER:
                 {
-                    return Instantiate( ArrowPrefab, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Arrow_Hammerhead >();
+                    GameObject newObject = Instantiate( ArrowPrefab, new Vector3( 0, -10, 0 ), Quaternion.identity );
+                    Arrow_Hammerhead arrow = newObject.GetComponent< Arrow_Hammerhead >();
+                    arrow.Pool = m_ArrowPool;
+                    arrow.gameObject.SetActive( false );
+
+                    return arrow;
                 }
             case Arrow.ArrowType.WATER:
                 {
-                    return Instantiate( ArrowPrefab, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Arrow_WaterBalloon >();
+                    GameObject newObject = Instantiate( ArrowPrefab, new Vector3( 0, -10, 0 ), Quaternion.identity );
+                    Arrow_WaterBalloon arrow = newObject.GetComponent< Arrow_WaterBalloon >();
+                    arrow.Pool = m_ArrowPool;
+                    arrow.gameObject.SetActive( false );
+
+                    return arrow;
                 }
             default:
                 {
@@ -63,7 +77,17 @@ public class Quiver : XRBaseInteractable
     private void OnArrowInactive( Arrow a_Arrow )
     {
         a_Arrow.gameObject.transform.position = new Vector3( 0, -10, 0 );
-        a_Arrow.gameObject.SetActive( false );
+        a_Arrow.gameObject.transform.rotation = Quaternion.identity;
+
+        // Resets
+        Collider collider = a_Arrow.GetComponent< Collider >();
+        collider.isTrigger = true;
+
+        Rigidbody rigidbody = a_Arrow.GetComponent< Rigidbody >();
+        rigidbody.useGravity = true;
+        rigidbody.isKinematic = false;
+
+        a_Arrow.movementType = MovementType.Instantaneous;
     }
 
     private void CreateAndSelectArrow( SelectEnterEventArgs a_Args )
@@ -82,23 +106,51 @@ public class Quiver : XRBaseInteractable
     //    return arrowObject.GetComponent< Arrow >();
     //}
 
+    //private Arrow CreateArrow( Transform a_Orientation )
+    //{
+    //    if ( m_ArrowPool.TrySpawn( out Arrow arrow ) )
+    //    {
+    //        arrow.gameObject.transform.position = a_Orientation.position;
+    //        arrow.gameObject.transform.rotation = a_Orientation.rotation;
+
+    //        return arrow;
+    //    }
+    //    else
+    //    {
+    //        return null;
+    //    }
+    //        //a_Orientation.position,
+    //        //a_Orientation.rotation );
+
+    //    //return arrowObject.GetComponent< Arrow >();
+    //}
+
     private Arrow CreateArrow( Transform a_Orientation )
     {
-        if ( m_ArrowPool.TrySpawn( out Arrow arrow ) )
-        {
-            arrow.gameObject.transform.position = a_Orientation.position;
-            arrow.gameObject.transform.rotation = a_Orientation.rotation;
+        Arrow arrow = null;
 
-            return arrow;
-        }
-        else
+        switch (Type)
         {
-            return null;
+            case Arrow.ArrowType.BROAD:
+                {
+                    arrow = Instantiate( GalleryController.Instance.PersistantArrowBroad, a_Orientation.position, a_Orientation.rotation ).GetComponent< Arrow >();
+                    break;
+                }
+            case Arrow.ArrowType.HAMMER:
+                {
+                    arrow = Instantiate( GalleryController.Instance.PersistantArrowHammer, a_Orientation.position, a_Orientation.rotation ).GetComponent< Arrow >();
+                    break;
+                }
+            case Arrow.ArrowType.WATER:
+                {
+                    arrow = Instantiate( GalleryController.Instance.PersistantArrowWater, a_Orientation.position, a_Orientation.rotation ).GetComponent< Arrow >();
+                    break;
+                }
+            default:
+                break;
         }
-            //a_Orientation.position,
-            //a_Orientation.rotation );
-
-        //return arrowObject.GetComponent< Arrow >();
+        arrow.gameObject.SetActive( true );
+        return arrow;
     }
 
     private ObjectPool< Arrow > m_ArrowPool;

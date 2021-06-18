@@ -32,7 +32,7 @@ public struct ContactScenario
     {
         if ( HitCorrectTarget )
         {
-            return ( int )( TravelDistance * 4 );
+            return ( int )( TravelDistance * 4 + GameStateManager.Instance.TimeController.Progression * 4 );
         }
         else if ( HitTarget )
         {
@@ -40,7 +40,7 @@ public struct ContactScenario
         }
         else
         {
-            return -20;
+            return -2;
         }
     }
 }

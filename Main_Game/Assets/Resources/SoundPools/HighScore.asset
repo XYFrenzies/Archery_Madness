@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd0e736ee620e7419d7c369f763fbcd, type: 3}
   m_Name: HighScore
   m_EditorClassIdentifier: 
-  m_Clips: []
+  m_Clips:
+  - {fileID: 8300000, guid: 020025246da2de24e9983111a3ee8a51, type: 3}

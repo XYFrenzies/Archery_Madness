@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acd0e736ee620e7419d7c369f763fbcd, type: 3}
-  m_Name: Music
+  m_Name: TimesUp
   m_EditorClassIdentifier: 
   m_Clips:
-  - {fileID: 8300000, guid: 63e18ba41c8fe1c40ac77bba46cdf8d5, type: 3}
-  - {fileID: 8300000, guid: 3b18bd92841d0a2429f614c1492327d0, type: 3}
-  - {fileID: 8300000, guid: e67e2a38d88f5ab42be4d52e36c5806f, type: 3}
+  - {fileID: 8300000, guid: 022278bd0e032ea45bcd7a8a156d8cba, type: 3}
+  - {fileID: 8300000, guid: 967699097ef993448b58c19f9affce0e, type: 3}
+  - {fileID: 8300000, guid: b506c3d151e3f04459784e0edf6009bb, type: 3}
+  - {fileID: 8300000, guid: 004e87a869974b047b5b8c6c5f128fc5, type: 3}

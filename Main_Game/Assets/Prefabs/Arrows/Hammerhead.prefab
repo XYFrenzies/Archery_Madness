@@ -525,11 +525,11 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_ThrowVelocityScale: 1.5
-  m_ThrowAngularVelocityScale: 1
+  m_ThrowAngularVelocityScale: 0.25
   m_ForceGravityOnDetach: 0
   m_RetainTransformParent: 1
   m_AttachPointCompatibilityMode: 0
-  Speed: 2000
+  Speed: 1500
   AudioSource: {fileID: 0}
   Tip: {fileID: 3778538156570270743}
   LayerMask:
@@ -547,8 +547,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca0cf184079af9544b2c6e14d6914946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TriangleCount: 50
-  ExplosionForce: 2000
-  DisableDelay: 3
+  TriangleCount: 10
+  ExplosionForce: 500
+  DisableDelay: 1
   ExplosionPointOffset: {x: 0, y: 0, z: 0}
   DisableObject: {fileID: 9074247676438521320}

@@ -284,8 +284,8 @@ GameObject:
   - component: {fileID: 7311814565876323886}
   - component: {fileID: 4844184944371979184}
   - component: {fileID: 1997200396442012835}
-  - component: {fileID: 8004732392528614414}
   - component: {fileID: 2575941524463338365}
+  - component: {fileID: 5443547678825607101}
   m_Layer: 2
   m_Name: Broadhead
   m_TagString: Untagged
@@ -342,7 +342,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8004732392528614414
+--- !u!114 &2575941524463338365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7940717193495678100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0cf184079af9544b2c6e14d6914946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriangleCount: 10
+  ExplosionForce: 500
+  DisableDelay: 1
+  ExplosionPointOffset: {x: 0, y: 0, z: 0}
+  DisableObject: {fileID: 7940717193495678100}
+--- !u!114 &5443547678825607101
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -413,8 +430,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_AttachTransform: {fileID: 2315906081575900351}
-  m_AttachEaseInTime: 0.3
-  m_MovementType: 1
+  m_AttachEaseInTime: 0.15
+  m_MovementType: 2
   m_VelocityDamping: 1
   m_VelocityScale: 1
   m_AngularVelocityDamping: 1
@@ -455,23 +472,6 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 307
---- !u!114 &2575941524463338365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7940717193495678100}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca0cf184079af9544b2c6e14d6914946, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriangleCount: 50
-  ExplosionForce: 2000
-  DisableDelay: 3
-  ExplosionPointOffset: {x: 0, y: 0, z: 0}
-  DisableObject: {fileID: 7940717193495678100}
 --- !u!1 &8144363175409345112
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,6 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acd0e736ee620e7419d7c369f763fbcd, type: 3}
-  m_Name: PlayerTakesTooLong
+  m_Name: MainMenuMusic
   m_EditorClassIdentifier: 
-  m_Clips: []
+  m_Clips:
+  - {fileID: 8300000, guid: e67e2a38d88f5ab42be4d52e36c5806f, type: 3}
+  - {fileID: 8300000, guid: 63e18ba41c8fe1c40ac77bba46cdf8d5, type: 3}

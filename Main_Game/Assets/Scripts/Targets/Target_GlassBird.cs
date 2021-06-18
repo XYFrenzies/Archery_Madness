@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class Target_GlassBird : Target
 {
+    public ObjectPool< Target_GlassBird > Pool;
+
     private void Awake()
     {
         Type = TargetType.GLASS;
+        GetComponent< ShatterObject >()?.SetOnDisable( OnShatterDisable );
     }
 
-    public override void OnArrowHit( Arrow a_Arrow )
+    private void OnShatterDisable( GameObject gameObject )
     {
-        base.OnArrowHit(a_Arrow);
+        Destroy( gameObject );
     }
 }

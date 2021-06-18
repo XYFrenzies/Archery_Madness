@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Target_UI : Target
 {
+    public ObjectPool< Target_UI > Pool;
+
     public enum UIButton
     {
         PLAY,
@@ -15,24 +17,11 @@ public class Target_UI : Target
     private void Awake()
     {
         Type = TargetType.UI;
+        GetComponent< ShatterObject >()?.SetOnDisable( OnShatterDisable );
     }
 
-    public override void DestroyTarget()
+    private void OnShatterDisable( GameObject gameObject )
     {
-        //gameObject.transform.DetachChildren();
-        //gameObject.GetComponent< Rigidbody >().isKinematic = false;
-        //GetComponent< DestructionController >()?.BlowUp();
-        //if ( TryGetComponent( out ShatterObject shatter ) )
-        //{
-        //    shatter.enabled = true;
-        //}
-
-        //GetComponent< ShatterObject >()?.TriggerExplosion();
-        base.DestroyTarget();
-    }
-
-    public override void OnArrowHit( Arrow a_Arrow )
-    {
-        base.OnArrowHit( a_Arrow );
+        Destroy( gameObject );
     }
 }

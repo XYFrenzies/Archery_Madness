@@ -33,6 +33,14 @@ public class Arrow : XRGrabInteractable, IResettable
         AudioSource = GetComponent< AudioSource >();
     }
 
+    
+
+
+    public virtual void ResetExplosion( GameObject gameObject )
+    {
+        Destroy( gameObject );
+    }
+
     protected override void OnSelectEntering( SelectEnterEventArgs a_Args )
     {
         base.OnSelectEntering( a_Args );
@@ -53,8 +61,7 @@ public class Arrow : XRGrabInteractable, IResettable
     public void DestroyArrow()
     {
         ShatterObject shatter = GetComponent< ShatterObject >();
-        shatter.SetOnDisable( DisableArrow );
-        transform.SetParent( null );
+        //transform.SetParent( null );
         shatter.TriggerExplosion();
     }
 
@@ -89,10 +96,10 @@ public class Arrow : XRGrabInteractable, IResettable
         }
     }
 
-    public void TriggerDespawn( float a_Time )
-    {
-        Destroy( gameObject, a_Time );
-    }
+    //public void TriggerDespawn( float a_Time )
+    //{
+    //    Destroy( gameObject, a_Time );
+    //}
 
     protected override void OnSelectExited( SelectExitEventArgs a_Args )
     {
@@ -187,7 +194,7 @@ public class Arrow : XRGrabInteractable, IResettable
         TogglePhysics( false );
         ChildArrow( a_Hit );
         CheckForHittable( a_Hit );
-        TriggerDespawn( 3.0f );
+        //TriggerDespawn( 3.0f );
     }
 
     private void TogglePhysics( bool a_Value )
@@ -224,7 +231,10 @@ public class Arrow : XRGrabInteractable, IResettable
 
     public void OnReset()
     {
-        
+        //SetLaunch( false );
+        //Reset();
+        //m_ThisRigidbody.isKinematic = false;
+        //m_ThisRigidbody.useGravity = true;
     }
 
     private Collider m_Collider;

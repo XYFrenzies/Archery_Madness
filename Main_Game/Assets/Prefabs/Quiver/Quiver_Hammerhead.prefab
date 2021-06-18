@@ -46,7 +46,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: -0.01, y: 0.1, z: -0.05}
 --- !u!54 &4794017296815812797
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -134,6 +134,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   ArrowPrefab: {fileID: 9074247676438521320, guid: 30257c4b422fc604ea0b2b5d3afb114d, type: 3}
+  Type: 2
 --- !u!1001 &2689661924656726460
 PrefabInstance:
   m_ObjectHideFlags: 0

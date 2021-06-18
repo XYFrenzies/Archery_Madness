@@ -44,6 +44,7 @@ public class ShatterObject : MonoBehaviour
                 elapsed = 0f;
                 run = false;
                 m_OnDisable.Invoke( DisableObject );
+                //ShatterContainer.SetActive( false );
                 DisableObject.SetActive(false);
             }
         }
@@ -52,6 +53,8 @@ public class ShatterObject : MonoBehaviour
     public void TriggerExplosion()
     {
         run = true;
+        GameObject thisObject = gameObject;
+        enabled = true;
         ShatterContainer.SetActive(true);
         foreach (MeshRenderer mr in Meshs._Renderer)
             mr.enabled = false;
@@ -76,7 +79,7 @@ public class ShatterObject : MonoBehaviour
                 Meshs._Filter.Add(_mf);
                 Meshs._Renderer.Add(transform.GetChild(i).GetComponent<MeshRenderer>());
                 Meshs._Transform.Add(transform.GetChild(i).transform);
-                Meshs._Transform[Meshs._Transform.Count - 1].localScale = Vector3.Scale(Meshs._Transform[Meshs._Transform.Count - 1].localScale, transform.localScale);
+                //Meshs._Transform[Meshs._Transform.Count - 1].localScale = Vector3.Scale(Meshs._Transform[Meshs._Transform.Count - 1].localScale, transform.localScale);
             }
         }
     }

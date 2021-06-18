@@ -9,6 +9,9 @@ public class PullMeasurer : XRBaseInteractable
     public PullEvent Pulled = new PullEvent();
     public Transform Start = null;
     public Transform End = null;
+    public Notch Notch;
+
+    public LineOfShot LineOfShot;
 
     private float m_PullAmount = 0.0f;
     public float PullAmount => m_PullAmount;
@@ -25,6 +28,19 @@ public class PullMeasurer : XRBaseInteractable
         base.OnSelectExited( a_Args );
         m_PullingInteractor = null;
         SetPullValues( Start.position, 0.0f );
+
+        if ( ReferenceEquals( GameStateManager.Instance.LeftController.selectTarget,
+            GameStateManager.Instance.Bow ) )
+        {
+            GameStateManager.Instance.LeftController.SendHapticImpulse( 1.0f, 0.8f );
+        }
+        else if ( ReferenceEquals( GameStateManager.Instance.RightController.selectTarget,
+            GameStateManager.Instance.Bow ) )
+        {
+            GameStateManager.Instance.RightController.SendHapticImpulse( 1.0f, 0.8f );
+        }
+
+        LineOfShot.HideLine();
     }
 
     public override void ProcessInteractable( XRInteractionUpdateOrder.UpdatePhase a_UpdatePhase )
@@ -36,6 +52,14 @@ public class PullMeasurer : XRBaseInteractable
             if ( a_UpdatePhase == XRInteractionUpdateOrder.UpdatePhase.Dynamic )
             {
                 CheckForPull();
+
+                if ( Notch.selectTarget != null )
+                {
+                    LineOfShot.ShowLine( PullAmount, ( Notch.selectTarget as Arrow ).Type );
+                }
+                
+                GameStateManager.Instance.LeftController.SendHapticImpulse( PullAmount * 0.2f, 0.1f );
+                GameStateManager.Instance.RightController.SendHapticImpulse( PullAmount * 0.2f, 0.1f );
             }
         }
     }

@@ -8,11 +8,22 @@ public class GalleryController : Singleton< GalleryController >
     public GameObject TargetPrefab_Wood;
     public GameObject TargetPrefab_Glass;
     public GameObject TargetPrefab_Fire;
-
+    public GameObject ArrowBroad;
+    public GameObject ArrowHammer;
+    public GameObject ArrowWater;
     public GameObject TargetUIPrefab_Play;
     public GameObject TargetUIPrefab_Exit;
 
     public TargetDock UIDock;
+
+    public GameObject PersistantGlassBird;
+    public GameObject PersistantWoodBird;
+    public GameObject PersistantFireBird;
+    public GameObject PersistantUIPlay;
+    public GameObject PersistantUIExit;
+    public GameObject PersistantArrowBroad;
+    public GameObject PersistantArrowHammer;
+    public GameObject PersistantArrowWater;
 
     public ObjectPool< Target_FireBird > PoolFireBird
     {
@@ -91,76 +102,203 @@ public class GalleryController : Singleton< GalleryController >
         GameObject targetsGameObject = GameObject.Find( "Targets" );
         BirdTargetDocks = targetsGameObject.GetComponentsInChildren< TargetDock >();
 
-        m_Firebirds = new ObjectPool< Target_FireBird >( CreateFirebird, OnBirdActive, OnBirdInactive );
-        m_Glassbirds = new ObjectPool< Target_GlassBird >( CreateGlassbird, OnBirdActive, OnBirdInactive );
-        m_Woodbirds = new ObjectPool< Target_WoodBird >( CreateWoodbird, OnBirdActive, OnBirdInactive );
-        m_UIPlay = new ObjectPool< Target_UI >( CreatePlayUI, OnUIActive, OnUIInactive );
-        m_UIExit = new ObjectPool< Target_UI >( CreateExitUI, OnUIActive, OnUIInactive );
+        //m_Firebirds = new ObjectPool< Target_FireBird >( CreateFirebird, OnBirdActive, OnBirdInactive );
+        //m_Glassbirds = new ObjectPool< Target_GlassBird >( CreateGlassbird, OnBirdActive, OnBirdInactive );
+        //m_Woodbirds = new ObjectPool< Target_WoodBird >( CreateWoodbird, OnBirdActive, OnBirdInactive );
+        //m_UIPlay = new ObjectPool< Target_UI >( CreatePlayUI, OnUIActive, OnUIInactive );
+        //m_UIExit = new ObjectPool< Target_UI >( CreateExitUI, OnUIActive, OnUIInactive );
 
-        m_Firebirds.Populate( 10 );
-        m_Glassbirds.Populate( 10 );
-        m_Woodbirds.Populate( 10 );
-        m_UIPlay.Populate( 1 );
-        m_UIExit.Populate( 1 );
+        //m_Firebirds.Populate( 10 );
+        //m_Glassbirds.Populate( 10 );
+        //m_Woodbirds.Populate( 10 );
+        //m_UIPlay.Populate( 1 );
+        //m_UIExit.Populate( 1 );
+
+        PersistantGlassBird = Instantiate( TargetPrefab_Glass, new Vector3( 0, -10, 0 ), Quaternion.identity );
+        PersistantWoodBird = Instantiate( TargetPrefab_Wood, new Vector3( 0, -10, 0 ), Quaternion.identity );
+        PersistantFireBird = Instantiate( TargetPrefab_Fire, new Vector3( 0, -10, 0 ), Quaternion.identity );
+        PersistantUIPlay = Instantiate( TargetUIPrefab_Play, new Vector3( 0, -10, 0 ), Quaternion.identity );
+        PersistantUIExit = Instantiate( TargetUIPrefab_Exit, new Vector3( 0, -10, 0 ), Quaternion.identity );
+        PersistantArrowBroad = Instantiate( ArrowBroad, new Vector3( 0, -10, 0 ), Quaternion.identity );
+        PersistantArrowHammer = Instantiate( ArrowHammer, new Vector3( 0, -10, 0 ), Quaternion.identity );
+        PersistantArrowWater = Instantiate( ArrowWater, new Vector3( 0, -10, 0 ), Quaternion.identity );
+
+        PersistantGlassBird.SetActive( false );
+        PersistantWoodBird.SetActive( false );
+        PersistantFireBird.SetActive( false );
+        PersistantUIPlay.SetActive( false );
+        PersistantUIExit.SetActive( false );
+        PersistantArrowBroad.SetActive( false );
+        PersistantArrowHammer.SetActive( false );
+        PersistantArrowWater.SetActive( false );
     }
 
-    private static Target_FireBird CreateFirebird()
+    private Target_FireBird CreateFirebird()
     {
-        return Instantiate( Instance.TargetPrefab_Fire, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Target_FireBird >();
+        GameObject newObject = Instantiate( Instance.TargetPrefab_Fire, new Vector3( 0, -10, 0 ), Quaternion.identity );
+        Target_FireBird targetFire = newObject.GetComponent< Target_FireBird >();
+        targetFire.Pool = PoolFireBird;
+        newObject.SetActive( false );
+
+        return targetFire;
     }
 
-    private static Target_GlassBird CreateGlassbird()
+    //private Target_GlassBird CreateGlassbird()
+    //{
+    //    GameObject newObject = Instantiate( Instance.TargetPrefab_Glass, new Vector3( 0, -10, 0 ), Quaternion.identity );
+    //    Target_GlassBird targetGlass = newObject.GetComponent< Target_GlassBird >();
+    //    targetGlass.Pool = PoolGlassBird;
+    //    newObject.SetActive( false );
+
+    //    return targetGlass;
+    //}
+
+    //private Target_WoodBird CreateWoodbird()
+    //{
+    //    GameObject newObject = Instantiate( Instance.TargetPrefab_Wood, new Vector3( 0, -10, 0 ), Quaternion.identity );
+    //    Target_WoodBird targetWood = newObject.GetComponent< Target_WoodBird >();
+    //    targetWood.Pool = PoolWoodBird;
+    //    newObject.SetActive( false );
+
+    //    return targetWood;
+    //}
+
+    //private Target_UI CreatePlayUI()
+    //{
+    //    GameObject newObject = Instantiate( Instance.TargetUIPrefab_Play, new Vector3( 0, -10, 0 ), Quaternion.identity );
+    //    Target_UI targetUI = newObject.GetComponent< Target_UI >();
+    //    targetUI.Pool = PoolPlayUI;
+    //    targetUI.gameObject.SetActive( false );
+
+    //    return targetUI;
+    //}
+
+    //private Target_UI CreateExitUI()
+    //{
+    //    GameObject newObject = Instantiate( Instance.TargetUIPrefab_Exit, new Vector3( 0, -10, 0 ), Quaternion.identity );
+    //    Target_UI targetUI = newObject.GetComponent< Target_UI >();
+    //    targetUI.Pool = PoolExitUI;
+    //    targetUI.gameObject.SetActive( false );
+
+    //    return targetUI;
+    //}
+
+    //private void OnBirdActive( Target a_Bird )
+    //{
+    //    a_Bird.gameObject.SetActive( true );
+    //}
+
+    //private void OnBirdInactive( Target a_Bird )
+    //{
+    //    a_Bird.transform.position = new Vector3( 0, -10, 0 );
+    //    a_Bird.transform.rotation = Quaternion.identity;
+
+    //    // Resets
+    //    Collider collider = a_Bird.GetComponent< Collider >();
+    //    collider.isTrigger = false;
+
+    //    Rigidbody rigidbody = a_Bird.GetComponent< Rigidbody >();
+    //    rigidbody.useGravity = true;
+    //    rigidbody.isKinematic = true;
+    //}
+
+    //private static void OnUIActive( Target_UI a_UI )
+    //{
+    //    a_UI.gameObject.SetActive( true );
+    //}
+
+    //private static void OnUIInactive( Target_UI a_UI )
+    //{
+    //    a_UI.transform.position = new Vector3( 0, -10, 0 );
+    //    a_UI.transform.rotation = Quaternion.identity;
+
+    //    // Resets
+    //    Collider collider = a_UI.GetComponent< Collider >();
+    //    collider.isTrigger = false;
+
+    //    Rigidbody rigidbody = a_UI.GetComponent< Rigidbody >();
+    //    rigidbody.useGravity = true;
+    //    rigidbody.isKinematic = true;
+    //}
+
+    //------NEW-----------------------------------------------------
+
+    public IEnumerator New_BeginSpawning()
     {
-        return Instantiate( Instance.TargetPrefab_Glass, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Target_GlassBird >();
+        EnableTrackMovement();
+        SetMovementSpeeds( 0.5f );
+
+        while ( GameStateManager.Instance.InGame )
+        {
+            yield return new WaitForSeconds( m_RespawnLoopTimer );
+            New_SpawnNewTarget();
+        }
+
+        DestroyAllTargets();
+        yield return SlowDownAndStop();
     }
 
-    private static Target_WoodBird CreateWoodbird()
+    public bool New_SpawnNewTarget()
     {
-        return Instantiate( Instance.TargetPrefab_Wood, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Target_WoodBird >();
+        Target.TargetType newTargetType = ( Target.TargetType )UnityEngine.Random.Range( 2, 5 );
+
+        TargetDock emptyDock = New_FindEmptyDock();
+
+        if ( emptyDock == null )
+        {
+            return false;
+        }
+
+        StartCoroutine( emptyDock.New_ShowTarget( newTargetType, m_FlipDownTimer ) );
+        return true;
     }
 
-    private static Target_UI CreatePlayUI()
+    public TargetDock New_FindEmptyDock()
     {
-        return Instantiate( Instance.TargetUIPrefab_Play, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Target_UI >();
+        if ( InactiveTargets == 0 )
+        {
+            return null;
+        }
+
+        int index = UnityEngine.Random.Range( 0, InactiveTargets );
+        int currentIndex = 0;
+
+        foreach ( TargetDock targetDock in BirdTargetDocks )
+        {
+            if ( targetDock.DockedTarget == null )
+            {
+                if ( currentIndex == index )
+                {
+                    return targetDock;
+                }
+                else
+                {
+                    ++currentIndex;
+                }
+            }
+        }
+
+        return null;
     }
 
-    private static Target_UI CreateExitUI()
+    public IEnumerator New_RaisePlay()
     {
-        return Instantiate( Instance.TargetUIPrefab_Exit, new Vector3( 0, -10, 0 ), Quaternion.identity ).GetComponent< Target_UI >();
+        yield return UIDock.New_ShowUI( Target_UI.UIButton.PLAY );
     }
 
-    private static void OnBirdActive( Target a_Bird )
+    public IEnumerator New_RaiseExit()
     {
-        a_Bird.GetComponent< ShatterObject >().gameObject?.SetActive( true );
+        yield return UIDock.New_ShowUI( Target_UI.UIButton.EXIT );
     }
 
-    private static void OnBirdInactive( Target a_Bird )
-    {
-        a_Bird.gameObject.transform.position = new Vector3( 0, -10, 0 );
-        //a_Bird.GetComponent< ShatterObject >().gameObject?.SetActive( false );
-    }
-
-    private static void OnUIActive( Target_UI a_UI )
-    {
-        a_UI.GetComponent< ShatterObject >().gameObject?.SetActive( true );
-    }
-
-    private static void OnUIInactive( Target_UI a_UI )
-    {
-        a_UI.gameObject.transform.position = new Vector3( 0, -10, 0 );
-    }
+    //---------------------------------------------------------------
 
     public void NotifyOfKill()
     {
         --m_ActiveTargets;
-
-        if ( m_ActiveTargets < m_PersistantCount && GameStateManager.Instance.InGame )
-        {
-            SpawnRandomNewTarget();
-        }
     }
 
-    private void NotifyOfRespawn()
+    public void NotifyOfRespawn()
     {
         ++m_ActiveTargets;
     }
@@ -238,7 +376,7 @@ public class GalleryController : Singleton< GalleryController >
         {
             yield return new WaitForSeconds( m_RespawnLoopTimer );
 
-            SpawnRandomNewTarget( m_EndlessFlipDownTimer );
+            SpawnRandomNewTarget( m_FlipDownTimer );
         }
 
         DestroyAllTargets();
@@ -362,7 +500,7 @@ public class GalleryController : Singleton< GalleryController >
 
     [ SerializeField ] [ Range( 0, 23 ) ] private int m_PersistantCount;
     [ SerializeField ] [ Range( 0.1f, 10.0f ) ] private float m_RespawnLoopTimer;
-    [ SerializeField ] [ Range( 0.1f, 10.0f ) ] private float m_EndlessFlipDownTimer;
+    [ SerializeField ] [ Range( 0.1f, 10.0f ) ] private float m_FlipDownTimer;
     private Coroutine m_TutorialSpawningRoutine;
     private Coroutine m_PlaySpawningRoutine;
     private Coroutine m_SpawningRoutine;

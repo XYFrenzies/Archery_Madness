@@ -221,7 +221,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_AttachTransform: {fileID: 5217067935857775649}
-  m_AttachEaseInTime: 0.3
+  m_AttachEaseInTime: 0.15
   m_MovementType: 1
   m_VelocityDamping: 1
   m_VelocityScale: 1
@@ -275,9 +275,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca0cf184079af9544b2c6e14d6914946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TriangleCount: 50
-  ExplosionForce: 2000
-  DisableDelay: 3
+  TriangleCount: 10
+  ExplosionForce: 500
+  DisableDelay: 1
   ExplosionPointOffset: {x: 0, y: 0, z: 0}
   DisableObject: {fileID: 2102440058248084647}
 --- !u!1 &4508881077291756377
